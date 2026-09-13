@@ -1,0 +1,15 @@
+import type { OutputWorkspaceVM } from '../../experience/outputWorkspaceVM';
+import { beginStage4RuntimeV4, selectBlockV4 } from '../../application/stage4/learnerRuntimeV4';
+import { projectAdaptiveWorkspaceV4 } from '../../lesson-runtime/adaptiveOutputWorkspaceRuntime';
+import { blockRegistryV4 } from '../../application/v4/blockRegistryV4';
+
+const ids:Record<string,string>={SPELLING_RECONSTRUCTION:'spelling-reconstruction',SENTENCE_BUILDER:'sentence-builder',FORM_MEANING_CONTRAST:'form-contrast',COLLOCATION_MATCH:'collocation-match',REWRITE_SURFACE:'rewrite-surface',TRANSLATION_SEGMENTATION:'meaning-segmentation',CONTEXTUAL_PRODUCTION:'contextual-production',FROZEN_RETURN_ORIGINAL:'return-original-translation'};
+const list=(value:unknown)=>Array.isArray(value)?value.map(String).join('|'):undefined;
+export function productionBlockFixtureV1(id:string,renderer:NonNullable<OutputWorkspaceVM['intervention']>['renderer'],payload:Record<string,unknown>,editable=false):OutputWorkspaceVM{
+  const blockId=ids[id],block=blockRegistryV4.get(blockId);if(!block)throw new Error(`qa_block_not_registered:${blockId}`);
+  const artifact={schemaVersion:4 as const,id:`qa-artifact:${id}`,learnerId:'qa-learner',source:'PASTE' as const,mode:(id.includes('TRANSLATION')||id==='FROZEN_RETURN_ORIGINAL'?'TRANSLATION':'WRITING') as 'WRITING'|'TRANSLATION',pages:[{page:1,mimeType:'text/plain',originalText:'This measure can reduce waste.'}],chineseSource:'這項措施可以減少浪費。',submittedAt:'2026-08-30T00:00:00.000Z',immutable:true as const};
+  const base=beginStage4RuntimeV4(artifact,[{id:`qa-span:${id}`,artifactId:artifact.id,region:'LEARNER_WRITING',text:artifact.pages[0].originalText,confidence:'HIGH',alternatives:[]}],true),intent=block.role==='TEACH'?'TEACH':block.role==='PRACTICE'?'PRACTICE':block.role==='ASSESS'?'ASSESS':'TRANSFER',support=block.role==='ASSESS'?'NONE':'GUIDED';
+  const configuration={decisionPointId:`qa-decision:${id}`,targetWord:String(payload.target??''),letters:list(payload.letters)??'',parts:list(payload.parts)??'',choices:list(payload.choices)??'',meanings:list(payload.meanings)??'',leftItems:list(payload.left)??'',rightItems:list(payload.right)??'',meaningSegments:list(payload.segments)??'',rewriteConstraint:String(payload.constraint??''),learnerInstruction:'先用這個方法處理目前的一小步。'};
+  const runtime=selectBlockV4(base,{objectiveId:`qa-objective:${id}`,focus:block.suitableFacets[0],pedagogicalIntent:intent,selectedBlockId:block.id,targetReference:'qa.canonical-target',supportLevel:support,contextProvenance:block.contextAffordance,configuration,reasonForSelection:'DETERMINISTIC_PRODUCTION_STATE_HARNESS',evidenceToObserve:[],successTransition:'REDECIDE',failureTransition:'CHANGE_REPRESENTATION',requestedSystemAction:'NONE'},true),vm=projectAdaptiveWorkspaceV4({runtime,draft:editable?'':artifact.pages[0].originalText,sourceMeaning:artifact.chineseSource});
+  if(vm.intervention?.renderer!==renderer)throw new Error(`qa_renderer_mismatch:${id}`);return Object.freeze(vm);
+}

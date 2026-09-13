@@ -1,0 +1,2 @@
+import{generalPolicyCapabilityStatusV1}from'./capabilities';
+export const waveRGeneralPolicyStatusV1=Object.freeze({wave:'R',subsystem:'General Product Policy',status:'READY_FOR_AUDIT' as const,capabilities:generalPolicyCapabilityStatusV1,firstPass:generalPolicyCapabilityStatusV1.filter(x=>x.status==='FIRST_PASS').length,contractOnly:generalPolicyCapabilityStatusV1.filter(x=>x.status==='CONTRACT_ONLY').length});

@@ -1,0 +1,56 @@
+You are the independent reviewer. Do NOT trust ChatGPT's completion claims, status files, test counts, comments, package manifest, or summaries. Do not modify any file.
+
+Audit only the actual local repository supplied to you.
+
+PHASE 0 — SOURCE FRESHNESS + MERGE PRESERVATION PREFLIGHT
+
+Verify ALL of the following before substantive audit.
+
+F freshness:
+1. `shared/block-contract-v4.generated.json` exists with exactly 52 blocks, registryVersion `4.2.0`, fingerprint `fnv1a32:6214cd37`.
+2. `src/experience/outputWorkspaceVM.ts` uses domain `ProductionConditionsV1` and exposes `productionConditions`.
+3. `src/application/evidence/evidenceGuardsV3.ts` uses `productionConditionsAllowIndependentV1`.
+4. `src/domain/task/productionConditions.ts` exists and fails closed for missing/contaminated independent conditions.
+5. `coach-server/block-teacher-v4.mjs` consumes `context.registeredBlockContract`, validates version/fingerprint, and derives schema/validation from that contract.
+6. The server must NOT declare an uppercase hand-maintained authority registry such as `const BLOCKS = [...]`, `let BLOCKS = ...`, or `var BLOCKS = ...`. Lowercase locals like `const blocks = contract.blocks` are legal and MUST NOT count as stale.
+7. Wave F suite has the 20-test post-fix coverage.
+
+U1 preservation:
+8. `src/teacher-runtime/types.ts` retains `TeacherDecisionLineageV1`/optional `lineage` and uses `ProductionConditionsV1` on pedagogical events.
+9. `src/teacher-runtime/runtime.ts` still emits lineage for qualified provider and deterministic fallback decisions.
+10. `app/daily-lesson.tsx` still uses U1 operational persistence/evidence/Teacher-lineage paths AND `registeredBlockContract:blockRegistryV4.providerContract()` AND actual production conditions through Stage4/TaskContract.
+11. `src/persistence/operationalDatabase.native.ts` exists; `package.json` still has `expo-sqlite`, `expo-crypto`, and `test:wave-u1`.
+12. No new unauthorized H integration and no `test:wave-h` requirement.
+
+If ANY preflight item fails, STOP and report exactly `STALE_OR_BROKEN_MERGE_SOURCE`, listing failed markers.
+
+PHASE 1 — ORIGINAL F BLOCKER 1
+
+Independently trace a real learner-facing path:
+Output Workspace → learner/block event → Stage4 observation/event → EvidenceCandidate → TaskContract → C/K evidence guard → canonical admission.
+
+Try to falsify preservation of language, selection, function cue, planning, task-load assistance, recent model prime, elicitation, context and task load. Verify `support=NONE` alone cannot establish independence. Verify missing/UNKNOWN/contaminated conditions fail closed. Search for legacy bypasses. Verify U1 durable evidence persistence does not reconstruct or weaken conditions after the guard.
+
+PHASE 2 — ORIGINAL F BLOCKER 2
+
+Trace canonical `blockRegistryV4` → provider contract projection/version/fingerprint → request → coach server validation → JSON schema → selected-block validation. Find any duplicate provider block authority, stale hard-coded list, fallback catalog, or divergence path. Do not count lowercase arrays derived from the canonical contract as duplicate authority.
+
+PHASE 3 — MERGE REGRESSION / OWNERSHIP
+
+Verify F did not steal U1 persistence authority and U1 did not alter evidence/pedagogical semantics. E still qualifies decisions; C/K still own evidence admission; F remains teaching intelligence; provider/network calls stay outside DB transactions; original learner work remains immutable. Search for hidden fallback, fake evidence, stale native AsyncStorage writers, duplicate authorities, and swallowed write failures.
+
+PHASE 4 — DIAGNOSTICS
+
+After source review, run relevant diagnostics if possible: Wave F, Wave E, U1, main architecture, domain/scenario, Stage4/Stage5A, typecheck, lint, Stage3 preflight. Tests are diagnostics, not proof.
+
+FINAL OUTPUT
+
+Return:
+- Verdict: `F_SEAL_CANDIDATE`, `F_BLOCKED`, or `OVERCLAIMED`
+- `F_BLOCKING_COUNT`
+- Findings for Blocker 1, Blocker 2, U1 preservation, ownership, legacy bypasses, diagnostics
+- Exact file/line evidence
+- Concrete minimal blocking fixes only
+- Explicit statement whether H remained untouched
+
+Do not edit files.

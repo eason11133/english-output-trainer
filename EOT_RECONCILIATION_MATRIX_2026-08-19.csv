@@ -1,0 +1,19 @@
+﻿ID,Invariant,Current status,Current repo evidence,Required cutover
+P-01,Growth-loop product spine,PARTIAL,"Tabs/surface moved toward Today/My English/Journey, but runtime beneath is narrow and split",Make loop the actual governing path end-to-end
+P-02,No mandatory Placement,FAIL,app/index says optional; app/_layout still redirects on placement incomplete,Remove placement completion from access authority; add route scenario test
+P-03,UNKNOWN is valid,PARTIAL,new copy says unknown can remain; legacy placement still generates assigned level/profile,Canonical state may remain unknown; legacy level is not authority
+P-04,Progressive diagnosis,FAIL/PARTIAL,"adaptive Ability Exploration exists, but is separate old truth; normal learning does not use full hypothesis/minimum-diagnostic loop",Move discovery into canonical learning runtime
+P-05,Interaction chosen by evidence need,PARTIAL,diagnostic question scoring has some response-driven routing; core Mission still canned Gold activities,Interaction planner must choose primitive/mechanism from uncertainty
+P-06,Closed-loop adaptive teaching,FAIL,diagnosticRouter is coarse; teaching templates generic; no unified hypothesis→policy path,Implement observations→hypotheses→policy→teaching→evidence loop
+P-07,Evidence integrity,STRONG FOUNDATION,v2 evidence/projection supports assisted/independent/transfer/delayed semantics,Keep; extend rather than replace
+P-08,Result changes world,PARTIAL,"Mission completion projects v2 changes, but only Gold universe",Keep projection model; broaden canonical truth and next-session causality
+P-09,My English represents learner,FAIL/PARTIAL,"honest v2 projection, but only 3 Gold points",Use real target registry + broader evidence
+P-10,Real Frontier,PARTIAL,frontier exists over Gold states,Compute over canonical learner targets and product policy
+P-11,Meaningful Journey,PARTIAL,"evidence-derived milestones are conceptually good, but Gold-only",Keep milestone principle; broaden sources
+P-12,Good stickiness / human factors,NOT ENFORCED,"No scenario/metric gate for first value, friction, return reason",Add consumer UX and analytics acceptance gates
+A-01,One learner truth,FAIL,legacy AppDataContext/SkillProfile and v2 Evidence both active,Cut over active product to canonical vNext evidence; legacy read-only migration
+A-02,One Today truth,FAIL/PARTIAL,old DailyPlan still active elsewhere; v2 MissionPlan drives current Today,Remove old daily authority from active vNext path
+A-03,Gold fixtures not product universe,FAIL,Today/Growth/Journey import Gold points directly,Move Gold to dev/test and use production registry
+A-04,Reteach first-class,FAIL,InteractionState has Hint/Reveal/Revise but no Reteach,Add policy-driven reteach/entry-point change
+A-05,Translation English-side default,FAIL,diagnosticRouter treats any Chinese span as meaning-to-English high-confidence,Replace with observation/hypothesis model
+A-06,Tests represent real authority,FAIL,optional-placement test does not inspect root guard,Scenario and architecture gates over actual policies

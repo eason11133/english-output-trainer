@@ -1,0 +1,291 @@
+version: 4
+purpose: architecture-family coverage, not phrase-specific regression
+scenarios:
+  - id: LIFE-001
+    family: cold_start
+    event: new learner with no placement and one authentic translation
+    authority: learner_lifecycle + task_evidence + outer_loop
+    invariant: unknown_is_valid_and_useful_learning_can_begin
+    model_call_tier: TEACHER_REASONING
+  - id: LIFE-002
+    family: sparse_history
+    event: no evidence for a candidate prerequisite
+    authority: learner_projection
+    invariant: no_evidence_is_not_weakness
+    model_call_tier: ZERO_AI
+  - id: INT-001
+    family: ambiguous_utterance
+    event: "我忘記了"
+    authority: interaction_intent
+    invariant: ambiguous_dialogue_is_not_capability_evidence
+    model_call_tier: LIGHT_SEMANTIC
+  - id: INT-002
+    family: correct_teacher
+    event: learner says Teacher misunderstood intended meaning
+    authority: interaction_intent + inner_loop
+    invariant: learner_correction_can_contradict_teacher_hypothesis
+    model_call_tier: TEACHER_REASONING
+  - id: INT-003
+    family: artifact_request
+    event: learner requests final complete revised version
+    authority: interaction_goal
+    invariant: teacher_generated_artifact_is_not_learner_evidence
+    model_call_tier: TEACHER_REASONING
+  - id: INT-004
+    family: navigation
+    event: return to original artifact
+    authority: session_system
+    invariant: navigation_does_not_call_teacher_or_create_evidence
+    model_call_tier: ZERO_AI
+  - id: EVD-001
+    family: model_copy
+    event: learner copies visible model exactly
+    authority: task_contract + evidence_guard
+    invariant: modeled_is_not_independent
+    model_call_tier: ZERO_AI
+  - id: EVD-002
+    family: ocr_correction
+    event: learner selects correct OCR alternative
+    authority: transcript_system + evidence_guard
+    invariant: ocr_correction_is_not_learning
+    model_call_tier: ZERO_AI
+  - id: EVD-003
+    family: valid_alternative
+    event: learner uses valid English not containing hidden target
+    authority: semantic_evaluator + task_contract
+    invariant: valid_alternative_not_wrong_without_target_provenance
+    model_call_tier: LIGHT_SEMANTIC
+  - id: EVD-004
+    family: same_context
+    event: immediate corrected revision after teaching
+    authority: evidence_guard
+    invariant: same_context_revision_not_transfer
+    model_call_tier: ZERO_AI
+  - id: LM-001
+    family: contradiction
+    event: strong prior independent history followed by one typo
+    authority: learner_projection
+    invariant: one_failure_does_not_erase_control
+    model_call_tier: ZERO_AI
+  - id: LM-002
+    family: time
+    event: 14 days since strong evidence with no new attempt
+    authority: learner_projection + scheduler
+    invariant: time_raises_verification_need_not_failure
+    model_call_tier: ZERO_AI
+  - id: LM-003
+    family: interaction_response
+    event: repeated form-contrast success but long-rule confusion
+    authority: interaction_projection
+    invariant: response_pattern_is_conditional_not_learning_style_truth
+    model_call_tier: ZERO_AI
+  - id: OUT-001
+    family: learning_need
+    event: recurrent writing bottleneck vs low-value isolated typo
+    authority: outer_loop
+    invariant: prioritize_high_value_outcome_bottleneck
+    model_call_tier: ZERO_AI
+  - id: OUT-002
+    family: learner_priority
+    event: learner wants translation today while writing need is slightly higher
+    authority: outer_loop + goal_projection
+    invariant: learner_priority_changes_ranking_but_not_teaching_mechanism_choice
+    model_call_tier: ZERO_AI
+  - id: TEACH-001
+    family: teaching_failure
+    event: learner becomes more confused after explanation
+    authority: inner_loop
+    invariant: change_strategy_not_repeat_longer_explanation
+    model_call_tier: TEACHER_REASONING
+  - id: TEACH-002
+    family: self_repair
+    event: signigicant typo with strong history and immediate repair
+    authority: inner_loop + learner_projection
+    invariant: do_not_force_spelling_lesson
+    model_call_tier: TEACHER_REASONING
+  - id: TEACH-003
+    family: recurrent_orthography
+    event: same typo with repeated spelling failures
+    authority: inner_loop
+    invariant: same_surface_output_can_require_different_action_by_history
+    model_call_tier: TEACHER_REASONING
+  - id: TASK-001
+    family: recognition
+    event: choose correct meaning among options
+    authority: task_contract
+    invariant: recognition_task_cannot_prove_retrieval
+    model_call_tier: ZERO_AI
+  - id: TASK-002
+    family: generated_task
+    event: AI generates transfer prompt with hidden target leak
+    authority: task_validator
+    invariant: contaminated_task_rejected_before_delivery
+    model_call_tier: LIGHT_SEMANTIC
+  - id: SCH-001
+    family: reencounter
+    event: target succeeded with support but never independently
+    authority: scheduler
+    invariant: schedule_independent_proof_before_stable_claim
+    model_call_tier: ZERO_AI
+  - id: SCH-002
+    family: natural_transfer
+    event: target opportunity naturally appears in later writing
+    authority: task_evidence + scheduler
+    invariant: use_natural_opportunity_for_transfer_when_valid
+    model_call_tier: TEACHER_REASONING
+  - id: CTX-001
+    family: context_builder
+    event: Teacher needs allow-construction evidence but learner has large history
+    authority: context_builder
+    invariant: include_relevant_evidence_and_strategy_history_not_full_history
+    model_call_tier: ZERO_AI
+  - id: CTX-002
+    family: stale_summary
+    event: cached summary conflicts with newer canonical evidence
+    authority: context_builder
+    invariant: canonical_projection_overrides_stale_summary
+    model_call_tier: ZERO_AI
+  - id: AI-001
+    family: zero_ai
+    event: learner presses return-to-source
+    authority: model_call_gate
+    invariant: zero_model_calls
+    model_call_tier: ZERO_AI
+  - id: AI-002
+    family: vision
+    event: artifact already transcribed and learner sends tutoring reply
+    authority: model_call_gate
+    invariant: do_not_resend_image_each_turn
+    model_call_tier: TEACHER_REASONING
+  - id: FAIL-001
+    family: pck_uncertainty
+    event: Teacher lacks reliable teaching knowledge for rare expression
+    authority: uncertainty_policy
+    invariant: defer_or_narrow_not_invent_rule
+    model_call_tier: TEACHER_REASONING
+  - id: FAIL-002
+    family: infrastructure
+    event: network fails during submission
+    authority: infrastructure/session
+    invariant: no_learning_evidence_from_failed_request_and_resume_idempotently
+    model_call_tier: ZERO_AI
+  - id: WRT-001
+    family: writing_partial_success
+    event: grammar error but strong causal idea development
+    authority: outcome_evaluator + evidence_model
+    invariant: preserve_positive_deep_evidence_while_isolating_surface_issue
+    model_call_tier: TEACHER_REASONING
+  - id: WRT-002
+    family: writing_final_revision
+    event: Teacher supplies polished complete essay by request
+    authority: artifact_result + evidence_guard
+    invariant: final_teacher_text_not_independent_composition
+    model_call_tier: TEACHER_REASONING
+  - id: TRN-001
+    family: translation_valid_alternative
+    event: meaning preserved with different valid wording
+    authority: translation_evaluator
+    invariant: linguistic_validity_and_target_retrieval_are_separate
+    model_call_tier: TEACHER_REASONING
+  - id: TRN-002
+    family: translation_distortion
+    event: output changes source meaning materially
+    authority: translation_evaluator + hypothesis_engine
+    invariant: source_comprehension_becomes_competing_hypothesis_only_when_supported
+    model_call_tier: TEACHER_REASONING
+  - id: FORM-001
+    family: reusable_expression
+    event: learner memorizes frozen phrase but cannot vary slots/context
+    authority: domain_model + task_evidence
+    invariant: memorized_copy_does_not_prove_flexible_deployment
+    model_call_tier: TEACHER_REASONING
+  - id: FORM-002
+    family: idiom_register
+    event: learner uses idiom grammatically but inappropriate register
+    authority: domain_model + evaluator
+    invariant: form_success_and_contextual_appropriacy_are_separate_facets
+    model_call_tier: TEACHER_REASONING
+  - id: SES-001
+    family: goal_switch
+    event: tutoring interrupted by evaluation request then learner returns
+    authority: interaction_goal + session
+    invariant: temporary_goal_switch_preserves_episode_and_evidence_integrity
+    model_call_tier: TEACHER_REASONING
+  - id: SES-002
+    family: old_artifact
+    event: learner cannot remember original intent from old essay
+    authority: interaction_intent + artifact_context
+    invariant: memory_failure_not_english_failure_and_intent_dependent_diagnosis_can_defer
+    model_call_tier: TEACHER_REASONING
+  - id: EVD-005
+    family: no_opportunity
+    event: target never had a legitimate production opportunity in task
+    authority: task_contract + projection
+    invariant: absence_of_target_is_not_negative_evidence_without_opportunity
+    model_call_tier: ZERO_AI
+  - id: EVD-006
+    family: partial_success
+    event: one sentence contains correct construction and separate word-order error
+    authority: evaluation + evidence_model
+    invariant: preserve_local_positive_and_negative_evidence_separately
+    model_call_tier: TEACHER_REASONING
+  - id: DOM-001
+    family: prerequisite
+    event: strong complex construction performance implies prerequisite plausibility
+    authority: domain_graph + projection
+    invariant: prerequisite_relation_can_inform_hypothesis_but_not_fabricate_evidence
+    model_call_tier: ZERO_AI
+  - id: DOM-002
+    family: generated_content
+    event: AI generates an unnatural reusable expression candidate
+    authority: content_governance
+    invariant: generated_candidate_not_canonical_until_validated
+    model_call_tier: LIGHT_SEMANTIC
+  - id: EVAL-001
+    family: scope_alignment
+    event: prompt asks only for local repair but evaluator scores entire essay
+    authority: evaluation_architecture
+    invariant: evaluator_scope_must_match_prompt_answer_reveal_scope
+    model_call_tier: ZERO_AI
+  - id: EVAL-002
+    family: rubric_uncertainty
+    event: writing meaning admits two plausible interpretations
+    authority: rubric_evaluator + uncertainty_policy
+    invariant: uncertain_interpretation_cannot_force_high_confidence_deep_claim
+    model_call_tier: TEACHER_REASONING
+  - id: SES-003
+    family: resume
+    event: app resumes after guided frame was visible before interruption
+    authority: session
+    invariant: support_state_survives_resume_and_response_cannot_be_reclassified_independent
+    model_call_tier: ZERO_AI
+  - id: SES-004
+    family: time_budget
+    event: session time expires before transfer check
+    authority: session + scheduler
+    invariant: time_expiry_is_not_failure_and_transfer_can_be_scheduled_later
+    model_call_tier: ZERO_AI
+  - id: OUT-003
+    family: multiple_needs
+    event: three unrelated high-ranked weaknesses compete in a short session
+    authority: learning_orchestrator
+    invariant: session_remains_coherent_instead_of_dumping_all_top_needs
+    model_call_tier: ZERO_AI
+  - id: OUT-004
+    family: learner_goal_override
+    event: learner requests a legitimate different priority for today
+    authority: goal_projection + learning_need_engine
+    invariant: learner_can_change_priority_while_system_still_chooses_pedagogy
+    model_call_tier: ZERO_AI
+  - id: LM-004
+    family: confidence_misalignment
+    event: learner says very unsure but independently answers correctly repeatedly
+    authority: learner_projection
+    invariant: self_report_and_performance_remain_separate_and_misalignment_increases_information_value
+    model_call_tier: ZERO_AI
+  - id: AI-003
+    family: critic_trigger
+    event: repeated pedagogical failure plus conflicting hypotheses
+    authority: model_call_gate
+    invariant: second_pass_allowed_only_by_explicit_high_value_trigger
+    model_call_tier: CRITIC_SECOND_PASS

@@ -1,0 +1,1 @@
+export async function resetLearnerDataV1(learnerId:string){return Object.freeze({supported:false,learnerId,operationalDeleted:false,complete:false,errors:Object.freeze(['WEB_COMPLETE_DEVICE_DELETION_NOT_SUPPORTED'])})}

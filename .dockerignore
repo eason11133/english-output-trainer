@@ -1,0 +1,8 @@
+**
+!Dockerfile
+!coach-server/
+!coach-server/**
+!shared/
+!shared/block-contract-v4.generated.json
+!scripts/
+!scripts/render-pdf-pages-v4.py

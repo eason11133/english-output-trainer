@@ -1,0 +1,4 @@
+export interface CoachSuccess{learnerSpan:string;messageZhTW:string;messageEn:string;knowledgePointId?:string}
+export interface CoachIssue{errorTag:string;category:'meaning'|'target_expression'|'missing_verb'|'tense'|'verb_pattern'|'article'|'plural'|'word_form'|'naturalness';learnerSpan?:string;messageZhTW:string;messageEn:string;hint1ZhTW:string;hint1En:string;hint2ZhTW:string;hint2En:string;minimalRevealZhTW:string;minimalRevealEn:string}
+export interface CoachEvidence{knowledgePointId:string;result:'independent'|'assisted'|'failed';evidenceType:'recognition'|'production'}
+export interface CoachAnalysis{verdict:'correct'|'partially_correct'|'incorrect';meaningPreserved:boolean;acceptedAlternative:boolean;successes:CoachSuccess[];nextIssue:CoachIssue|null;evidence:CoachEvidence[];conciseExplanationZhTW:string;conciseExplanationEn:string}

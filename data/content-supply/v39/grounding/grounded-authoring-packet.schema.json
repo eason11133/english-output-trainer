@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "eot-grounded-authoring-packet-v1",
+  "title": "EOT grounded authoring packet (not a learner task)",
+  "type": "object",
+  "required": ["jobId", "state", "contentState", "family", "profile", "primaryOperation", "canonical", "blockedReasons"],
+  "properties": {
+    "jobId": { "type": "string", "minLength": 1 },
+    "state": { "enum": ["GROUNDED_READY_FOR_AUTHORING", "GROUNDING_BLOCKED"] },
+    "contentState": { "const": "GROUNDED_AUTHORING_INPUT_NOT_A_TASK" },
+    "family": { "enum": ["VOCABULARY", "COMPREHENSIVE", "CONTEXTUAL_FILL", "DISCOURSE", "READING", "MIXED", "TRANSLATION", "WRITING"] },
+    "profile": { "enum": ["FOUNDATION", "GSAT_STANDARD", "HIGH_SCORE"] },
+    "primaryOperation": { "type": "string", "minLength": 1 },
+    "canonical": {
+      "type": "object",
+      "required": ["targetRef", "facet"],
+      "properties": { "targetRef": { "type": "string" }, "facet": { "type": "string" } }
+    },
+    "blockedReasons": { "type": "array", "items": { "type": "string" } }
+  },
+  "not": { "required": ["task_id"] },
+  "additionalProperties": true
+}

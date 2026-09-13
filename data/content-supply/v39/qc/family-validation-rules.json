@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "global_rules": [
+    "unique task_id",
+    "non-empty freshness_group_id",
+    "non-empty content_lineage_id",
+    "project/source provenance present",
+    "offline state does not claim production promotion"
+  ],
+  "rules": {
+    "VOCABULARY": {
+      "shape": "single selected-response lexical item",
+      "requirements": [
+        "4 unique options",
+        "1 keyed answer",
+        "context supports a single best answer",
+        "recognition/discrimination only"
+      ]
+    },
+    "COMPREHENSIVE": {
+      "shape": "passage with 5 blanks",
+      "requirements": [
+        "5 blanks",
+        "4 unique options per blank",
+        "all answer IDs valid",
+        "no unintended second answer"
+      ]
+    },
+    "CONTEXTUAL_FILL": {
+      "shape": "10x10 shared-bank set",
+      "requirements": [
+        "10 blanks",
+        "10 unique options",
+        "10 unique answers",
+        "answer bank == used answers",
+        "natural reconstruction"
+      ]
+    },
+    "DISCOURSE": {
+      "shape": "4-gap/5-option set",
+      "requirements": [
+        "4 blanks",
+        "5 unique options",
+        "4 distinct keyed option IDs",
+        "1 unused option",
+        "before/after fit"
+      ]
+    },
+    "READING": {
+      "shape": "passage + question set",
+      "requirements": [
+        ">=3 questions",
+        "4 unique options per selected-response question",
+        "valid answer ID",
+        "operation metadata",
+        "evidence-bounded key"
+      ]
+    },
+    "MIXED": {
+      "shape": "integrated source + part-scoped tasks",
+      "requirements": [
+        ">=2 parts",
+        "part-scoped rubric",
+        "constructed-response semantics bounded when present",
+        "cross-part leakage tracked"
+      ]
+    },
+    "TRANSLATION": {
+      "shape": "Chinese-to-English production",
+      "requirements": [
+        "meaning units",
+        "natural paraphrases allowed",
+        "exact-string authority forbidden",
+        "learner-authorship evidence policy"
+      ]
+    },
+    "WRITING": {
+      "shape": "learner writing production",
+      "requirements": [
+        "task requirements",
+        "multiple valid ideas/structures",
+        "bounded rubric dimensions",
+        "model rewrite not learner evidence"
+      ]
+    }
+  },
+  "semantic_manual_review_required_for": [
+    "single-best-answer naturalness",
+    "distractor plausibility",
+    "discourse before/after fit",
+    "reading evidence correctness",
+    "translation meaning preservation",
+    "writing prompt/rubric authenticity"
+  ]
+}

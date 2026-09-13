@@ -1,0 +1,607 @@
+{
+  "processed": 100,
+  "R3Issues": 0,
+  "result": "PASS",
+  "rows": [
+    {
+      "taskId": "V36-COMP-001",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-002",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-003",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-004",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-005",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-006",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-007",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-008",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-009",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-010",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-011",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-012",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-013",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-014",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-COMP-015",
+      "family": "COMPREHENSIVE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-001",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-002",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-003",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-004",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-005",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-006",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-007",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-008",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-009",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-010",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-011",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-012",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-013",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-014",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-CF-015",
+      "family": "CONTEXTUAL_FILL",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-001",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-002",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-003",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-004",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-005",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-006",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-007",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-008",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-009",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-010",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-011",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-012",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-013",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-014",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-DISC-015",
+      "family": "DISCOURSE",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-001",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-002",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-003",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-004",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-005",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-006",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-007",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-008",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-009",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-010",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-011",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-012",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-013",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-014",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-015",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-016",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-017",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-018",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-019",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-020",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-021",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-022",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-023",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-024",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-025",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-026",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-027",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-028",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-029",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-READ-030",
+      "family": "READING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-001",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-002",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-003",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-004",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-005",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-006",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-007",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-008",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-009",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-MIX-010",
+      "family": "MIXED",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-001",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-002",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-003",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-004",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-005",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-006",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-007",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-008",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-009",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-TRANS-010",
+      "family": "TRANSLATION",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-WRITE-001",
+      "family": "WRITING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-WRITE-002",
+      "family": "WRITING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-WRITE-003",
+      "family": "WRITING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-WRITE-004",
+      "family": "WRITING",
+      "riskLevel": "R0",
+      "issues": []
+    },
+    {
+      "taskId": "V36-WRITE-005",
+      "family": "WRITING",
+      "riskLevel": "R0",
+      "issues": []
+    }
+  ]
+}

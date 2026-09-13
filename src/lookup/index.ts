@@ -1,0 +1,15 @@
+export type{LookupPortV1}from'../architecture/contracts';
+export type{ContextualLookupPortV2,LookupCandidateV1,LookupRequestV1,LookupDecisionV1,LookupHistoryEventV1,LookupDataSourceV1,LookupAssessmentModeV1,LookupUnitKindV1}from'./types';
+export{selectPhraseFirstLookupV1}from'./resolver';
+export{lookupAccessDecisionV1}from'./policy';
+export{lookupHistoryEventV1}from'./history';
+export{applyLookupAssistanceV1,lookupVisibleSupportTokenV1}from'./productionConditions';
+export{createContextualLookupRuntimeV1}from'./runtime';
+export{lookupRequestsFromTapV1,type LookupTapV1}from'./binding';
+export{lookupCapabilityStatesV1,lookupWaveSummaryV1}from'./capabilities';
+export{wavePContextualLookupStatusV1}from'./wavePStatus';
+export{resolveSingleWordContextV1,resolveTapPhraseFirstContextV1,normalizeTappedLemmaV1,coreContextualLexiconV1,type SingleWordLookupRequestV1,type ContextualLookupResultV1,type ContextualSenseRecordV1}from'./contextualResolution';
+export{universalLookupSurfaceCoverageV1,type LookupSurfaceV1}from'./surfaceCoverage';
+export{prepareManualLexicalCaptureV1,preparePlatformShareLexicalCaptureV1,createEncounterRecordingLookupRuntimeV1,type ManualLexicalCaptureInputV1}from'./lexicalEncounterCapture';
+export{lookupDirectionForTextV1,resolveReverseContextV1,reverseLookupSegmentsV1,coreReverseLookupLexiconV1,type ReverseLookupRecordV1}from'./bidirectional';
+export const LOOKUP_EVIDENCE_RULE='Lookup is context support and never capability evidence.' as const;

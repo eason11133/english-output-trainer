@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path');
+const h=require('../.domain-test-build/application/teacher/stage12EvalHarnessV3.js');
+const root=path.join(__dirname,'../data/teacher/v3');
+const cases=h.parseStage12Corpus(fs.readFileSync(path.join(root,'eval_regression_stage1_2_v3.yaml'),'utf8'));
+const result=h.runStage12CorpusV3(cases);
+const replays=h.parseStage12Corpus(fs.readFileSync(path.join(root,'real_interaction_replay_v1.yaml'),'utf8'));
+const replayResult=h.runRealInteractionReplaysV3(replays);
+const selected=['WRT-002','WRT-003','TRN-001','CORR-005','EVD-001','EVD-003','LOOP-003','LOOP-004'].map(id=>result.results.find(x=>x.id===id)?.readableTrace).filter(Boolean);
+console.log(JSON.stringify({caseCount:result.caseCount,hardViolations:result.hardViolations,behavioralPassRate:result.behavioralPassRate,behavioralFailures:result.behavioralFailures,contrastFailures:result.contrastFailures,criticDisagreements:result.criticDisagreements,replayCount:replayResult.replayCount,replayHardViolations:replayResult.hardViolations,replayBehavioralPassRate:replayResult.behavioralPassRate,replayBehavioralFailures:replayResult.results.filter(x=>x.behavioralFailures.length).map(x=>({id:x.id,failures:x.behavioralFailures})),selectedTraces:selected,replayTraces:replayResult.results.slice(0,4).map(x=>x.readableTrace),pass:result.pass&&replayResult.pass},null,2));
+if(!result.pass||!replayResult.pass)process.exitCode=1;

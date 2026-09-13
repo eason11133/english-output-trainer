@@ -1,0 +1,113 @@
+You are the independent reviewer for EOT subsystem F (Teaching Intelligence / PCK). This is a READ-ONLY audit. Do not edit any file, do not generate a patch, do not “finish” the implementation, and do not assume ChatGPT's design choices or completion claims are correct.
+
+Use the CURRENT REAL REPOSITORY as the source of truth. Do not treat test names, CURRENT_EOT_STATUS.md, changelog text, architecture status flags, or prior assistant claims as proof. Derive the actual runtime behavior from production source and executable paths.
+
+PRODUCT GOAL YOU MAY TREAT AS GIVEN
+EOT should turn learner English output into better independent output. A learner may know/recognize a form yet fail to retrieve/select/deploy it in authentic Writing/Translation. Teaching should change useful learner action, fade assistance, preserve valid alternative English, return ownership to the learner's real task, and never convert AI output or supported performance directly into learner mastery. D owns WHAT/WHY/WHEN target selection. E owns legal HOW-NOW decision/execution authority. C/K own canonical evidence/admission semantics. F should provide pedagogical knowledge and admissible teaching/support options for the D-authorized target; it must not become a second curriculum/evidence/UI authority.
+
+AUDIT OBJECTIVE
+Independently determine whether this repository now has a coherent, production-consumed first pass of F, or whether it is overclaimed, duplicated, metadata-only, test-only, or architecturally wrong.
+
+DO NOT RUBBER-STAMP THE INTENDED DESIGN. In particular, challenge whether the implementation itself is pedagogically and architecturally coherent. If a simpler or different interpretation of product ownership is supported by the source, say so.
+
+MANDATORY SOURCE AUDIT
+Inspect at minimum:
+- `src/teaching/**`
+- `src/teacher-runtime/**`
+- `src/application/v4/blockRegistryV4.ts`
+- `src/application/v4/blockRuntimeV4.ts`
+- `src/application/stage4/**`
+- `src/experience/teacherDecisionExperience.ts`
+- `app/daily-lesson.tsx`
+- `lib/teacherApi.ts`
+- `coach-server/block-teacher-v4.mjs`
+- B/C/D contracts used by the above
+- architecture registry/catalog/upgrade files only after tracing real behavior
+- F/E tests and gates only after source inspection
+
+TRACE THE REAL PRODUCTION PATH
+Trace at least these paths from inputs to runtime effects:
+1. D LessonPlan → E context → AI-provider request → proposal → deterministic qualification → Experience Contract → executor.
+2. Provider unavailable/invalid → deterministic fallback → F mechanism/support selection → Experience Contract → executor.
+3. A learner succeeds with visible/recorded support → next decision(s) → whether support is faded or independent evidence is manufactured.
+4. A learner fails/no-progresses under one representation → whether the same representation can be repeated unchanged or a real alternate can be selected.
+5. Help requested before a learner attempt → whether the system invents failure evidence.
+6. Learner with prior local control fails under high authentic-task load → whether the code can preserve a load/deployment hypothesis instead of erasing prior control and blindly reteaching form.
+7. L1-collision mechanism → whether one current error can trigger it without grounded competing evidence.
+8. F → future G/task-generation contract → whether it describes the output operation/conditions rather than only a named grammar target.
+
+OBJECTIVELY CHECK THESE RISKS
+- F exists only as metadata while production still selects by first matching facet.
+- AI provider never receives the useful F context and therefore qualification is purely reject-after-the-fact.
+- F can change D target/facet, curriculum priority, mastery, transfer, retention, or canonical evidence.
+- Provider can bypass contingent-support policy or repeat a known failed representation through another route.
+- `support=NONE` is incorrectly treated as fully independent even when target/function/model-prime assistance exists.
+- Support fading is a fixed Hint1→Hint2 ladder unrelated to learner response.
+- Assisted success can be labeled `FRESH_INDEPENDENT` in-place.
+- Representation switching simply changes block ID but not pedagogical representation.
+- L1 assumptions are inferred from nationality/language rather than grounded learner evidence.
+- Load-sensitive failure is misread as lack of underlying knowledge.
+- Valid English alternatives are forced back to a hidden expected form.
+- Existing Stage1/2 teaching assets were duplicated rather than reconciled.
+- F created a second Block registry, evaluator authority, learner-truth store, or UI/rendering authority.
+- Legacy paths can bypass the current F/E chain.
+- New source only works in tests/fixtures and is unreachable from `daily-lesson` production flow.
+- Updated Wave-E tests were weakened to hide a regression rather than legitimately adapting to F ownership.
+
+EXECUTABLE CHECKS
+Run the repository's relevant commands in the real local environment, including at minimum:
+- `npm.cmd run test:wave-f`
+- `npm.cmd run test:wave-e`
+- `npm.cmd run test:main-architecture`
+- `npm.cmd run test:wave-gates:parallel`
+- `npm.cmd run test:domain`
+- `npm.cmd run test:scenario`
+- `npm.cmd run test:stage4`
+- `npm.cmd run test:stage5a`
+- `npm.cmd run typecheck`
+- `npm.cmd run lint`
+
+Tests are diagnostics only. A green test does not override a source/runtime flaw. Conversely, distinguish an environment/tooling failure from an F defect.
+
+Do not make paid model/API calls merely to satisfy this audit. Inspect the real provider payload/wiring. If a live call is genuinely necessary to establish a blocker, report that as missing evidence instead of spending money unless the Founder explicitly authorizes it.
+
+RETURN ONE REPORT ONLY
+Use this exact top-level structure:
+
+A. VERDICT
+Choose exactly one: PASS / PARTIAL / OVERCLAIMED / FAIL
+
+B. BLOCKERS
+Only defects that make the F first pass architecturally or behaviorally invalid, unsafe, metadata-only, unreachable, or misleading. For each give:
+- owning layer
+- exact source path / symbol
+- observed behavior
+- why it is a blocker
+- minimal acceptance condition to close it
+
+C. NON-BLOCKING IMPROVEMENTS
+Useful improvements that should NOT block moving into H/I Stable-Beta work.
+
+D. REAL PRODUCTION CHAIN
+Show the chain you actually verified from source. Explicitly name any alternate/legacy path that bypasses it.
+
+E. CLAIM-BY-CLAIM CHECK
+Independently classify each as TRUE / PARTIAL / FALSE / NOT PROVEN:
+- canonical PCK catalog is production-consumed
+- established teaching representations were reconciled rather than replaced
+- competing bottlenecks influence teaching
+- contingent support is learner-response-sensitive
+- failed representation can change mechanism
+- ungrounded L1 teaching is blocked
+- multidimensional assistance/elicitation is represented without being learner truth
+- AI provider receives bounded F teaching context
+- F→G contract expresses output operation/conditions
+- F does not own learner evidence/mastery/target authority
+- production daily-lesson can reach the new F path
+
+F. EXECUTABLE EVIDENCE
+Commands run and exact results. Do not summarize unrun commands as PASS.
+
+G. FINAL BLOCKING COUNT
+Return `F_BLOCKING_COUNT: N`.
+If N=0, explicitly say only that the scoped F first pass has no blocking defect found by this audit; do NOT claim that broad Writing/Translation pedagogy, real learner outcomes, corpus coverage, or F persistence is complete.

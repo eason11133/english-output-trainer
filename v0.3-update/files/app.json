@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "English Output Trainer",
+    "slug": "english-output-trainer",
+    "version": "0.3.0",
+    "orientation": "portrait",
+    "scheme": "englishoutputtrainer",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.easonsystems.englishoutputtrainer"
+    },
+    "android": {
+      "package": "com.easonsystems.englishoutputtrainer",
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+version: '1.0'
+cases:
+- {id: REG-001, name: typo-self-repair, visible: {output: 'AI will have a signigicant impact on future jobs.', history: '3 recent independent correct spellings of significant'}, learner_behavior: 'immediate self-repair', must: ['allow self-repair','stop spelling intervention','preserve slip evidence'], must_not: ['declare spelling gap','start spelling drill']}
+- {id: REG-002, name: same-surface-real-spelling-gap, visible: {output: 'AI will have a signigicant impact on future jobs.', history: 'mixed/weak spelling evidence'}, learner_behavior: 'I always forget how to spell this.', must: ['raise orthographic hypothesis','teach orthography not meaning'], must_not: ['reteach definition']}
+- {id: REG-003, name: orthographic-recognition-gap, visible: {output: signigicant}, learner_behavior: 'cannot discriminate forms', must: ['separate recognition and production','use form discrimination'], must_not: ['label simple typo']}
+- {id: REG-004, name: encourage-partial-success, visible: {output: 'Parents encourage kids to more read.'}, learner_behavior: 'changes to read more', must: ['preserve encourage success','record self-repair'], must_not: ['teach encourage','call whole original correct']}
+- {id: REG-005, name: encourage-no-self-repair, visible: {output: 'Parents encourage kids to more read.'}, learner_behavior: "I don't know what's wrong.", must: ['contingent support'], must_not: ['equate unknown with absent knowledge','dump answer']}
+- {id: REG-006, name: more-books-challenge, visible: {dialogue: "But 'more books' is correct, right?"}, must: ['recognize challenge','explain category distinction'], must_not: ['claim more always follows verbs']}
+- {id: REG-007, name: allow-to, visible: {output: 'Schools should allow to use phones.'}, must: ['reject allow O to V success'], must_not: ['count allow+to as success']}
+- {id: REG-008, name: valid-alternative-improve, visible: {target_history: improve, learner_output: 'make the environment better'}, must: ['accept English','separate target retrieval'], must_not: ['mark target mismatch wrong']}
+- {id: REG-009, name: retrieval-provenance, visible: {probe: '改善 → ?', history: 'no target provenance'}, must: ['block probe'], must_not: ['invent improve knowledge']}
+- {id: REG-010, name: future-job-intent, visible: {output: 'future job', intent: ambiguous}, must: ['resolve meaning'], must_not: ['blindly substitute']}
+- {id: REG-011, name: model-imitation, visible: {support: 'model visible', learner_output: 'copies exact target'}, must: ['modeled at most'], must_not: ['commit independent']}
+- {id: REG-012, name: strategy-failure, visible: {history: 'same explanation failed twice'}, learner_behavior: 'still confused', must: ['classify teaching failure','change representation'], must_not: ['repeat longer explanation']}
+- {id: REG-013, name: diagnosis-reversal, visible: {initial_hypothesis: 'grammar gap'}, learner_behavior: 'rushed then repairs', must: ['lower hypothesis','stop remediation'], must_not: ['continue fixed lesson']}
+- {id: REG-014, name: multi-error-interruption, visible: {artifact: 'paragraph with 8 candidate issues'}, must: ['prioritize/defer/ignore','protect writing flow'], must_not: ['open 8 corrections']}
+- {id: REG-015, name: vision-autocorrect, visible: {image_truth: signifcant, vision_output: significant}, must: ['flag mismatch','preserve raw'], must_not: ['teach normalized evidence']}
+- {id: REG-016, name: teacher-red-ink, visible: {learner_text: 'future job', teacher_annotation: jobs}, must: ['separate channels'], must_not: ['record jobs as learner production']}
+- {id: REG-017, name: controlled-success-source-failure, visible: {controlled_task: correct, returned_original_work: 'error recurs'}, must: ['record controlled success and unresolved source'], must_not: ['close learned']}
+- {id: REG-018, name: transfer-failure, visible: {original_context: 'independent success', new_context: failure}, must: ['separate source and transfer'], must_not: ['claim stable mastery']}
+- {id: REG-019, name: teacher-is-wrong, visible: {teacher_target: 'have a significant impact on', learner_output: 'have a major impact on'}, must: ['accept alternative'], must_not: ['force target']}
+- {id: REG-020, name: teacher-induced-confusion, visible: {learner_signal: 'I understood before, but that explanation confused me.'}, must: ['treat move as possible failure','reframe'], must_not: ['attribute all confusion to learner']}
+- {id: REG-021, name: same-output-different-state, visible: {output: signigicant}, variants: ['typo-only','retrieval plus spelling gap','weak recognition','unknown word'], must: ['materially different moves when evidence supports'], must_not: ['single surface diagnosis']}
+- {id: REG-022, name: photo-uncertainty-before-spelling, visible: {vision_candidates: [significant, signigicant], confidence: low}, must: ['resolve transcription first'], must_not: ['teach machine-created error']}
+- {id: REG-023, name: open-question-not-wrong-answer, visible: {learner_turn: 'What does flying colours mean?', move: question}, must: ['respond to question'], must_not: ['classify failed task attempt']}
+- {id: REG-024, name: accepted-answer-no-overteach, visible: {learner_attempt: adequate}, must: ['progress'], must_not: ['manufacture correction']}

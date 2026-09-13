@@ -1,0 +1,2 @@
+import{longitudinalCapabilityStatusV1}from'./capabilities';
+export const waveLLongitudinalStatusV1=Object.freeze({wave:'L',subsystem:'Longitudinal Learning System',status:'READY_FOR_AUDIT' as const,capabilities:longitudinalCapabilityStatusV1,firstPass:longitudinalCapabilityStatusV1.filter(x=>x.status==='FIRST_PASS').length,contractOnly:longitudinalCapabilityStatusV1.filter(x=>x.status==='CONTRACT_ONLY').length});

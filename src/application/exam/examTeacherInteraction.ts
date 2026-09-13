@@ -1,0 +1,79 @@
+import type { LessonPlanV1, ProductContextV1 } from '../../architecture/contracts';
+import type { LearnerModelSnapshotV3 } from '../../domain/learner/LearnerModelV3';
+import type { InnerTutorDecisionInputV1, QualifiedInnerTutorDecisionV1 } from '../../teacher-runtime';
+import { decideInnerTutorV1 } from '../../teacher-runtime';
+import { blockRegistryV4 } from '../v4/blockRegistryV4';
+
+export type ExamTeacherInteractionModeV1='SELECT'|'CLASSIFY'|'MARK'|'EVIDENCE_SELECT'|'REFERENCE_LINK'|'MATCH'|'COMPARE'|'REORDER'|'PLAN'|'CHUNK_RECONSTRUCTION'|'REPAIR'|'FREE_PRODUCTION'|'RETURN';
+export interface ExamTeacherInteractionV1{
+  schemaVersion:1;
+  interactionId:string;
+  decisionPointId:string;
+  blockId:string;
+  mechanismId:string;
+  mode:ExamTeacherInteractionModeV1;
+  title:string;
+  prompt:string;
+  placeholder?:string;
+  options?:readonly {id:string;label:string}[];
+  support:QualifiedInnerTutorDecisionV1['blockDecision']['supportLevel'];
+  mustAct:true;
+  answerLeakageForbidden:true;
+}
+
+const boundAction=(source?:Readonly<Record<string,unknown>>):Pick<ExamTeacherInteractionV1,'mode'|'title'|'prompt'|'placeholder'|'options'>|undefined=>{
+  const payload=source?.taskPayload as Record<string,unknown>|undefined,key=String(source?.responseKey??'');if(!payload||!key)return undefined;
+  for(const raw of [payload.questions,payload.parts,payload.blanks])if(Array.isArray(raw)){const item=(raw as {id?:unknown;prompt?:unknown;options?:unknown}[]).find(row=>String(row.id??'')===key);if(item&&Array.isArray(item.options))return{mode:'SELECT',title:'換你再判斷一次',prompt:String(item.prompt??'依照剛才的關係，重新選出最符合的答案。'),options:(item.options as {id?:unknown;text?:unknown}[]).map(option=>({id:String(option.id??''),label:String(option.text??option.id??'')}))};}
+  return{mode:'REPAIR',title:'只修這一小步',prompt:'保留原本是對的部分，只改剛才尚未成立的地方。',placeholder:'寫下你修正後的英文'};
+};
+const familyDiagnosticAction=(source?:Readonly<Record<string,unknown>>):Pick<ExamTeacherInteractionV1,'mode'|'title'|'prompt'|'placeholder'|'options'>|undefined=>{
+  const diagnosis=source?.familyDiagnosis as {family?:string;observationKind?:string;discriminatingActions?:readonly string[];learnerAuthorshipRequired?:boolean}|undefined;
+  if(!diagnosis?.discriminatingActions?.length)return undefined;
+  if(diagnosis.learnerAuthorshipRequired)return{mode:'REPAIR',title:diagnosis.family==='WRITING'?'只改最值得修的一小段':'先保留你的意思，再修一小段',prompt:'用你自己的英文完成修正；Teacher 提供的參考寫法不會算成你的作答證據。',placeholder:'寫下你修正後的英文'};
+  const labels:Record<string,string>={ASK_MEANING_RECOGNITION:'先確認看得懂的意思',CONTRAST_NEARBY_SENSES:'比較相近意思',CHECK_MEANING_TO_ENGLISH_RETRIEVAL:'不看選項，從意思叫出英文',MARK_SYNTACTIC_SLOT:'標出句法位置需要什麼形式',COMPARE_COLLOCATION:'比較哪個搭配自然',CHECK_PREVIOUS_AND_NEXT_SENTENCE:'同時檢查前後文',MARK_SLOT_CONSTRAINT:'標出詞性與句型限制',RECHECK_REMAINING_POOL:'重查剩餘選項的連鎖影響',LINK_REFERENCES:'連回代名詞或指涉來源',LABEL_SENTENCE_FUNCTION:'判斷句子的篇章功能',MARK_BACKWARD_LINK:'標出向前連接',MARK_FORWARD_LINK:'標出向後連接',SELECT_EVIDENCE_LOCATION:'先選真正支持答案的原文位置',EXPLAIN_EVIDENCE_TO_OPTION_LINK:'說明證據如何連到選項',COMPARE_CLAIM_STRENGTH:'比較原文與選項語氣強度',CLASSIFY_NOT_STATED_OR_CONTRADICTED:'分清未提及與原文相反',IDENTIFY_SOURCE_EVIDENCE:'標出各來源提供的證據',CLASSIFY_COPYABLE_OR_TRANSFORMED:'判斷可直接取用或必須改寫',RETRIEVE_WITHOUT_OPTION:'拿掉選項後自己提取',RECONSTRUCT_SUMMARY:'用自己的話重組摘要'};
+  return{mode:diagnosis.family==='READING'?'EVIDENCE_SELECT':'SELECT',title:'先確認真正卡住的地方',prompt:'完成一個小判斷，Teacher 才不會把不同問題當成同一種錯誤。',options:diagnosis.discriminatingActions.slice(0,4).map(id=>({id,label:labels[id]??id.toLowerCase().replaceAll('_',' ')}))};
+};
+const copy=(blockId:string,sourceTaskContext?:Readonly<Record<string,unknown>>,role?:string):Pick<ExamTeacherInteractionV1,'mode'|'title'|'prompt'|'placeholder'|'options'>=>{
+  if(role==='PRACTICE'||role==='ASSESS')return boundAction(sourceTaskContext)??{mode:'REPAIR',title:'換你完成',prompt:'依照剛才的關係完成修正。',placeholder:'寫下修正後的英文'};
+  const diagnostic=familyDiagnosticAction(sourceTaskContext);if(diagnostic)return diagnostic;
+  if(blockId==='inference-evidence-bridge')return{mode:'EVIDENCE_SELECT',title:'先找證據，再做推論',prompt:'先選你要用哪一種證據檢查方式；Teacher 不會替你選答案。',options:[{id:'DIRECT',label:'找原文直接支持的句子'},{id:'REFERENCE',label:'追查代名詞或指涉'},{id:'STRENGTH',label:'比較原文與選項的語氣強度'}]};
+  const modes:Record<string,ExamTeacherInteractionModeV1>={'reference-chain':'REFERENCE_LINK','text-structure-map':'CLASSIFY','paragraph-function-map':'CLASSIFY','sentence-insertion-continuity':'REORDER','distractor-evidence-contrast':'COMPARE','claim-strength-contrast':'COMPARE','meaning-representation':'MATCH','form-contrast':'COMPARE','chunk-as-unit':'CHUNK_RECONSTRUCTION','collocation-network':'MATCH','morphology-decomposition':'MARK','meaning-segmentation':'MARK','task-requirement-map':'PLAN','idea-development-ladder':'PLAN','alternative-translation-compare':'COMPARE'};
+  if(blockId==='task-requirement-map'){
+    const requirements=Array.isArray(sourceTaskContext?.requirements)?sourceTaskContext!.requirements as string[]:[];
+    return{mode:'PLAN',title:'先確認你有沒有答完整',prompt:`把題目要求逐一對回你的文章。${requirements.length?` 題目要求：${requirements.join('；')}`:''}`,options:(requirements.length?requirements:['立場','理由','例子']).map((label,index)=>({id:`REQ_${index}`,label}))};
+  }
+  if(blockId==='idea-development-ladder')return{mode:'PLAN',title:'把理由往下一層推',prompt:'不要重寫整篇。先選下一個必要內容步驟。',options:[{id:'WHY',label:'WHY：補原因'},{id:'MECHANISM',label:'MECHANISM：補如何發生'},{id:'EXAMPLE',label:'EXAMPLE：補具體例子'}]};
+  if(blockId==='return-original-writing'||blockId==='return-original-translation'||blockId==='return-source-navigation')return{mode:'RETURN',title:'回到你的原作',prompt:'把剛才處理的那一點放回原本答案，由你自己修改。'};
+  const block=blockRegistryV4.get(blockId);
+  if(block&&(modes[blockId]||['SELECT','COMPARE','MATCH','ORDER','MOVE','RECONSTRUCT'].includes(block.interaction)))return{mode:modes[blockId]??'SELECT',title:block.label,prompt:`${block.learnerAction}。先完成這個可檢查的小步驟。`,options:[{id:'CHECK_CONTEXT',label:'回到上下文標出限制'},{id:'COMPARE_CHOICES',label:'比較兩個候選的差異'},{id:'VERIFY_FIT',label:'放回原句檢查連貫與語意'}]};
+  return{mode:blockId.includes('repair')?'REPAIR':'FREE_PRODUCTION',title:block?.label??'現在換你做',prompt:block?.learnerAction??'請完成 Teacher 指定的下一小步。',placeholder:'在這裡完成這一步'};
+};
+
+export function buildExamTeacherInteractionV1(input:{decision:QualifiedInnerTutorDecisionV1;sessionId:string;sourceTaskContext?:Readonly<Record<string,unknown>>}):ExamTeacherInteractionV1|undefined{
+  const action=input.decision.action;
+  if(['NONE','WAIT','STOP','EXIT'].includes(action))return undefined;
+  const blockId=input.decision.blockDecision.selectedBlockId;
+  const block=blockRegistryV4.get(blockId);if(!block)return undefined;
+  const c=copy(blockId,input.sourceTaskContext,block.role);
+  return Object.freeze({schemaVersion:1,interactionId:`exam-interaction:${input.sessionId}:${input.decision.provenance.decisionPointId}:${blockId}`,decisionPointId:input.decision.provenance.decisionPointId,blockId,mechanismId:input.decision.experience.mechanismId??blockId,...c,support:input.decision.blockDecision.supportLevel,mustAct:true,answerLeakageForbidden:true});
+}
+
+export type ExamInteractionCompletionV1={kind:'SUBMITTED'|'IMPASSE'|'RETURNED';response?:string;evaluatedOutcome?:'SUCCESS'|'PARTIAL'|'FAILURE'};
+export function interactionOutcomeV1(input:{decision:QualifiedInnerTutorDecisionV1;completion:ExamInteractionCompletionV1}):'NOT_EVALUATED'|'EXPOSURE_ONLY'|'SUCCESS'|'PARTIAL'|'FAILURE'{
+  if(input.completion.kind==='IMPASSE')return'FAILURE';
+  if(input.completion.kind==='RETURNED')return'NOT_EVALUATED';
+  if(input.decision.blockDecision.pedagogicalIntent==='TEACH')return'EXPOSURE_ONLY';
+  return input.completion.evaluatedOutcome??'NOT_EVALUATED';
+}
+
+export async function continueExamTeacherAfterInteractionV1(input:{
+  learnerId:string;sessionId:string;lessonPlan:LessonPlanV1;productContext:ProductContextV1;learnerTruth:LearnerModelSnapshotV3;
+  previousDecision:QualifiedInnerTutorDecisionV1;completion:ExamInteractionCompletionV1;sourceTaskContext?:Readonly<Record<string,unknown>>;
+  provider?:InnerTutorDecisionInputV1['provider'];
+}):Promise<QualifiedInnerTutorDecisionV1>{
+  const now=new Date().toISOString(),outcome=interactionOutcomeV1({decision:input.previousDecision,completion:input.completion});
+  const targetPlan:LessonPlanV1={...input.lessonPlan,targetRef:input.previousDecision.provenance.targetRef,facet:input.previousDecision.provenance.facet};
+  const history=input.previousDecision.lineage?.context.recentTreatmentResponses??[];
+  const treatments=[...history,...(input.previousDecision.treatmentResponse?[input.previousDecision.treatmentResponse]:[])].filter((item,index,all)=>all.findIndex(other=>other.eventId===item.eventId)===index).slice(-6);
+  return decideInnerTutorV1({lessonPlan:targetPlan,productContext:input.productContext,learnerTruth:input.learnerTruth,event:{id:`exam-interaction-response:${input.sessionId}:${input.previousDecision.provenance.decisionPointId}`,kind:'LEARNER_MANIPULATION',occurredAt:now,outcome,support:input.previousDecision.blockDecision.supportLevel,observationIds:[],learnerIntent:input.completion.kind==='IMPASSE'?'IMPASSE_REPLAN':undefined},recentAttempts:[],recentTreatmentResponses:treatments,timeRemainingMinutes:targetPlan.timeBudgetMinutes,currentDecision:input.previousDecision.blockDecision,currentProvenance:input.previousDecision.provenance,sourceTaskContext:{...input.sourceTaskContext,learnerResponse:input.completion.response,interactionKind:input.completion.kind,interactionOutcome:outcome},provider:input.provider??(async()=>{throw new Error('exam_teacher_provider_unavailable')})});
+}

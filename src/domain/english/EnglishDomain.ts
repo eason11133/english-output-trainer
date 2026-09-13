@@ -1,0 +1,7 @@
+export type EnglishDomainObjectType='WORD'|'WORD_FAMILY'|'SENSE'|'COLLOCATION'|'CHUNK'|'IDIOM_PROVERB'|'FORMULAIC_SEQUENCE'|'REUSABLE_EXPRESSION'|'GRAMMAR_CONSTRUCTION'|'DISCOURSE_MOVE'|'COMPOSITION_CAPABILITY';
+export type EnglishFacet='FORM_RECOGNITION'|'FORM_TO_MEANING'|'MEANING_TO_RETRIEVAL'|'ORTHOGRAPHIC_PRODUCTION'|'MORPHOLOGY'|'SENSE_DISCRIMINATION'|'COLLOCATION'|'LEXICAL_SYNTACTIC_BEHAVIOR'|'FORM_MEANING_MAPPING'|'SELECTION'|'CONSTRUCTION'|'CONTEXTUAL_APPROPRIACY'|'CONTROLLED_PRODUCTION'|'FREE_PRODUCTION'|'SPONTANEOUS_DEPLOYMENT'|'SOURCE_CONTROL'|'TRANSFER'|'RETENTION';
+/** Context/provenance dimensions are deliberately excluded from capability claims. */
+export type CapabilityFacet=Exclude<EnglishFacet,'SOURCE_CONTROL'|'TRANSFER'|'RETENTION'>;
+export type Relevance='LOW'|'MEDIUM'|'HIGH';
+export interface EnglishDomainObject{id:string;type:EnglishDomainObjectType;label:string;description?:string;facets:CapabilityFacet[];prerequisiteIds?:string[];contrastIds?:string[];alternativeIds?:string[];registerGenreConstraints?:string[];writingRelevance:Relevance;translationRelevance:Relevance}
+export function validateEnglishDomainObject(value:EnglishDomainObject):string[]{const errors:string[]=[];if(!value.id.trim())errors.push('id required');if(!value.label.trim())errors.push('label required');if(new Set(value.facets).size!==value.facets.length)errors.push('facets must be unique');if(!value.facets.length)errors.push('at least one facet required');return errors}

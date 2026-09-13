@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "rootDir": "src",
+    "outDir": ".wave1d-persistence-build",
+    "noEmitOnError": true
+  },
+  "include": [
+    "src/persistence/lessonPersistenceGateway.ts",
+    "src/persistence/readingAttemptStore.web.ts"
+  ]
+}

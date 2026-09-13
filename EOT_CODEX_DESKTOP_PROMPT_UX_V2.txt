@@ -1,0 +1,94 @@
+EOT — UX V2 Learner Experience Rebuild
+
+Work in the real Expo repository.
+
+Before editing, read:
+- AGENTS.md
+- EOT_RECONCILIATION_2026-08-19.md
+- EOT_PUBLIC_MVP_REBUILD_CONTRACT_FOR_CODEX_2026-08-19.md
+- docs/EOT_CORE_AUTHORITY_AUDIT_2026-08-19.md
+- EOT_UX_V2_IMPLEMENTATION_CONTRACT.md
+- EOT_UX_V2_ACCEPTANCE_CHECKLIST.md
+
+Use `EOT_UX_V2_VISUAL_REFERENCE.png` as the visual implementation target.
+
+The previous learner-facing Visual Contract V1 is superseded for UX.
+Do not continue patching the fragmented V1 Mission experience.
+
+Preserve the consolidated runtime:
+- canonical Evidence
+- learner projection
+- progressive diagnosis
+- Tutor Policy authority
+- Interaction Planner authority
+- semantic/deterministic evaluator routing
+- General/Exam shared truth
+- policy-owned reteach
+- no mandatory Placement
+
+Rebuild the surface around:
+
+Today
+→ one continuous adaptive Lesson
+→ Result
+→ My English
+→ updated Today
+
+Hard requirements:
+- one learner-facing Start per lesson
+- no per-unit Start
+- no Question X/Y framing
+- teaching may occur before learner failure
+- primitive transitions are invisible
+- feedback stays in the same lesson context
+- 「我還不會」 works from every primitive where shown
+- no arbitrary KnowledgePoint labels as distractors
+- SELECT distractors must represent a real linguistic discrimination
+- if safe distractors are unavailable, choose another primitive
+- feedback is primitive-specific
+- policy-owned reteach visibly changes teaching approach
+- learner acts again after teaching
+- independent proof only when justified
+- Result reports evidence-backed learning change, not score
+- My English remains evidence-honest and sparse when appropriate
+- Journey records milestones, not session spam
+
+VISUAL RULE:
+COPY THE PROVIDED V2 REFERENCE DIRECTION CLOSELY.
+Do not redesign it.
+Match layout hierarchy, card structure, whitespace, restrained palette, CTA placement, bottom nav, Lesson continuity, Result, My English, and Journey.
+
+Replace only example copy/data and generated-image artifacts with real runtime-driven EOT content.
+
+Implementation sequence:
+1. Audit current Today/Mission/Result/My English/Journey against V2.
+2. Remove V1 UX/state-machine leaks.
+3. Refine presentation VMs so React remains thin.
+4. Rebuild Mission as one continuous lesson surface.
+5. Fix 「我還不會」 across primitives.
+6. Remove repeated per-unit Start.
+7. Fix primitive-specific prompt/feedback/distractor contracts.
+8. Keep Result/My English/Updated Today bound to canonical persisted evidence.
+9. Keep Journey milestone-driven.
+10. Run typecheck, domain tests, scenario tests, Android Expo export.
+11. Perform strongest rendered/mobile acceptance available.
+12. Repair ordinary defects before handoff.
+
+Do not stop after a plan.
+Do not ask the user to debug ordinary integration defects.
+Do not return PASS merely because tests are green if the lesson still feels like quiz cards.
+
+Return:
+- old UX paths removed
+- screens/components rebuilt
+- presenter/view-model boundaries
+- exact runtime bindings
+- how one-start lesson continuity works
+- how 「我還不會」 works
+- primitive-specific prompt/feedback behavior
+- how SELECT distractors are sourced or avoided
+- Result/My English/Today persistence path
+- tests/export results
+- visual deviations from reference
+- remaining physical-device acceptance steps
+- explicit PASS/FAIL

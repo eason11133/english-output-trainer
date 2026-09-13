@@ -1,0 +1,17 @@
+export const translationCapabilityPoliciesV1=Object.freeze({
+  'I.source-meaning':{owner:'I',referenceAnswerAuthority:false},
+  'I.meaning-fidelity':{owner:'I',referenceAnswerAuthority:false},
+  'I.lexical-retrieval':{owner:'I',teachingMechanismOwner:'F'},
+  'I.collocation':{owner:'I',teachingMechanismOwner:'F'},
+  'I.verb-pattern':{owner:'I',teachingMechanismOwner:'F'},
+  'I.grammar-form':{owner:'I',teachingMechanismOwner:'F'},
+  'I.role-mapping':{owner:'I',teachingMechanismOwner:'F'},
+  'I.l1-l2-contrast':{owner:'I',hypothesisOnly:true},
+  'I.restructuring':{owner:'I',teachingMechanismOwner:'F'},
+  'I.guided-reconstruction':{owner:'I',teachingMechanismOwner:'F'},
+  'I.valid-realizations':{owner:'I',multipleValid:true},
+  'I.naturalness-precision':{owner:'I',meaningFidelityFirst:true},
+  'I.exam-alignment':{owner:'I',scoreOwner:'S/K'},
+  'I.changed-context-retranslation':{owner:'I',taskOwner:'G',evidenceOwner:'C/K'},
+  'I.translation-evaluation':{owner:'I',evidenceOwner:'C/K',scoreOwner:'S/K'},
+});

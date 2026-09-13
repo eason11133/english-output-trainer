@@ -1,0 +1,4 @@
+import { EnglishFacet } from '../english/EnglishDomain';
+export type BeliefStateV4='UNKNOWN'|'OBSERVED_WEAK'|'REPRESENTATION_FORMING'|'RETRIEVAL_FRAGILE'|'ASSISTED_USE'|'LOCAL_INDEPENDENT'|'CONTEXTUAL_INDEPENDENT'|'TRANSFER_OBSERVED'|'STABLE_FOR_SCOPE'|'CONFLICTED'|'VERIFICATION_DUE';
+export interface FacetBeliefV4{learnerId:string;targetRef:string;facet:EnglishFacet;contextScope:string;state:BeliefStateV4;confidence:'LOW'|'MEDIUM'|'HIGH';supportingEvidenceIds:string[];contradictoryEvidenceIds:string[];lastIndependentAt?:string;lastAssistedAt?:string;contextsObserved:string[];supportDependence:'UNKNOWN'|'HIGH'|'MEDIUM'|'LOW'|'NONE_OBSERVED';verificationDue:boolean;possibleSlip:boolean;possibleGuess:boolean;evidenceVolume:number;evidenceDiversity:number}
+export interface SelfReportV4{id:string;learnerId:string;targetRef?:string;kind:'CONFIDENCE'|'DIFFICULTY'|'MEMORY'|'HELP_NEED'|'PREFERENCE';value:string;occurredAt:string;isCapabilityEvidence:false}

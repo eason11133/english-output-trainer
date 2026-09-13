@@ -1,0 +1,15 @@
+import type { CapabilityFacet } from '../../domain/english/EnglishDomain';
+import type { ProductionConditionsV1 } from '../../domain/task/TaskContract';
+import type { TranslationDeliveredTaskV1 } from '../../content/types';
+
+export type TranslationSourceTypeV1='SCHOOL'|'EXAM'|'SELF_CHOSEN'|'REAL_WORLD'|'GENERATED_FALLBACK'|'UNSPECIFIED_AUTHENTIC';
+export interface TranslationSourceContextV1{sourceArtifactId:string;sourceText:string;sourceLanguage:'zh-TW';targetLanguage:'en';sourceType:TranslationSourceTypeV1;rubricRefs:readonly string[];referenceAnswers:readonly string[];learnerConfirmed:boolean}
+export type TranslationRevisionActorV1='LEARNER'|'LEARNER_ASSISTED'|'AI_SUGGESTION'|'TEACHER_MODEL'|'SYSTEM';
+export interface TranslationRevisionOperationV1{operationId:string;revisionId:string;actor:TranslationRevisionActorV1;sourceSpan:{start:number;end:number};before:string;after:string;occurredAt:string;productionConditions?:ProductionConditionsV1;visibleBeforeResponse:readonly string[];reasonRef?:string}
+export interface TranslationRevisionVersionV1{revisionId:string;originalArtifactId:string;parentRevisionId?:string;text:string;operations:readonly TranslationRevisionOperationV1[];createdAt:string;immutable:true}
+export interface TranslationArtifactContextV1{originalArtifactId:string;originalRevisionId:string;workingRevisionId:string;revisions:readonly TranslationRevisionVersionV1[]}
+export type TranslationDimensionV1='SOURCE_MEANING'|'MEANING_SEGMENTATION'|'MEANING_FIDELITY'|'LEXICAL_RETRIEVAL'|'LEXICAL_PRECISION'|'COLLOCATION'|'VERB_PATTERN'|'GRAMMAR_FORM'|'ROLE_MAPPING'|'L1_L2_CONTRAST'|'RESTRUCTURING'|'NATURALNESS_PRECISION';
+export interface TranslationOpportunityCandidateV1{candidateId:string;translationDimension:TranslationDimensionV1;targetRefs:readonly string[];facets:readonly CapabilityFacet[];sourceText:string;learnerText:string;confidence:'LOW'|'MEDIUM'|'HIGH';reasonCodes:readonly string[];possibleBottlenecks:readonly string[];referenceMatchRequired:false}
+export interface TranslationTeachingContextV1{sourceContext:TranslationSourceContextV1;originalArtifactId:string;originalRevisionId:string;workingRevisionId:string;currentLearnerTranslation:string;focusCandidate?:TranslationOpportunityCandidateV1;validAlternativePolicy:'MEANING_PRESERVING_ALTERNATIVES_ACCEPTED';referenceAnswersAreAuthority:false;phase:'ORIGINAL_TRANSLATION'|'LOCAL_REPAIR'|'RETURN_TO_ORIGINAL'|'FRESH_TRANSLATION'|'COMPLETE_FOR_NOW';authority:{targetOwner:'D';teacherActionOwner:'E';mechanismOwner:'F';translationSemanticsOwner:'I';evidenceOwner:'C/K'}}
+export interface TranslationAnalyticObservationV1{observationId:string;sourceText:string;learnerText:string;meaningFidelity:'PRESERVED'|'PARTIAL'|'DISTORTED'|'UNKNOWN';languageAcceptability:'ACCEPTABLE'|'NEEDS_REPAIR'|'UNKNOWN';naturalness:'NATURAL'|'ACCEPTABLE'|'AWKWARD'|'UNKNOWN';validAlternativePossible:boolean;referenceMatchRequired:false;canClaimCapability:false;canAssignExamScore:false;reasonCodes:readonly string[]}
+export type { TranslationDeliveredTaskV1 };

@@ -1,0 +1,17 @@
+export type { SpecializedTeacherRuntimeV1 } from '../../architecture/contracts';
+export const WRITING_RUNTIME_AUTHORITY='Writing specializes the shared Teacher/evidence chain and never owns separate learner truth.' as const;
+export * from './types';
+export * from './sourceContext';
+export * from './revision';
+export * from './feedbackBudget';
+export * from './contextCompiler';
+export * from './taskNeed';
+export * from './freshTask';
+export * from './evaluation';
+export * from './runtime';
+export * from './workRuntime';
+export * from './capabilities';
+export * from './waveHStatus';
+export * from './freshTaskCoordinator';
+export * from './activePractice';
+export * from './multiBottleneckDiagnosis';

@@ -1,0 +1,29 @@
+EOT 2.0 FRONTEND RESET — CODEX ENTRY
+
+SOURCE OF TRUTH FILES:
+1. EOT_2.0_Frontend_Learning_Experience_Implementation_Contract_v1.1.md
+2. EOT_2.0_Visual_Reference_Manifest_v1.1.md
+3. EOT_VIS_01_General_Core_v1.1.png
+4. EOT_VIS_02_Mission_Interaction_v1.1.png
+5. EOT_VIS_03_Exam_Core_v1.1.png
+6. EOT_VIS_04_Design_System_v1.1.png
+
+v1.1 supersedes conflicting v1.0 dark-first and one-screen-only frontend recovery rules.
+
+Do not perform product analysis.
+Do not propose a new UX.
+Do not substitute your own visual design.
+
+Before editing, verify all six files are present and readable.
+If yes, Visual Source Check = READY.
+
+Then implement the complete learner-facing frontend reset in v1.1.
+Do not stop after General Today.
+Do not add new backend/product features.
+
+Return:
+- files added/changed/removed
+- surfaces implemented
+- validation results
+- exact Android QA steps
+- real-data limitations

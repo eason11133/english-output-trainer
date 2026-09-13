@@ -1,0 +1,39 @@
+{
+  "packageSchemaVersion": 3,
+  "checkpointId": "F_U1_BLOCKER_CLOSURE_PLUS_H_WRITING_20260828",
+  "status": "READY_FOR_INDEPENDENT_AUDIT",
+  "baseline": "live F+U1 semantic merge installed before the prior independent audit",
+  "scope": [
+    "three independently proven F/U1 blocker closures",
+    "H Writing learner-path integration",
+    "H capability truth/status without overclaim"
+  ],
+  "fStatus": "RE_AUDIT_CANDIDATE",
+  "u1Status": "PARTIAL_NATIVE_ACCEPTANCE_PENDING",
+  "hStatus": "READY_FOR_AUDIT_PARTIAL",
+  "hCapabilityStatus": {
+    "FIRST_PASS": [
+      "H.sentence-realization",
+      "H.meaning-encoding",
+      "H.feedback-budget",
+      "H.local-repair",
+      "H.revision",
+      "H.return-original"
+    ],
+    "CONTRACT_ONLY": [
+      "H.purpose-audience-genre",
+      "H.idea-generation",
+      "H.reasoning-depth",
+      "H.planning",
+      "H.organization",
+      "H.cohesion",
+      "H.joint-construction",
+      "H.writing-evaluation"
+    ],
+    "BLOCKED_EXTERNAL": ["H.fresh-writing-transfer"]
+  },
+  "acceptanceRule": "This manifest and all local diagnostics are claims only. Independent Codex must inspect live source/runtime and may reject the design, statuses, blocker closures, or merge compatibility.",
+  "u2Included": false,
+  "hSealed": false,
+  "fSealed": false
+}

@@ -1,0 +1,67 @@
+EOT — Learner Experience Rebuild — Vertical Slice V1
+
+Work in the real Expo repository.
+
+Before editing, read:
+- AGENTS.md
+- EOT_RECONCILIATION_2026-08-19.md
+- EOT_PUBLIC_MVP_REBUILD_CONTRACT_FOR_CODEX_2026-08-19.md
+- docs/EOT_CORE_AUTHORITY_AUDIT_2026-08-19.md
+- EOT_LEARNER_EXPERIENCE_VISUAL_CONTRACT_V1.md
+
+Also use EOT_VISUAL_CONTRACT_VERTICAL_SLICE_V1.png as the visual hierarchy reference.
+
+This task is NOT another architecture redesign.
+
+The core learner runtime has already been consolidated. Your job is to implement the learner-facing vertical slice faithfully while preserving runtime authority.
+
+Implement the complete flow:
+FIRST ENTRY
+→ TODAY
+→ MISSION ATTEMPT
+→ FOCUSED FEEDBACK
+→ POLICY-OWNED RETEACH WHEN REQUIRED
+→ RE-OUTPUT
+→ RESULT
+→ MY ENGLISH
+→ UPDATED TODAY
+
+Rules:
+- Do not invent pedagogy in React components.
+- Do not hard-code fake learner states just to match the image.
+- If runtime truth does not support a visual statement, render honest sparse/unknown state.
+- Do not reintroduce mandatory Placement.
+- Do not turn the app into a module/toolbox home.
+- Do not add XP, levels, mastery percentages, streak pressure, or game mechanics.
+- Chinese-first learner copy.
+- One dominant action per state.
+- Reuse the existing restrained design system and components where possible.
+- Preserve contextual English lookup.
+- Respect keyboard, safe-area, Android Back, resume/restart, and time-box behavior.
+- Mission interactions must render the planned primitive, not always a text box.
+- Open semantic output must keep semantic evaluation behavior.
+- Assisted success must remain visibly and semantically assisted.
+- Result, My English, Frontier, and returned Today must all come from canonical persisted evidence.
+
+Implementation method:
+1. Audit the current real UI state against the Visual Contract.
+2. Map every visible element to a real runtime field/view model.
+3. Implement the whole vertical slice, not one screen.
+4. Add any missing presentation/view-model adapters needed to keep React components thin.
+5. Do not move Tutor Policy/diagnosis/evidence decisions into UI.
+6. Run typecheck, domain tests, scenario tests, and Android Expo export.
+7. Run the strongest practical rendered/mobile acceptance available in your environment.
+8. Capture screenshots of the implemented states if your environment supports it.
+9. Fix ordinary integration/UI defects before handing back.
+
+Return:
+- exact screens/states changed
+- runtime bindings used for each
+- files changed
+- tests/export results
+- physical-device acceptance steps
+- explicit PASS/FAIL conditions
+- any visual deviations from the supplied contract and why
+
+Do not stop after a plan.
+Do not ask the user to debug ordinary integration issues.

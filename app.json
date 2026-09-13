@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "English Output Trainer",
+    "slug": "english-output-trainer",
+    "version": "0.3.4",
+    "orientation": "portrait",
+    "scheme": "englishoutputtrainer",
+    "icon": "./assets/images/eot-icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.easonsystems.englishoutputtrainer",
+      "buildNumber": "7"
+    },
+    "android": {
+      "package": "com.easonsystems.englishoutputtrainer",
+      "versionCode": 7,
+      "softwareKeyboardLayoutMode": "resize",
+      "icon": "./assets/images/eot-icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/eot-adaptive-foreground.png",
+        "backgroundColor": "#F5F0E6"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      "expo-sqlite",
+      "expo-image",
+      "expo-splash-screen"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "releaseLabel": "cloud-live-ai-physical-retest-2026-09-13",
+      "router": {},
+      "eas": {
+        "projectId": "9f32a9ee-526a-4cb8-8c8c-4da9431b1150"
+      }
+    },
+    "owner": "eason-systems"
+  }
+}

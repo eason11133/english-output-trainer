@@ -1,0 +1,644 @@
+{
+  "count": 89,
+  "jobs": [
+    {
+      "jobId": "V38-VOC-JOB-0177",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0178",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0179",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0180",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0181",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0182",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0183",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0184",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0273",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0274",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0275",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0276",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0277",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0278",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0279",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0280",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0401",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0402",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0403",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0404",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0405",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0406",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0407",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0408",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0457",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0458",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0459",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0460",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0461",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0462",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0463",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0464",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0473",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0474",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0475",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0476",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0477",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0478",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0479",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0480",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0513",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0514",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0515",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0516",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0517",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0518",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0519",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0520",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0529",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0530",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0531",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0532",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0533",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0534",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0535",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0536",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0609",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0610",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0611",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0612",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0613",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0614",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0615",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0616",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0641",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0642",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0643",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0644",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0645",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0646",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0647",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0648",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING",
+        "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0737",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0738",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0739",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0740",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0741",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0742",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0743",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0744",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0865",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0866",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0867",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0868",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0869",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0870",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0871",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0872",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    },
+    {
+      "jobId": "V38-VOC-JOB-0995",
+      "family": "VOCABULARY",
+      "reasons": [
+        "CORPUS_LEMMA_SENSE_MISSING"
+      ]
+    }
+  ]
+}

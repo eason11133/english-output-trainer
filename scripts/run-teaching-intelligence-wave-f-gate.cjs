@@ -1,0 +1,33 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.resolve(__dirname,'..');
+const build=process.env.EOT_DOMAIN_TEST_BUILD||'.domain-test-build-wave-f';
+const fromBuild=rel=>require(path.join(root,build,rel));
+const registry=fromBuild('architecture/registry.js');
+const catalog=fromBuild('architecture/capabilityCatalog.js');
+const upgrade=fromBuild('architecture/upgradePlan.js');
+const f=fromBuild('teaching/index.js');
+const failures=[];
+const requiredFiles=['src/teaching/types.ts','src/teaching/modeRegistry.ts','src/teaching/pckCatalog.ts','src/teaching/intelligence.ts','src/teaching/waveFStatus.ts','tests/domain/teachingIntelligenceWaveF.test.cjs'];
+for(const rel of requiredFiles)if(!fs.existsSync(path.join(root,rel)))failures.push(`missing Wave F asset: ${rel}`);
+const subsystem=registry.eotArchitectureRegistryV1.find(item=>item.id==='F');
+if(subsystem?.current_wave_status!=='COMPLETE_FIRST_PASS'||subsystem?.maturity_status!=='PRODUCTION_CORE')failures.push('F is not COMPLETE_FIRST_PASS / PRODUCTION_CORE');
+if(upgrade.recommendedMajorSubsystemUpgradeWavesV1.find(item=>item.subsystem==='F')?.state!=='COMPLETE_FIRST_PASS')failures.push('F upgrade plan state incorrect');
+const caps=catalog.capabilitiesForSubsystemV1('F');
+if(caps.length!==24)failures.push(`expected 24 Wave F capabilities, got ${caps.length}`);
+for(const cap of caps)if(cap.implementation_status!=='FIRST_PASS')failures.push(`Wave F capability not FIRST_PASS: ${cap.id}`);
+if(f.teachingWaveFCapabilityStatusV1.length!==caps.length)failures.push('Wave F status row count mismatch');
+for(const row of f.teachingWaveFCapabilityStatusV1)if(![0,25,50,75,90,100].includes(row.afterPercent))failures.push(`invalid evidence-gated score: ${row.capabilityId}`);
+if(f.establishedTeachingRepresentationIdsV1.length!==10)failures.push(`expected 10 established teaching representations, got ${f.establishedTeachingRepresentationIdsV1.length}`);
+const pckIds=new Set(f.canonicalPckMechanismsV1.map(item=>item.id));for(const block of f.blockRegistryV4.byRole('TEACH'))if(!pckIds.has(block.id))failures.push(`production TEACH block lacks F PCK metadata: ${block.id}`);
+failures.push(...f.validateTeachingPrimitiveCoverageV1());
+try{
+ const request={targetRef:'allow-object-infinitive',facet:'CONSTRUCTION',targetArea:'GRAMMAR',targetKind:'GRAMMAR_CONSTRUCTION',learnerState:'OBSERVED_FRAGILE',supportDependence:'UNKNOWN',competingHypotheses:[],current:{outcome:'FAILURE',support:'NONE',eventKind:'LEARNER_RESPONSE'},conditions:f.defaultTeachingOpportunityConditionsV1({support:'NONE',elicitation:'OPEN_CHOICE',context:'SOURCE',taskLoad:'HIGH'}),recentTreatment:[{mechanismId:'grammar-role-map',support:'EXPLICIT',outcome:'FAILURE',responseSignal:'NO_PROGRESS'}]};
+ const options=f.deriveTeachingOptionsV1(request);if(options.targetRef!==request.targetRef||options.facet!==request.facet)failures.push('F changed D target/facet');if(!options.preferredMechanismIds.length)failures.push('F produced no admissible mechanism');if(options.preferredMechanismIds[0]==='grammar-role-map')failures.push('F repeated failed representation unchanged');if(options.feedbackBudget.maxConcurrentTargets!==1)failures.push('F exceeded single authorized focus budget');
+ const generation=f.taskGenerationNeedFromTeachingOptionsV1(options);if(generation.validAlternatives!=='ACCEPT')failures.push('F generation contract does not preserve valid alternatives');
+ const supported=f.deriveContingentSupportPolicyV1({...request,current:{outcome:'SUCCESS',support:'GUIDED',eventKind:'LEARNER_RESPONSE'},recentTreatment:[]});if(supported.transition!=='FADE'||supported.recommendedSupport!=='CUED'||supported.nextEvidenceCeiling!=='ASSISTED')failures.push('F contingent support does not fade one step after supported success');
+ const fresh=f.deriveContingentSupportPolicyV1({...request,current:{outcome:'SUCCESS',support:'LIGHT',eventKind:'LEARNER_RESPONSE'},conditions:f.defaultTeachingOpportunityConditionsV1({support:'LIGHT',elicitation:'FUNCTION_CUED'}),recentTreatment:[]});if(fresh.transition!=='FRESH_CHECK'||fresh.recommendedSupport!=='NONE'||fresh.nextElicitation!=='OPEN_CHOICE')failures.push('F does not transition from light support to fresh answer-safe check');
+ const l1=f.validateTeachingMechanismChoiceV1({...request,facet:'FORM_MEANING_MAPPING',recentTreatment:[]},'l1-collision');if(!l1.includes('L1_HYPOTHESIS_NOT_GROUNDED'))failures.push('F allows ungrounded L1 diagnosis');
+}catch(error){failures.push(`Wave F executable gate crashed: ${error instanceof Error?error.message:String(error)}`)}
+const result={passed:!failures.length,auditedCapabilities:caps.length,pckMechanisms:f.canonicalPckMechanismsV1.length,establishedTeachingRepresentations:f.establishedTeachingRepresentationIdsV1.length,primitiveCount:f.requiredTeachingPrimitivesV1.length,evidenceScale:'0/25/50/75/90/100',nextIntegration:['DB0/DB1 treatment persistence','H Writing','I Translation','G task generation','K condition evidence'],failures};
+console.log(JSON.stringify(result,null,2));if(!result.passed)process.exitCode=1;

@@ -1,0 +1,37 @@
+import { EOTWood as wood } from './EOTWoodTheme';
+export const eotLearnerTokensV1={
+  colors:{
+    canvas:wood.color.canvas,
+    background:wood.color.canvasRaised,
+    paper:wood.color.card,
+    ink:wood.color.ink,
+    muted:wood.color.inkSoft,
+    // Darker than inkMuted so small labels remain legible on paper.
+    subtle:'#716257',
+    line:wood.color.sand200,
+    deepWood:wood.color.walnut800,
+    midWood:wood.color.walnut600,
+    lightWood:wood.color.sand300,
+    woodWash:wood.color.cardMuted,
+    focus:wood.color.caramel600,
+    focusWash:wood.color.sand100,
+    success:wood.color.success,
+    successWash:wood.color.sand100,
+    danger:wood.color.danger,
+    dangerWash:'#F7EAE5',
+    overlay:wood.color.overlay,
+    spotlight:wood.color.spotlight,
+    border:wood.color.border,
+    borderStrong:wood.color.borderStrong,
+    shadow:wood.color.walnut900,
+  },
+  layout:{
+    learnerShellMaxWidth:430,
+    lessonCanvasMaxWidth:390,
+    minimumTouchTarget:44,
+  },
+  radius:{small:wood.radius.sm,medium:wood.radius.md,large:wood.radius.lg,xlarge:wood.radius.xl},
+  motion:wood.motion,
+  spacing:{xs:6,sm:10,md:16,lg:22,xl:30,xxl:40},
+  typography:{caption:12,body:15,bodyLarge:17,section:20,title:30,display:34},
+} as const;

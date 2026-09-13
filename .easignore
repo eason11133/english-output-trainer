@@ -1,0 +1,126 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env
+.env.*
+.env*.local
+!.env.example
+!.env.teacher.example
+!.env.coach.example
+
+# local patch backups
+.eot-backups/
+
+# typescript
+*.tsbuildinfo
+.domain-test-build/
+.domain-test-build-*/
+.tmp-*/
+.wave1d-persistence-build/
+.domain-test-build-data-corpus/
+.data-cache/
+data/corpus/*.sqlite*
+
+example
+
+# generated native folders
+/ios
+/android
+
+# ---- EAS build archive exclusions ----
+
+# Dependencies are reinstalled by EAS
+node_modules/
+
+# Local Python environments / caches
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+
+# Test / coverage outputs
+coverage/
+.coverage
+
+# Local Expo cache
+.expo/
+
+# Generated exports and QA artifacts
+dist/
+dist-*/
+artifacts/
+archive/
+founder-builds/
+_patch_backups/
+_EOT_*/
+
+# Logs
+*.log
+
+
+.eas-archive-check/
+
+# ---- Generated EOT exports / build outputs ----
+.eot-private-beta-android-export/
+.eot-private-beta-ui-closure-android/
+.eot-ui-closure-web/
+.eot-ui-closure-web-final/
+.eot-*/
+.foundation-*/
+.teaching-lookup-*/
+.codex-temp/
+.railway-deploy/
+.eas-inspect-*/
+
+# ---- Local downloaded APKs ----
+Expo-Go-*.apk
+*.apk
+
+# EAS materializes this exact corpus from the checked-in gzip after install.
+assets/corpus/*.sqlite
+
+# ---- Local capture / browser test profiles ----
+.capture-profile-test/
+
+# ---- Temporary QA / PDF / Hermes files ----
+tmp/
+
+# ---- Historical update / QA payloads ----
+_EOT_EXAM_BINDING_20260903/
+_EOT_UPDATE_20260903/
+
+# ---- Previous inspect output ----
+.eas-archive-check/
+

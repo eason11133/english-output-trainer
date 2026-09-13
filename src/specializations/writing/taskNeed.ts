@@ -1,0 +1,8 @@
+import type { LessonPlanV1 } from '../../architecture/contracts';
+import type { CapabilityFacet } from '../../domain/english/EnglishDomain';
+import type { WritingTaskGenerationNeedV1 } from '../../content/types';
+import type { WritingSourceContextV1 } from './types';
+
+export function createWritingTaskGenerationNeedV1(input:{lessonPlan:LessonPlanV1;source:WritingSourceContextV1;purpose:WritingTaskGenerationNeedV1['purpose'];desiredContextDistance:WritingTaskGenerationNeedV1['desiredContextDistance'];responseScope:WritingTaskGenerationNeedV1['responseScope'];writingFunction:string;semanticRequirements:readonly string[];forbiddenReuse:readonly string[];targetNameVisible?:boolean;functionCueVisible?:boolean;planningSupportAllowed?:boolean;recentModelPrimeAllowed?:boolean}):WritingTaskGenerationNeedV1{
+  return Object.freeze({targetRef:input.lessonPlan.targetRef,facet:input.lessonPlan.facet as CapabilityFacet,writingFunction:input.writingFunction,purpose:input.purpose,audience:input.source.audience,genre:input.source.genre,desiredContextDistance:input.desiredContextDistance,targetNameVisible:input.targetNameVisible??false,functionCueVisible:input.functionCueVisible??false,planningSupportAllowed:input.planningSupportAllowed??false,recentModelPrimeAllowed:input.recentModelPrimeAllowed??false,responseScope:input.responseScope,validAlternatives:'ACCEPT',semanticRequirements:Object.freeze([...new Set(input.semanticRequirements)]),forbiddenReuse:Object.freeze([...new Set(input.forbiddenReuse)]),observationWanted:'fresh learner writing that demonstrates deployability without reference-answer matching'});
+}

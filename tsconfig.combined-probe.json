@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.domain-tests.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": ".combined-probe-build",
+    "noEmitOnError": true
+  },
+  "include": [
+    "src/domain/**/*.ts",
+    "src/learner-truth/**/*.ts",
+    "src/product/**/*.ts",
+    "src/curriculum/**/*.ts",
+    "src/teacher-runtime/**/*.ts",
+    "src/experience/teacherDecisionExperience.ts",
+    "src/application/stage4/**/*.ts",
+    "src/application/stage5a/**/*.ts",
+    "src/application/access/**/*.ts",
+    "src/application/evidence/**/*.ts",
+    "src/application/learner/**/*.ts",
+    "src/application/learning/**/*.ts",
+    "src/application/teacher/**/*.ts",
+    "src/application/v4/**/*.ts",
+    "src/application/stage2/**/*.ts",
+    "src/repositories/EvidenceRepository.ts",
+    "src/repositories/InMemoryEvidenceRepository.ts",
+    "src/architecture/**/*.ts",
+    "src/evaluation/**/*.ts",
+    "src/teaching/**/*.ts",
+    "src/domain-test-shims.d.ts",
+    "src/persistence/treatmentChronology.ts",
+    "src/persistence/operationalTypes.ts",
+    "src/specializations/writing/**/*.ts",
+    "src/specializations/translation/**/*.ts",
+    "src/content/**/*.ts",
+    "tests/type-probes/fu1hGComposition.ts"
+  ]
+}

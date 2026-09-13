@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "risk_levels": {
+    "R0": "No detected mechanical/editorial risk",
+    "R1": "Low-risk review signal",
+    "R2": "Manual semantic review required",
+    "R3": "Quarantine until fixed"
+  },
+  "risks": [
+    {
+      "id": "SECOND_DEFENSIBLE_ANSWER",
+      "level": "R3",
+      "families": [
+        "VOCABULARY",
+        "COMPREHENSIVE",
+        "CONTEXTUAL_FILL",
+        "DISCOURSE",
+        "READING"
+      ]
+    },
+    {
+      "id": "MORPHOLOGY_OR_GRAMMAR_BREAK",
+      "level": "R3",
+      "families": [
+        "COMPREHENSIVE",
+        "CONTEXTUAL_FILL",
+        "TRANSLATION"
+      ]
+    },
+    {
+      "id": "SHARED_BANK_SWAP_AMBIGUITY",
+      "level": "R3",
+      "families": [
+        "CONTEXTUAL_FILL"
+      ]
+    },
+    {
+      "id": "GENERIC_DISTRACTOR_TEMPLATE_REPETITION",
+      "level": "R2",
+      "families": [
+        "VOCABULARY",
+        "COMPREHENSIVE",
+        "DISCOURSE",
+        "READING"
+      ]
+    },
+    {
+      "id": "ANSWER_POSITION_PATTERNING",
+      "level": "R1",
+      "families": [
+        "VOCABULARY",
+        "COMPREHENSIVE",
+        "DISCOURSE",
+        "READING",
+        "MIXED"
+      ]
+    },
+    {
+      "id": "PASSAGE_ARCHITECTURE_REPETITION",
+      "level": "R2",
+      "families": [
+        "DISCOURSE",
+        "READING"
+      ]
+    },
+    {
+      "id": "CLAIM_STRENGTH_OVERREACH",
+      "level": "R3",
+      "families": [
+        "READING",
+        "MIXED",
+        "TRANSLATION",
+        "WRITING"
+      ]
+    },
+    {
+      "id": "EXACT_STRING_SEMANTIC_AUTHORITY",
+      "level": "R3",
+      "families": [
+        "MIXED",
+        "TRANSLATION",
+        "WRITING"
+      ]
+    },
+    {
+      "id": "MODEL_TEXT_AS_LEARNER_EVIDENCE",
+      "level": "R3",
+      "families": [
+        "MIXED",
+        "TRANSLATION",
+        "WRITING"
+      ]
+    },
+    {
+      "id": "FRESHNESS_LINEAGE_COLLISION",
+      "level": "R3",
+      "families": [
+        "ALL"
+      ]
+    },
+    {
+      "id": "NEAR_DUPLICATE_STIMULUS",
+      "level": "R2",
+      "families": [
+        "ALL"
+      ]
+    },
+    {
+      "id": "DIFFICULTY_BY_RARE_VOCAB_ONLY",
+      "level": "R2",
+      "families": [
+        "DISCOURSE",
+        "READING",
+        "MIXED"
+      ]
+    },
+    {
+      "id": "DIAGNOSTIC_OVERCLAIM",
+      "level": "R2",
+      "families": [
+        "ALL"
+      ]
+    },
+    {
+      "id": "LICENSE_OR_USAGE_SCOPE_UNSAFE",
+      "level": "R3",
+      "families": [
+        "ALL"
+      ]
+    }
+  ]
+}

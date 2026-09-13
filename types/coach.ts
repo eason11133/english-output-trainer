@@ -1,0 +1,12 @@
+import{CoachAnalysis,CoachEvidence}from'./coachContract';
+export type CoachInteractionState='ANSWER'|'INLINE_FEEDBACK'|'ERROR'|'CHALLENGE'|'ANALYZING'|'ACKNOWLEDGE_SUCCESS'|'NOTICE_THE_ISSUE'|'CONCEPT_CHECK'|'HELP_CHOICE'|'REVISION'|'VERIFY_REPAIR'|'MICRO_TRANSFER'|'COMPLETE'|'NETWORK_ERROR';
+export type CoachHelpStyle='clue'|'rule'|'comparison';
+export type GrammarKnowledgePointId='simple_past'|'tense_consistency'|'modal_base_verb'|'allow_object_to_verb'|'definite_article'|'subject_verb_agreement'|'singular_plural'|'verb_pattern';
+export type CoachCorrection={id:string;originalText:string;replacementText:string;start:number|null;end:number|null;category:'error'|'naturalness';issueType:string;knowledgePointId?:GrammarKnowledgePointId;title:string;reason:string;expandedExplanation?:string};
+export type GrammarPracticeResponse={itemId:string;answer:string;correct:boolean;correctedAfterError:boolean;evidence:'independent'|'assisted'|'unresolved'};
+export type GrammarPracticeResult={knowledgePointId:GrammarKnowledgePointId;completedAt:string;responses:GrammarPracticeResponse[]};
+export interface CoachChallenge{id:string;sourceTextZhTW:string;referenceAnswers:string[];requiredMeaningUnits:string[];targetKnowledgePointIds:string[];guidedTargetExpression?:string;likelyErrorTags:string[];followUpChallengeIds:string[];difficulty:number}
+export interface CoachAttempt{schemaVersion:1;id:string;challengeId:string;startedAt:string;completedAt?:string;originalAnswer:string;revisions:string[];analyses:CoachAnalysis[];hintsUsed:number;answerRevealed:boolean;selfRepairSucceeded:boolean;finalEvidence:CoachEvidence[];status:'in_progress'|'completed';interactionState?:CoachInteractionState;draftAnswer?:string;helpStyle?:CoachHelpStyle;preAnswerClueUsed?:boolean;focusErrorTag?:string;microTransfer?:{itemId:string;selected:string;correct:boolean};revealedCorrectionIds?:string[];selectedCorrectionId?:string;grammarPracticeResults?:GrammarPracticeResult[]}
+export interface LearnerWeaknessEvent{schemaVersion:1;id:string;errorTag:string;knowledgePointId?:string;firstSeenAt:string;latestSeenAt:string;occurrenceCount:number;repairedCount:number;lastEvidenceType:'independent'|'assisted'|'failed';nextReviewAt:string}
+export interface CoachQueueItem{challengeId:string;dueAt:string;reasonZhTW:string;reasonEn:string}
+export type CoachMockScenario='normal'|'correct'|'alternative'|'partial'|'self_repair'|'timeout'|'invalid_schema';

@@ -1,0 +1,43 @@
+{
+  "processed": 100,
+  "promoted": 100,
+  "quarantined": 0,
+  "promotedByFamily": {
+    "COMPREHENSIVE": 15,
+    "CONTEXTUAL_FILL": 15,
+    "DISCOURSE": 15,
+    "MIXED": 10,
+    "READING": 30,
+    "TRANSLATION": 10,
+    "WRITING": 5
+  },
+  "promotedByProfile": {
+    "FOUNDATION": 30,
+    "GSAT_STANDARD": 33,
+    "HIGH_SCORE": 37
+  },
+  "bindingsCreated": 100,
+  "bindingsReused": 0,
+  "receiptsGenerated": 100,
+  "semanticRubricsGenerated": 25,
+  "quarantinedTasks": [],
+  "live": {
+    "total": 628,
+    "byFamily": {
+      "VOCABULARY": 123,
+      "COMPREHENSIVE": 73,
+      "CONTEXTUAL_FILL": 63,
+      "DISCOURSE": 63,
+      "READING": 103,
+      "MIXED": 53,
+      "TRANSLATION": 104,
+      "WRITING": 46
+    },
+    "byProfile": {
+      "FOUNDATION": 191,
+      "GSAT_STANDARD": 206,
+      "HIGH_SCORE": 203,
+      "LEGACY_UNPROFILED": 28
+    }
+  }
+}

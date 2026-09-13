@@ -1,0 +1,12 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","title":"EOT TeacherTurnPlan v1","type":"object",
+  "required":["observations","positiveEvidence","candidateIssues","competingHypotheses","interventionDecision","expectedLearnerSignals","replanIf","stopIf","teacherUtterance"],
+  "properties":{
+    "observations":{"type":"array","items":{"$ref":"#/$defs/evidenceClaim"}},"positiveEvidence":{"type":"array","items":{"$ref":"#/$defs/evidenceClaim"}},
+    "candidateIssues":{"type":"array","items":{"type":"object","required":["issue","domain","confidence"],"properties":{"issue":{"type":"string"},"domain":{"enum":["VOCABULARY","CHUNK","GRAMMAR","COMPOSITION","OTHER"]},"confidence":{"enum":["LOW","MEDIUM","HIGH"]},"sourceEvidenceIds":{"type":"array","items":{"type":"string"}}}}},
+    "competingHypotheses":{"type":"array","items":{"$ref":"#/$defs/hypothesis"}},"uncertainty":{"type":"string"},"interventionDecision":{"enum":["CONTINUE","DEFER","INTERVENE"]},"interventionReason":{"type":"string"},
+    "teachingObjective":{"type":["object","null"],"properties":{"domain":{"enum":["VOCABULARY","CHUNK","GRAMMAR","COMPOSITION","OTHER"]},"targetId":{"type":["string","null"]},"facet":{"type":"string"},"desiredChange":{"type":"string"}}},
+    "teacherAction":{"type":["string","null"]},"supportLevel":{"enum":["NONE","LIGHT","MODERATE","EXPLICIT","MODEL",null]},"rationale":{"type":["string","null"]},"expectedLearnerSignals":{"type":"array","items":{"type":"object","required":["signal","implication"],"properties":{"signal":{"type":"string"},"implication":{"type":"string"}}}},"replanIf":{"type":"array","items":{"type":"string"}},"stopIf":{"type":"array","items":{"type":"string"}},"teacherUtterance":{"type":"string"}
+  },
+  "$defs":{"evidenceClaim":{"type":"object","required":["claim","evidenceIds"],"properties":{"claim":{"type":"string"},"evidenceIds":{"type":"array","items":{"type":"string"}}}},"hypothesis":{"type":"object","required":["id","explanation","confidence","teachingWouldDiffer"],"properties":{"id":{"type":"string"},"explanation":{"type":"string"},"confidence":{"enum":["LOW","MEDIUM","HIGH"]},"supportingEvidenceIds":{"type":"array","items":{"type":"string"}},"contradictingEvidenceIds":{"type":"array","items":{"type":"string"}},"discriminatingEvidenceNeeded":{"type":["string","null"]},"teachingWouldDiffer":{"type":"boolean"}}}}
+}

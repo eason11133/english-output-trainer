@@ -1,0 +1,2963 @@
+{
+  "comprehensive": [
+    {
+      "task_id": "COMP-G-004",
+      "family": "COMPREHENSIVE",
+      "subtype": "AUTHENTIC_PASSAGE_5_BLANK",
+      "freshness_group_id": "gold-comp-g-004",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "The Move Toward Cashless Payments",
+        "passage": "Paying by phone or card has become common in many places, and some stores now accept very little cash. Digital payment can be fast and convenient, especially when people are making small purchases. It can also help businesses keep records automatically. Yet a fully cashless system may create problems for customers who do not have bank accounts, smartphones, or reliable internet access. Older adults and travelers may also find unfamiliar payment apps difficult to use. For this reason, several cities have considered rules that ___1___ stores from refusing cash completely. Supporters of such rules argue that convenience should not come at the ___2___ of access. Businesses, however, point to the cost of handling cash and the risk of theft. The debate shows that new technology often brings benefits and trade-offs at the same time. A payment system may be more efficient overall while still ___3___ certain groups. Good policy therefore requires more than asking whether a technology is popular; it must also examine who can use it, under what conditions, and with what alternatives. As payment habits continue to change, the challenge will be to ___4___ innovation with inclusion rather than treating the two goals as ___5___.",
+        "blanks": [
+          {
+            "id": "1",
+            "options": [
+              {
+                "id": "A",
+                "text": "prevent"
+              },
+              {
+                "id": "B",
+                "text": "protect"
+              },
+              {
+                "id": "C",
+                "text": "provide"
+              },
+              {
+                "id": "D",
+                "text": "prefer"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "options": [
+              {
+                "id": "A",
+                "text": "expense"
+              },
+              {
+                "id": "B",
+                "text": "cost"
+              },
+              {
+                "id": "C",
+                "text": "price"
+              },
+              {
+                "id": "D",
+                "text": "charge"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "options": [
+              {
+                "id": "A",
+                "text": "excluding"
+              },
+              {
+                "id": "B",
+                "text": "expanding"
+              },
+              {
+                "id": "C",
+                "text": "exchanging"
+              },
+              {
+                "id": "D",
+                "text": "explaining"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "options": [
+              {
+                "id": "A",
+                "text": "balance"
+              },
+              {
+                "id": "B",
+                "text": "borrow"
+              },
+              {
+                "id": "C",
+                "text": "benefit"
+              },
+              {
+                "id": "D",
+                "text": "bother"
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "options": [
+              {
+                "id": "A",
+                "text": "opposites"
+              },
+              {
+                "id": "B",
+                "text": "objects"
+              },
+              {
+                "id": "C",
+                "text": "options"
+              },
+              {
+                "id": "D",
+                "text": "operations"
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "prevent",
+          "2": "expense",
+          "3": "excluding",
+          "4": "balance",
+          "5": "opposites"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "COMP-G-004:blank:1",
+          "semantic_target_key": "comp-g-004.blank.1",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "CHUNK",
+          "expected_answer": "prevent",
+          "teacher_diagnosis_hint": "CHUNK",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-004:blank:2",
+          "semantic_target_key": "comp-g-004.blank.2",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "CHUNK",
+          "expected_answer": "expense",
+          "teacher_diagnosis_hint": "CHUNK",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-004:blank:3",
+          "semantic_target_key": "comp-g-004.blank.3",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "excluding",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-004:blank:4",
+          "semantic_target_key": "comp-g-004.blank.4",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "COLLOCATION",
+          "expected_answer": "balance",
+          "teacher_diagnosis_hint": "COLLOCATION",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-004:blank:5",
+          "semantic_target_key": "comp-g-004.blank.5",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "opposites",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "COMP-G-007",
+      "family": "COMPREHENSIVE",
+      "subtype": "AUTHENTIC_PASSAGE_5_BLANK",
+      "freshness_group_id": "gold-comp-g-007",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Museum Labels: More or Less?",
+        "passage": "Museum visitors often rely on labels to understand what they are seeing, but deciding how much information to provide is difficult. A long label can explain history and context, yet many visitors will not stop to read several paragraphs. A very short label is easier to scan but may leave important questions unanswered. Some museums have responded by using layers of information: a brief label near the object, with additional details available through a QR code or audio guide. This approach lets visitors choose how deeply they want to explore. It also recognizes that people visit museums for different reasons. Someone with strong prior knowledge may want technical detail, while another visitor may need basic context first. Good labels therefore do more than ___1___ facts; they help visitors notice what is worth looking at. The language matters too. Unexplained specialist terms can make an object seem less ___2___, while overly simple language may remove useful complexity. Museums increasingly test labels with real visitors before installing them permanently. These tests can reveal where readers become confused or lose interest. The goal is not to create one perfect amount of text but to design information that is clear, optional, and connected ___3___ the object itself. In that way, labels can support observation rather than ___4___ it. The best label may be the one that encourages a visitor to look again with a more ___5___ question in mind.",
+        "blanks": [
+          {
+            "id": "1",
+            "options": [
+              {
+                "id": "A",
+                "text": "present"
+              },
+              {
+                "id": "B",
+                "text": "prevent"
+              },
+              {
+                "id": "C",
+                "text": "pretend"
+              },
+              {
+                "id": "D",
+                "text": "predict"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "options": [
+              {
+                "id": "A",
+                "text": "accessible"
+              },
+              {
+                "id": "B",
+                "text": "acceptable"
+              },
+              {
+                "id": "C",
+                "text": "available"
+              },
+              {
+                "id": "D",
+                "text": "accurate"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "options": [
+              {
+                "id": "A",
+                "text": "to"
+              },
+              {
+                "id": "B",
+                "text": "for"
+              },
+              {
+                "id": "C",
+                "text": "with"
+              },
+              {
+                "id": "D",
+                "text": "by"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "options": [
+              {
+                "id": "A",
+                "text": "replace"
+              },
+              {
+                "id": "B",
+                "text": "repeat"
+              },
+              {
+                "id": "C",
+                "text": "return"
+              },
+              {
+                "id": "D",
+                "text": "remove"
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "options": [
+              {
+                "id": "A",
+                "text": "specific"
+              },
+              {
+                "id": "B",
+                "text": "special"
+              },
+              {
+                "id": "C",
+                "text": "separate"
+              },
+              {
+                "id": "D",
+                "text": "standard"
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "present",
+          "2": "accessible",
+          "3": "to",
+          "4": "replace",
+          "5": "specific"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "COMP-G-007:blank:1",
+          "semantic_target_key": "comp-g-007.blank.1",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "present",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-007:blank:2",
+          "semantic_target_key": "comp-g-007.blank.2",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SENSE",
+          "expected_answer": "accessible",
+          "teacher_diagnosis_hint": "SENSE",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-007:blank:3",
+          "semantic_target_key": "comp-g-007.blank.3",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "PREPOSITION",
+          "expected_answer": "to",
+          "teacher_diagnosis_hint": "PREPOSITION",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-007:blank:4",
+          "semantic_target_key": "comp-g-007.blank.4",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "replace",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-007:blank:5",
+          "semantic_target_key": "comp-g-007.blank.5",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "specific",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "COMP-G-008",
+      "family": "COMPREHENSIVE",
+      "subtype": "AUTHENTIC_PASSAGE_5_BLANK",
+      "freshness_group_id": "gold-comp-g-008",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Can Online Reviews Be Trusted?",
+        "passage": "Before choosing a restaurant, hotel, or product, many people read online reviews. Reviews can provide useful details that advertisements leave out, but they also have limitations. People are more likely to write a review after an unusually good or bad experience than after an ordinary one. As a result, the visible opinions may not represent every customer's experience. Some platforms also struggle with fake reviews written to improve or damage a business's rating. Readers can reduce the risk of being misled by looking for patterns across many comments instead of ___1___ on a single dramatic story. It can also help to notice whether reviewers describe specific details rather than making only vague claims. A review that explains what happened, when it happened, and what the reviewer expected is easier to ___2___ than one that simply says “amazing” or “terrible.” Ratings should also be considered in context. A four-star hotel and a four-star budget hostel may be serving very different expectations. None of these checks makes online reviews perfectly reliable, but they encourage readers to treat reviews as evidence that must be interpreted rather than as facts that can be ___3___ automatically. The most useful question is often not “Is this review positive?” but “What information does this review provide, and is that information ___4___ to what I care about?” Used this way, reviews can support a decision without ___5___ it entirely.",
+        "blanks": [
+          {
+            "id": "1",
+            "options": [
+              {
+                "id": "A",
+                "text": "relying"
+              },
+              {
+                "id": "B",
+                "text": "replying"
+              },
+              {
+                "id": "C",
+                "text": "relating"
+              },
+              {
+                "id": "D",
+                "text": "releasing"
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "options": [
+              {
+                "id": "A",
+                "text": "evaluate"
+              },
+              {
+                "id": "B",
+                "text": "estimate"
+              },
+              {
+                "id": "C",
+                "text": "establish"
+              },
+              {
+                "id": "D",
+                "text": "exchange"
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "options": [
+              {
+                "id": "A",
+                "text": "accepted"
+              },
+              {
+                "id": "B",
+                "text": "accessed"
+              },
+              {
+                "id": "C",
+                "text": "achieved"
+              },
+              {
+                "id": "D",
+                "text": "affected"
+              }
+            ]
+          },
+          {
+            "id": "4",
+            "options": [
+              {
+                "id": "A",
+                "text": "relevant"
+              },
+              {
+                "id": "B",
+                "text": "relative"
+              },
+              {
+                "id": "C",
+                "text": "reliable"
+              },
+              {
+                "id": "D",
+                "text": "regular"
+              }
+            ]
+          },
+          {
+            "id": "5",
+            "options": [
+              {
+                "id": "A",
+                "text": "determining"
+              },
+              {
+                "id": "B",
+                "text": "describing"
+              },
+              {
+                "id": "C",
+                "text": "delivering"
+              },
+              {
+                "id": "D",
+                "text": "decorating"
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "relying",
+          "2": "evaluate",
+          "3": "accepted",
+          "4": "relevant",
+          "5": "determining"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "COMP-G-008:blank:1",
+          "semantic_target_key": "comp-g-008.blank.1",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "CHUNK",
+          "expected_answer": "relying",
+          "teacher_diagnosis_hint": "CHUNK",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-008:blank:2",
+          "semantic_target_key": "comp-g-008.blank.2",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "evaluate",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-008:blank:3",
+          "semantic_target_key": "comp-g-008.blank.3",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "accepted",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-008:blank:4",
+          "semantic_target_key": "comp-g-008.blank.4",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SENSE",
+          "expected_answer": "relevant",
+          "teacher_diagnosis_hint": "SENSE",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        },
+        {
+          "unit_id": "COMP-G-008:blank:5",
+          "semantic_target_key": "comp-g-008.blank.5",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION",
+            "CONSTRUCTION"
+          ],
+          "operation": "SEMANTIC_FIT",
+          "expected_answer": "determining",
+          "teacher_diagnosis_hint": "SEMANTIC_FIT",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "grammar-role-map",
+            "form-meaning-mapping",
+            "collocation-network",
+            "cohesion-relation-map"
+          ]
+        }
+      ]
+    }
+  ],
+  "contextual_fill": [
+    {
+      "task_id": "CF-G-001",
+      "family": "CONTEXTUAL_FILL",
+      "subtype": "FULL_10X10",
+      "freshness_group_id": "gold-cf-g-001",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Repair Cafés",
+        "passage": "In many cities, people throw away household items that could still be repaired. Repair cafés try to change this habit by bringing volunteers and local residents together. Visitors bring broken lamps, bicycles, small appliances, or clothing, and volunteers show them how to inspect the problem. The goal is not simply to provide a free repair (1) ____; it is also to help people understand how everyday objects work. Because the volunteers have different skills, organizers usually ask visitors to describe the problem before assigning them to a suitable (2) ____. Some repairs are completed quickly, while others require parts that are not (3) ____ on the day. Even when an item cannot be fixed, the visitor may leave with a better idea of why it failed. Supporters say the events reduce waste and make repair knowledge more (4) ____. They can also create a sense of (5) ____ because strangers spend time solving practical problems together. However, organizers must be careful about safety. Volunteers may refuse a repair if the item involves dangerous wiring or if they do not have the right (6) ____. Clear rules help visitors understand that the café is a learning event, not a professional repair shop. Many groups also keep records of common failures so that future sessions can be planned more (7) ____. Over time, this information may reveal which products are especially hard to repair and which parts are most often (8) ____. Some repair cafés share these findings with manufacturers or local governments. In this way, a small community event can contribute to a wider discussion about product design, consumer habits, and the (9) ____ use of resources. Its impact depends not only on the number of objects saved from the trash but also on whether participants become more (10) ____ about repairing and reusing things in the future.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "options": [
+          {
+            "id": "A",
+            "text": "service"
+          },
+          {
+            "id": "B",
+            "text": "expert"
+          },
+          {
+            "id": "C",
+            "text": "available"
+          },
+          {
+            "id": "D",
+            "text": "accessible"
+          },
+          {
+            "id": "E",
+            "text": "community"
+          },
+          {
+            "id": "F",
+            "text": "equipment"
+          },
+          {
+            "id": "G",
+            "text": "efficiently"
+          },
+          {
+            "id": "H",
+            "text": "needed"
+          },
+          {
+            "id": "I",
+            "text": "responsible"
+          },
+          {
+            "id": "J",
+            "text": "confident"
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "B",
+          "3": "C",
+          "4": "D",
+          "5": "E",
+          "6": "F",
+          "7": "G",
+          "8": "H",
+          "9": "I",
+          "10": "J"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "CF-G-001:blank:1",
+          "semantic_target_key": "cf-g-001.blank.1.service",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "service",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:2",
+          "semantic_target_key": "cf-g-001.blank.2.expert",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "expert",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:3",
+          "semantic_target_key": "cf-g-001.blank.3.available",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "available",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:4",
+          "semantic_target_key": "cf-g-001.blank.4.accessible",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "accessible",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:5",
+          "semantic_target_key": "cf-g-001.blank.5.community",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "community",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:6",
+          "semantic_target_key": "cf-g-001.blank.6.equipment",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "equipment",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:7",
+          "semantic_target_key": "cf-g-001.blank.7.efficiently",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "efficiently",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:8",
+          "semantic_target_key": "cf-g-001.blank.8.needed",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "needed",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:9",
+          "semantic_target_key": "cf-g-001.blank.9.responsible",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "responsible",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-001:blank:10",
+          "semantic_target_key": "cf-g-001.blank.10.confident",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "confident",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "CF-G-002",
+      "family": "CONTEXTUAL_FILL",
+      "subtype": "FULL_10X10",
+      "freshness_group_id": "gold-cf-g-002",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Better Note-Taking",
+        "passage": "Students often believe that taking more notes automatically leads to better learning, but the quality of notes matters as much as the amount. Writing every word from a lecture can keep a student busy without requiring much (1) ____. More useful notes usually involve selecting key ideas, showing relationships, and leaving space for later questions. One simple method is to divide a page into a main note area and a smaller (2) ____ for keywords or questions. After class, the student can use those prompts to check whether the main ideas are still (3) ____ in memory. This turns the notes into a tool for retrieval rather than a record that is never opened again. Digital tools can make notes easier to search and reorganize, but they can also create (4) ____ if notifications or unrelated tabs remain open. For that reason, the best format is the one that helps the learner stay (5) ____ on the material. Diagrams and arrows can be especially useful when a topic contains steps, causes, or contrasting ideas. The visual structure makes relationships more (6) ____ than a long list of separate sentences. Good note-taking also includes deciding what not to write. If every example is recorded in full, important information may become harder to (7) ____. Finally, notes should be reviewed while the material is still recent enough to understand. A short review can reveal missing explanations and unclear terms before they are (8) ____. In this sense, note-taking is not a single classroom action but a (9) ____ that continues after class. Its value comes from how the notes are used to support understanding, retrieval, and later (10) ____.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "options": [
+          {
+            "id": "A",
+            "text": "thinking"
+          },
+          {
+            "id": "B",
+            "text": "margin"
+          },
+          {
+            "id": "C",
+            "text": "clear"
+          },
+          {
+            "id": "D",
+            "text": "distraction"
+          },
+          {
+            "id": "E",
+            "text": "focused"
+          },
+          {
+            "id": "F",
+            "text": "visible"
+          },
+          {
+            "id": "G",
+            "text": "identify"
+          },
+          {
+            "id": "H",
+            "text": "forgotten"
+          },
+          {
+            "id": "I",
+            "text": "process"
+          },
+          {
+            "id": "J",
+            "text": "review"
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "B",
+          "3": "C",
+          "4": "D",
+          "5": "E",
+          "6": "F",
+          "7": "G",
+          "8": "H",
+          "9": "I",
+          "10": "J"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "CF-G-002:blank:1",
+          "semantic_target_key": "cf-g-002.blank.1.thinking",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "thinking",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:2",
+          "semantic_target_key": "cf-g-002.blank.2.margin",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "margin",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:3",
+          "semantic_target_key": "cf-g-002.blank.3.clear",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "clear",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:4",
+          "semantic_target_key": "cf-g-002.blank.4.distraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "distraction",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:5",
+          "semantic_target_key": "cf-g-002.blank.5.focused",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "focused",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:6",
+          "semantic_target_key": "cf-g-002.blank.6.visible",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "visible",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:7",
+          "semantic_target_key": "cf-g-002.blank.7.identify",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "identify",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:8",
+          "semantic_target_key": "cf-g-002.blank.8.forgotten",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "forgotten",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:9",
+          "semantic_target_key": "cf-g-002.blank.9.process",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "process",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-002:blank:10",
+          "semantic_target_key": "cf-g-002.blank.10.review",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "review",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "CF-G-004",
+      "family": "CONTEXTUAL_FILL",
+      "subtype": "FULL_10X10",
+      "freshness_group_id": "gold-cf-g-004",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Checking Information Online",
+        "passage": "A surprising claim can spread quickly online, especially when it confirms what people already want to believe. Before sharing such a claim, readers can use several simple checks. The first is to look beyond the headline and read the original (1) ____. Headlines are often written to attract attention and may leave out important limits or conditions. The second step is to identify the source and ask whether it has relevant (2) ____ or a clear reason to know the information. A third useful check is to search for independent (3) ____ from other reliable sources. If several websites repeat the same statement but all trace it back to one unverified post, the claim has not truly been (4) ____. Images also require caution because an old photo can be shared with a new and misleading (5) ____. Reverse-image search or date information may reveal where the picture first appeared. Readers should also separate evidence from (6) ____. A confident tone does not make a statement factual, and a large number of likes does not make it accurate. Finally, uncertainty should be treated honestly. Sometimes the available information is incomplete, and the most responsible conclusion is to (7) ____ judgment rather than choose a side immediately. These habits may slow down sharing, but that is partly the point. Fast reactions are easy; careful verification requires a short (8) ____. Over time, repeated checking can become a normal part of online reading rather than an extra task. The goal is not to distrust everything but to become more (9) ____ about what deserves confidence. In an information-rich environment, that skill is increasingly (10) ____.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "options": [
+          {
+            "id": "A",
+            "text": "article"
+          },
+          {
+            "id": "B",
+            "text": "expertise"
+          },
+          {
+            "id": "C",
+            "text": "confirmation"
+          },
+          {
+            "id": "D",
+            "text": "verified"
+          },
+          {
+            "id": "E",
+            "text": "caption"
+          },
+          {
+            "id": "F",
+            "text": "opinion"
+          },
+          {
+            "id": "G",
+            "text": "withhold"
+          },
+          {
+            "id": "H",
+            "text": "pause"
+          },
+          {
+            "id": "I",
+            "text": "selective"
+          },
+          {
+            "id": "J",
+            "text": "valuable"
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "B",
+          "3": "C",
+          "4": "D",
+          "5": "E",
+          "6": "F",
+          "7": "G",
+          "8": "H",
+          "9": "I",
+          "10": "J"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "CF-G-004:blank:1",
+          "semantic_target_key": "cf-g-004.blank.1.article",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "article",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:2",
+          "semantic_target_key": "cf-g-004.blank.2.expertise",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "expertise",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:3",
+          "semantic_target_key": "cf-g-004.blank.3.confirmation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "confirmation",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:4",
+          "semantic_target_key": "cf-g-004.blank.4.verified",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "verified",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:5",
+          "semantic_target_key": "cf-g-004.blank.5.caption",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "caption",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:6",
+          "semantic_target_key": "cf-g-004.blank.6.opinion",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "opinion",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:7",
+          "semantic_target_key": "cf-g-004.blank.7.withhold",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "withhold",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:8",
+          "semantic_target_key": "cf-g-004.blank.8.pause",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "pause",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:9",
+          "semantic_target_key": "cf-g-004.blank.9.selective",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "selective",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        },
+        {
+          "unit_id": "CF-G-004:blank:10",
+          "semantic_target_key": "cf-g-004.blank.10.valuable",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY",
+            "FORM_MEANING_MAPPING",
+            "COLLOCATION"
+          ],
+          "operation": "SHARED_BANK_CONTEXT_DISCRIMINATION",
+          "expected_answer_text": "valuable",
+          "teacher_mechanism_candidates": [
+            "meaning-representation",
+            "cohesion-relation-map",
+            "collocation-network"
+          ]
+        }
+      ]
+    }
+  ],
+  "discourse": [
+    {
+      "task_id": "DISC-G-001",
+      "family": "DISCOURSE",
+      "subtype": "FULL_4X5",
+      "freshness_group_id": "gold-disc-g-001",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Quiet Cars on Trains",
+        "passage": "Some train systems have introduced “quiet cars,” where passengers are asked to keep phone calls and conversations to a minimum. The idea sounds simple, but it raises an important question: what counts as acceptable noise in a shared space? (1) ____ A passenger typing on a laptop may be nearly silent, while another passenger listening to music through poorly fitted earphones may disturb several rows. (2) ____ Clear signs help, but rules alone do not solve every disagreement. Staff members may hesitate to intervene unless the noise is clearly excessive, and passengers may have different expectations depending on the time of day. (3) ____ This is why some systems describe quiet cars as a request for considerate behavior rather than as a zone of absolute silence. (4) ____ The success of the policy therefore depends less on measuring every sound than on creating a shared expectation about how people should behave.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "sentenceOptions": [
+          {
+            "id": "A",
+            "text": "Noise is not produced only by conversation."
+          },
+          {
+            "id": "B",
+            "text": "As a result, the policy works best when passengers understand its purpose rather than merely its wording."
+          },
+          {
+            "id": "C",
+            "text": "The challenge becomes even greater when a train is crowded."
+          },
+          {
+            "id": "D",
+            "text": "In practice, most systems allow ordinary travel sounds such as announcements, doors, and luggage."
+          },
+          {
+            "id": "E",
+            "text": "For this reason, many railway companies have stopped using trains altogether."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "C",
+          "3": "D",
+          "4": "B"
+        },
+        "unused": "E"
+      },
+      "binding_intents": [
+        {
+          "unit_id": "DISC-G-001:blank:1",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-001:blank:2",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-001:blank:3",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-001:blank:4",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DISC-G-003",
+      "family": "DISCOURSE",
+      "subtype": "FULL_4X5",
+      "freshness_group_id": "gold-disc-g-003",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "A Study Group That Actually Studies",
+        "passage": "Study groups can be helpful, but simply placing several students in the same room does not guarantee useful learning. (1) ____ Without a plan, a group may spend most of its time comparing homework answers or talking about unrelated topics. A better approach is to agree on a small goal before meeting. (2) ____ Another useful rule is that each member should attempt a problem before the group discusses it. This prevents one confident student from becoming the permanent answer provider. (3) ____ Explaining a solution also reveals gaps that may remain hidden when a student only reads someone else's work. Finally, groups benefit from ending with a short check of what each person can now do independently. (4) ____ A successful study group therefore alternates between individual effort and shared explanation rather than replacing one with the other.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "sentenceOptions": [
+          {
+            "id": "A",
+            "text": "The main problem is often lack of structure."
+          },
+          {
+            "id": "B",
+            "text": "For example, the group might decide to compare two methods for solving the same type of question."
+          },
+          {
+            "id": "C",
+            "text": "When students explain their own reasoning, the discussion becomes evidence of understanding rather than a race to the answer."
+          },
+          {
+            "id": "D",
+            "text": "That final step keeps the meeting from creating an illusion of learning."
+          },
+          {
+            "id": "E",
+            "text": "Students should therefore avoid speaking during the entire meeting."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "B",
+          "3": "C",
+          "4": "D"
+        },
+        "unused": "E"
+      },
+      "binding_intents": [
+        {
+          "unit_id": "DISC-G-003:blank:1",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-003:blank:2",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-003:blank:3",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-003:blank:4",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "DISC-G-004",
+      "family": "DISCOURSE",
+      "subtype": "FULL_4X5",
+      "freshness_group_id": "gold-disc-g-004",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Borrowing Things from a Library",
+        "passage": "Libraries have traditionally lent books, but some now lend tools, sewing machines, board games, or other useful objects. These programs are sometimes called “libraries of things.” (1) ____ A person who needs a drill for one afternoon may prefer borrowing one to buying a tool that will sit unused for years. The program can also give people access to equipment they could not easily afford. (2) ____ Staff must decide how to inspect returned items, replace missing parts, and teach borrowers to use unfamiliar equipment safely. Demand can also be difficult to predict. (3) ____ For this reason, many libraries begin with a small collection and expand only after they learn which items are actually useful to the community. (4) ____ The model does not replace books; instead, it extends the same basic idea of shared access to a wider range of resources.",
+        "blanks": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "sentenceOptions": [
+          {
+            "id": "A",
+            "text": "The idea is based on the fact that ownership is not always necessary for occasional use."
+          },
+          {
+            "id": "B",
+            "text": "At the same time, lending objects creates practical challenges that books may not create."
+          },
+          {
+            "id": "C",
+            "text": "A popular item may be unavailable for weeks, while another object is rarely requested."
+          },
+          {
+            "id": "D",
+            "text": "When carefully managed, the service can reduce unnecessary purchases while helping residents try new activities."
+          },
+          {
+            "id": "E",
+            "text": "As a result, libraries have stopped providing quiet places to read."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "1": "A",
+          "2": "B",
+          "3": "C",
+          "4": "D"
+        },
+        "unused": "E"
+      },
+      "binding_intents": [
+        {
+          "unit_id": "DISC-G-004:blank:1",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-004:blank:2",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-004:blank:3",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        },
+        {
+          "unit_id": "DISC-G-004:blank:4",
+          "semantic_target_key": "reading.discourse-relation",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DISCOURSE_RELATION_AND_REFERENCE",
+          "teacher_mechanism_candidates": [
+            "cohesion-relation-map",
+            "sentence-anatomy"
+          ]
+        }
+      ]
+    }
+  ],
+  "reading": [
+    {
+      "task_id": "READ-G-001",
+      "family": "READING",
+      "subtype": "PASSAGE_3Q",
+      "freshness_group_id": "gold-read-g-001",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Choice Overload in a School Fundraiser",
+        "passage": "A student council once tested two snack tables during a school fundraiser. One table offered six kinds of cookies, while the other offered twenty-four. More students stopped at the table with twenty-four choices, but a larger percentage of visitors actually bought something from the table with only six. The council repeated the test on another day and found a similar pattern. The students first concluded that too many choices made people less willing to decide. Their teacher, however, pointed out that the experiment had limits. The two tables were in different locations, and the most popular cookie happened to be on the six-choice table. The class therefore redesigned the test so that the tables switched locations and both included the same popular flavors. The difference became smaller but did not disappear completely. The project taught the students two lessons: choice can affect decisions, and an interesting result is not the same as a complete explanation.",
+        "questions": [
+          {
+            "id": "Q1",
+            "operation": "MAIN_IDEA",
+            "prompt": "What is the main idea of the passage?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Fundraisers should sell only six kinds of food."
+              },
+              {
+                "id": "B",
+                "text": "A student experiment suggested that many choices can affect buying decisions, but the result required careful testing."
+              },
+              {
+                "id": "C",
+                "text": "Popular cookies always produce misleading data."
+              },
+              {
+                "id": "D",
+                "text": "Students should avoid repeating experiments."
+              }
+            ]
+          },
+          {
+            "id": "Q2",
+            "operation": "DETAIL",
+            "prompt": "Why did the teacher ask the students to redesign the experiment?",
+            "options": [
+              {
+                "id": "A",
+                "text": "The first test had possible confounding factors."
+              },
+              {
+                "id": "B",
+                "text": "The students had sold too few cookies."
+              },
+              {
+                "id": "C",
+                "text": "The teacher wanted twenty-four new flavors."
+              },
+              {
+                "id": "D",
+                "text": "The fundraiser had ended too early."
+              }
+            ]
+          },
+          {
+            "id": "Q3",
+            "operation": "INFERENCE",
+            "prompt": "What can reasonably be inferred from the final test?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Choice overload was proven to be the only cause of the original difference."
+              },
+              {
+                "id": "B",
+                "text": "Location and flavor explained the entire effect."
+              },
+              {
+                "id": "C",
+                "text": "The number of choices may have mattered, but other factors also influenced the result."
+              },
+              {
+                "id": "D",
+                "text": "The experiment showed that students dislike popular cookies."
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "Q1": "B",
+          "Q2": "A",
+          "Q3": "C"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "READ-G-001:Q1",
+          "semantic_target_key": "reading.main-idea",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MAIN_IDEA",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-001:Q2",
+          "semantic_target_key": "reading.detail",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DETAIL",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-001:Q3",
+          "semantic_target_key": "reading.inference",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "INFERENCE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "READ-G-004",
+      "family": "READING",
+      "subtype": "PASSAGE_3Q",
+      "freshness_group_id": "gold-read-g-004",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Do Plants 'Talk'?",
+        "passage": "Popular articles sometimes say that plants “talk” to one another. The phrase is memorable, but scientists use more careful language. Plants can release chemicals when they are damaged by insects, and nearby plants may respond to those chemicals by changing their own defenses. Roots and fungi can also form underground networks through which nutrients and chemical signals move. These findings show that plants respond to information in their environment. They do not, however, prove that plants communicate with intentions like humans do. In scientific writing, the word communication may simply describe a signal produced by one organism that affects another. Researchers continue to debate which plant signals should count as communication and which are better described as side effects of ordinary biological processes. The debate is useful because it forces scientists to define their terms and design experiments that separate exciting metaphors from measurable mechanisms.",
+        "questions": [
+          {
+            "id": "Q1",
+            "operation": "CONTEXTUAL_MEANING",
+            "prompt": "In the passage, the phrase 'careful language' most nearly refers to language that is",
+            "options": [
+              {
+                "id": "A",
+                "text": "technically precise"
+              },
+              {
+                "id": "B",
+                "text": "emotionally positive"
+              },
+              {
+                "id": "C",
+                "text": "easy for children"
+              },
+              {
+                "id": "D",
+                "text": "secret"
+              }
+            ]
+          },
+          {
+            "id": "Q2",
+            "operation": "INFERENCE",
+            "prompt": "Why does the author mention human intention?",
+            "options": [
+              {
+                "id": "A",
+                "text": "To argue that plants have human-like thoughts."
+              },
+              {
+                "id": "B",
+                "text": "To show why the popular word 'talk' can suggest more than the evidence proves."
+              },
+              {
+                "id": "C",
+                "text": "To explain how fungi think."
+              },
+              {
+                "id": "D",
+                "text": "To prove all plant signals are accidental."
+              }
+            ]
+          },
+          {
+            "id": "Q3",
+            "operation": "MAIN_IDEA",
+            "prompt": "What is the author's main point?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Plant signaling is imaginary."
+              },
+              {
+                "id": "B",
+                "text": "Plant responses are real, but claims about 'communication' require careful definitions and evidence."
+              },
+              {
+                "id": "C",
+                "text": "Plants and humans communicate in the same way."
+              },
+              {
+                "id": "D",
+                "text": "Scientists should avoid metaphors completely."
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "Q1": "A",
+          "Q2": "B",
+          "Q3": "B"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "READ-G-004:Q1",
+          "semantic_target_key": "reading.contextual-meaning",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "CONTEXTUAL_MEANING",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-004:Q2",
+          "semantic_target_key": "reading.inference",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "INFERENCE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-004:Q3",
+          "semantic_target_key": "reading.main-idea",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MAIN_IDEA",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "READ-G-007",
+      "family": "READING",
+      "subtype": "PASSAGE_3Q",
+      "freshness_group_id": "gold-read-g-007",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "title": "Crowdsourced Translation During Emergencies",
+        "passage": "During a major storm, a nonprofit group received hundreds of requests to translate safety information into several languages. At first, volunteers worked independently and sent completed translations through email. This was fast, but different volunteers sometimes used different words for the same emergency term. The group then created a shared glossary and required a second volunteer to review messages containing evacuation instructions, addresses, or medical information. The new system slowed some translations by a few minutes, yet it reduced contradictory wording. The group also discovered that literal accuracy was not enough. A phrase that matched the original word for word could still confuse readers if the sentence structure was unfamiliar in the target language. Reviewers therefore checked whether the message preserved the intended action as well as the source wording. After the storm, the nonprofit kept the glossary and review procedure for future emergencies.",
+        "questions": [
+          {
+            "id": "Q1",
+            "operation": "MAIN_IDEA",
+            "prompt": "What problem did the nonprofit solve?",
+            "options": [
+              {
+                "id": "A",
+                "text": "How to balance speed with consistency and meaning in emergency translation."
+              },
+              {
+                "id": "B",
+                "text": "How to eliminate all volunteers."
+              },
+              {
+                "id": "C",
+                "text": "How to translate only medical terms."
+              },
+              {
+                "id": "D",
+                "text": "How to send messages without addresses."
+              }
+            ]
+          },
+          {
+            "id": "Q2",
+            "operation": "DETAIL",
+            "prompt": "Why was a shared glossary introduced?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Different volunteers had used inconsistent terms for the same ideas."
+              },
+              {
+                "id": "B",
+                "text": "The source messages were too short."
+              },
+              {
+                "id": "C",
+                "text": "Email stopped working."
+              },
+              {
+                "id": "D",
+                "text": "Volunteers did not know any languages."
+              }
+            ]
+          },
+          {
+            "id": "Q3",
+            "operation": "INFERENCE",
+            "prompt": "What does the passage suggest about translation quality?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Word-for-word similarity alone does not guarantee that readers receive the intended instruction."
+              },
+              {
+                "id": "B",
+                "text": "The fastest translation is always the best."
+              },
+              {
+                "id": "C",
+                "text": "Review is unnecessary when a glossary exists."
+              },
+              {
+                "id": "D",
+                "text": "All languages should use the same sentence structure."
+              }
+            ]
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "answers": {
+          "Q1": "A",
+          "Q2": "A",
+          "Q3": "A"
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "READ-G-007:Q1",
+          "semantic_target_key": "reading.main-idea",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MAIN_IDEA",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-007:Q2",
+          "semantic_target_key": "reading.detail",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "DETAIL",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        },
+        {
+          "unit_id": "READ-G-007:Q3",
+          "semantic_target_key": "reading.inference",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "INFERENCE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "cohesion-relation-map",
+            "meaning-representation"
+          ]
+        }
+      ]
+    }
+  ],
+  "mixed": [
+    {
+      "task_id": "MIX-G-001",
+      "family": "MIXED",
+      "subtype": "INTEGRATED_3_MODE",
+      "freshness_group_id": "gold-mix-g-001",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "sourceTitle": "Weekend Train Engineering Notice",
+        "source": "Saturday service notice\n08:10 River Station → Central Station: normal service\n08:40 River Station → Central Station: canceled\n09:10 River Station → Central Station: bus replacement from Lake Junction\n09:40 River Station → Central Station: normal service\n\nPassengers using the 09:10 service should leave the train at Lake Junction and follow staff signs to the replacement bus. Bicycles cannot be carried on the bus. Tickets remain valid for the entire trip.",
+        "parts": [
+          {
+            "id": "P1",
+            "type": "CHOICE",
+            "prompt": "Which departure lets a passenger travel to Central without changing to a bus?",
+            "options": [
+              {
+                "id": "A",
+                "text": "08:40 only"
+              },
+              {
+                "id": "B",
+                "text": "09:10 only"
+              },
+              {
+                "id": "C",
+                "text": "08:10 or 09:40"
+              },
+              {
+                "id": "D",
+                "text": "All departures"
+              }
+            ]
+          },
+          {
+            "id": "P2",
+            "type": "FILL",
+            "prompt": "Passengers on the 09:10 service must change at ____ Junction."
+          },
+          {
+            "id": "P3",
+            "type": "SHORT_RESPONSE",
+            "prompt": "In one English sentence, explain why a passenger with a bicycle should avoid the 09:10 service."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "P1": "C",
+        "P2": {
+          "acceptable": [
+            "Lake"
+          ]
+        },
+        "P3": {
+          "required_meaning": [
+            "bicycles",
+            "cannot be carried",
+            "replacement bus"
+          ],
+          "allow_valid_alternatives": true
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "MIX-G-001:P1",
+          "semantic_target_key": "reading.source-integration",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_CHOICE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-001:P2",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_FILL",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-001:P3",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "CONTROLLED_PRODUCTION",
+            "CONSTRUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_SHORT_RESPONSE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "MIX-G-002",
+      "family": "MIXED",
+      "subtype": "INTEGRATED_3_MODE",
+      "freshness_group_id": "gold-mix-g-002",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "sourceTitle": "School Club Survey",
+        "source": "Student club survey, 240 responses\nSports clubs: 78 current members, 24 interested non-members\nMusic/performing arts: 54 current members, 42 interested non-members\nVolunteer/service clubs: 32 current members, 58 interested non-members\nAcademic clubs: 46 current members, 39 interested non-members\n\nThe student council has funding to help ONE category add a new introductory activity. The stated goal is to reach students who are interested but not yet participating.",
+        "parts": [
+          {
+            "id": "P1",
+            "type": "CHOICE",
+            "prompt": "Which club category best matches the council's stated goal?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Sports"
+              },
+              {
+                "id": "B",
+                "text": "Music/performing arts"
+              },
+              {
+                "id": "C",
+                "text": "Volunteer/service"
+              },
+              {
+                "id": "D",
+                "text": "Academic"
+              }
+            ]
+          },
+          {
+            "id": "P2",
+            "type": "FILL",
+            "prompt": "There are ____ interested non-members in volunteer/service clubs."
+          },
+          {
+            "id": "P3",
+            "type": "SHORT_RESPONSE",
+            "prompt": "Give one English sentence using the survey data to justify your choice."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "P1": "C",
+        "P2": {
+          "acceptable": [
+            "58"
+          ]
+        },
+        "P3": {
+          "required_meaning": [
+            "interested non-members",
+            "largest",
+            "58"
+          ],
+          "allow_valid_alternatives": true
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "MIX-G-002:P1",
+          "semantic_target_key": "reading.source-integration",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_CHOICE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-002:P2",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_FILL",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-002:P3",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "CONTROLLED_PRODUCTION",
+            "CONSTRUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_SHORT_RESPONSE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "MIX-G-004",
+      "family": "MIXED",
+      "subtype": "INTEGRATED_3_MODE",
+      "freshness_group_id": "gold-mix-g-004",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "sourceTitle": "Cafeteria Food Waste Trial",
+        "source": "Four-week cafeteria trial\nWeek 1: 118 kg food waste — normal serving sizes\nWeek 2: 102 kg — posters reminding students to take only what they would eat\nWeek 3: 81 kg — smaller default rice portion; extra rice available on request\nWeek 4: 84 kg — same serving system as Week 3\n\nThe cafeteria manager notes that the trial did not measure how hungry students felt or whether students bought extra food elsewhere.",
+        "parts": [
+          {
+            "id": "P1",
+            "type": "CHOICE",
+            "prompt": "Which change was followed by the largest drop in recorded food waste?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Adding reminder posters"
+              },
+              {
+                "id": "B",
+                "text": "Using a smaller default rice portion"
+              },
+              {
+                "id": "C",
+                "text": "Removing extra rice"
+              },
+              {
+                "id": "D",
+                "text": "Ending the trial"
+              }
+            ]
+          },
+          {
+            "id": "P2",
+            "type": "FILL",
+            "prompt": "Food waste in Week 3 was ____ kg."
+          },
+          {
+            "id": "P3",
+            "type": "SHORT_RESPONSE",
+            "prompt": "State one limitation of the trial in one English sentence."
+          }
+        ]
+      },
+      "answer_or_rubric": {
+        "P1": "B",
+        "P2": {
+          "acceptable": [
+            "81"
+          ]
+        },
+        "P3": {
+          "required_meaning": [
+            "did not measure",
+            "hunger",
+            "extra food elsewhere",
+            "alternative valid"
+          ],
+          "allow_valid_alternatives": true
+        }
+      },
+      "binding_intents": [
+        {
+          "unit_id": "MIX-G-004:P1",
+          "semantic_target_key": "reading.source-integration",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_CHOICE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-004:P2",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "SELECTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_FILL",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        },
+        {
+          "unit_id": "MIX-G-004:P3",
+          "semantic_target_key": "reading.source-extraction",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "CONTROLLED_PRODUCTION",
+            "CONSTRUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MIXED_SHORT_RESPONSE",
+          "teacher_mechanism_candidates": [
+            "inference-evidence-bridge",
+            "meaning-representation",
+            "task-requirement-map"
+          ]
+        }
+      ]
+    }
+  ],
+  "translation_targeted": [
+    {
+      "task_id": "TRANS-G-T02",
+      "family": "TRANSLATION",
+      "subtype": "TARGETED_ONE_SENTENCE",
+      "freshness_group_id": "gold-trans-g-t02",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "TARGETED",
+        "chineseSentences": [
+          "這項研究顯示，規律複習比考前一次讀完更有效。"
+        ]
+      },
+      "answer_or_rubric": {
+        "required_meaning": [
+          "the study shows",
+          "regular review",
+          "more effective than",
+          "all at once before the exam"
+        ],
+        "allow_valid_alternatives": true
+      },
+      "binding_intents": [
+        {
+          "unit_id": "TRANS-G-T02:sentence:1",
+          "semantic_target_key": "translation.meaning-intent.trans-g-t02",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "FORM_MEANING_MAPPING",
+            "CONSTRUCTION",
+            "CONTROLLED_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MEANING_TO_ENGLISH",
+          "teacher_mechanism_candidates": [
+            "meaning-segmentation",
+            "worked-transformation",
+            "reformulation-map",
+            "l1-collision"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "TRANS-G-T05",
+      "family": "TRANSLATION",
+      "subtype": "TARGETED_ONE_SENTENCE",
+      "freshness_group_id": "gold-trans-g-t05",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "TARGETED",
+        "chineseSentences": [
+          "這個活動不但減少浪費，也讓居民學會如何修理日常用品。"
+        ]
+      },
+      "answer_or_rubric": {
+        "required_meaning": [
+          "not only",
+          "reduce waste",
+          "but also",
+          "learn how to repair"
+        ],
+        "allow_valid_alternatives": true
+      },
+      "binding_intents": [
+        {
+          "unit_id": "TRANS-G-T05:sentence:1",
+          "semantic_target_key": "translation.meaning-intent.trans-g-t05",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "FORM_MEANING_MAPPING",
+            "CONSTRUCTION",
+            "CONTROLLED_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MEANING_TO_ENGLISH",
+          "teacher_mechanism_candidates": [
+            "meaning-segmentation",
+            "worked-transformation",
+            "reformulation-map",
+            "l1-collision"
+          ]
+        }
+      ]
+    },
+    {
+      "task_id": "TRANS-G-T17",
+      "family": "TRANSLATION",
+      "subtype": "TARGETED_ONE_SENTENCE",
+      "freshness_group_id": "gold-trans-g-t17",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "TARGETED",
+        "chineseSentences": [
+          "當同一種解釋沒有幫助時，老師應該換一種呈現方式，而不是只換句話說。"
+        ]
+      },
+      "answer_or_rubric": {
+        "required_meaning": [
+          "when the same explanation does not help",
+          "teacher should change representation",
+          "rather than merely rephrase"
+        ],
+        "allow_valid_alternatives": true
+      },
+      "binding_intents": [
+        {
+          "unit_id": "TRANS-G-T17:sentence:1",
+          "semantic_target_key": "translation.meaning-intent.trans-g-t17",
+          "canonical_target_ref": null,
+          "facet_candidates": [
+            "FORM_MEANING_MAPPING",
+            "CONSTRUCTION",
+            "CONTROLLED_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "operation": "MEANING_TO_ENGLISH",
+          "teacher_mechanism_candidates": [
+            "meaning-segmentation",
+            "worked-transformation",
+            "reformulation-map",
+            "l1-collision"
+          ]
+        }
+      ]
+    }
+  ],
+  "writing_micro": [
+    {
+      "task_id": "WRITE-G-M06",
+      "family": "WRITING",
+      "subtype": "MICRO",
+      "freshness_group_id": "gold-write-g-m06",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "MICRO",
+        "prompt": "有人認為 AI 會讓學生變懶。用 2～4 句英文提出你的立場與一個條件。",
+        "requirementBullets": [
+          "清楚回應題目",
+          "至少一個理由、條件、結果或例子"
+        ]
+      },
+      "answer_or_rubric": {
+        "dimensions": [
+          "task_fulfillment",
+          "idea_development",
+          "language_control"
+        ],
+        "feedbackBudget": 1
+      },
+      "binding_intents": [
+        {
+          "semantic_target_key": "writing.task-fulfillment",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.idea-development",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.sentence-realization",
+          "facet_candidates": [
+            "CONSTRUCTION",
+            "FREE_PRODUCTION"
+          ],
+          "canonical_target_ref": null
+        }
+      ]
+    },
+    {
+      "task_id": "WRITE-G-M09",
+      "family": "WRITING",
+      "subtype": "MICRO",
+      "freshness_group_id": "gold-write-g-m09",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "MICRO",
+        "prompt": "用 2～4 句英文說明『犯錯之後立刻看答案』可能有什麼好處與風險。",
+        "requirementBullets": [
+          "清楚回應題目",
+          "至少一個理由、條件、結果或例子"
+        ]
+      },
+      "answer_or_rubric": {
+        "dimensions": [
+          "task_fulfillment",
+          "idea_development",
+          "language_control"
+        ],
+        "feedbackBudget": 1
+      },
+      "binding_intents": [
+        {
+          "semantic_target_key": "writing.task-fulfillment",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.idea-development",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.sentence-realization",
+          "facet_candidates": [
+            "CONSTRUCTION",
+            "FREE_PRODUCTION"
+          ],
+          "canonical_target_ref": null
+        }
+      ]
+    }
+  ],
+  "writing_paragraph": [
+    {
+      "task_id": "WRITE-G-P01",
+      "family": "WRITING",
+      "subtype": "PARAGRAPH",
+      "freshness_group_id": "gold-write-g-p01",
+      "promotion_state": "CURATED_CANDIDATE",
+      "provenance": {
+        "author": "EOT original",
+        "license": "project-authored"
+      },
+      "canonical_status": "PENDING_LIVE_G1_G10",
+      "payload": {
+        "mode": "PARAGRAPH",
+        "prompt": "請寫一個英文段落，說明『固定的小習慣為什麼可能比偶爾一次大量努力更有效』。至少包含主張、原因與一個具體例子。",
+        "requirementBullets": [
+          "主題句",
+          "至少兩層發展",
+          "清楚收束"
+        ]
+      },
+      "answer_or_rubric": {
+        "dimensions": [
+          "task_fulfillment",
+          "organization",
+          "idea_development",
+          "coherence",
+          "language_control"
+        ],
+        "feedbackBudget": 2
+      },
+      "binding_intents": [
+        {
+          "semantic_target_key": "writing.task-fulfillment",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.idea-development",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.organization",
+          "facet_candidates": [
+            "FREE_PRODUCTION",
+            "CONTEXTUAL_APPROPRIACY"
+          ],
+          "canonical_target_ref": null
+        },
+        {
+          "semantic_target_key": "writing.sentence-realization",
+          "facet_candidates": [
+            "CONSTRUCTION",
+            "FREE_PRODUCTION"
+          ],
+          "canonical_target_ref": null
+        }
+      ]
+    }
+  ]
+}

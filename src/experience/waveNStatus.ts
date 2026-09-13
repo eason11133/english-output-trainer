@@ -1,0 +1,2 @@
+import {experienceCapabilityStatesV1,experienceWaveSummaryV1}from'./capabilities';
+export const waveNExperienceStatusV1=Object.freeze({wave:'N',subsystem:'Product Experience / UX Architecture',status:'READY_FOR_AUDIT' as const,capabilities:experienceCapabilityStatesV1,summary:experienceWaveSummaryV1(),nativeUnknowns:Object.freeze(['physical keyboard/back behavior','long-form writing scroll/IME behavior','formal Exam no-help UX','screen-reader/device acceptance'])});

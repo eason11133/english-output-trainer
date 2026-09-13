@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "reprocessed": 165,
+  "accepted": 165,
+  "quarantined": [],
+  "byFamily": {
+    "MIXED": {
+      "accepted": 40,
+      "quarantined": 0
+    },
+    "TRANSLATION": {
+      "accepted": 90,
+      "quarantined": 0
+    },
+    "WRITING": {
+      "accepted": 35,
+      "quarantined": 0
+    }
+  },
+  "newBindings": 165,
+  "newReceipts": 165,
+  "semanticRubricArtifacts": 165,
+  "finalLivePromoted": {
+    "total": 528,
+    "byFamily": {
+      "VOCABULARY": 123,
+      "COMPREHENSIVE": 58,
+      "CONTEXTUAL_FILL": 48,
+      "DISCOURSE": 48,
+      "READING": 73,
+      "MIXED": 43,
+      "TRANSLATION": 94,
+      "WRITING": 41
+    },
+    "byProfile": {
+      "FOUNDATION": 161,
+      "GSAT_STANDARD": 173,
+      "HIGH_SCORE": 166,
+      "LEGACY_UNPROFILED": 28
+    }
+  },
+  "reachableByRole": {
+    "TEACH": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "GUIDED_PRACTICE": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "FADE": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "INDEPENDENT_ASSESS": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "TRANSFER": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "REVIEW_REACTIVATION": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    },
+    "DISCRIMINATING_PROBE": {
+      "total": 528,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 43,
+        "TRANSLATION": 94,
+        "WRITING": 41
+      }
+    }
+  },
+  "candidateFirewallPreserved": true
+}

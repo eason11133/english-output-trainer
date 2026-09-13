@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "state_model": [
+    "AUTHORING_JOB_NOT_A_TASK",
+    "GROUNDED_AUTHORING_INPUT_NOT_A_TASK",
+    "AUTHORING_CANDIDATE",
+    "CONTENT_RETAINED",
+    "ENGINEERING_BLOCKED",
+    "CONTENT_QUARANTINED",
+    "PRODUCTION_PROMOTED"
+  ],
+  "required_common_fields": [
+    "task_id",
+    "family",
+    "role",
+    "difficulty",
+    "diagnostic",
+    "freshness_group_id",
+    "content_lineage_id",
+    "provenance",
+    "payload",
+    "answer_or_rubric"
+  ],
+  "required_common_semantics": {
+    "freshness_group_id": "Must represent material reuse/exposure grouping; not a random uniqueness token.",
+    "content_lineage_id": "Must remain stable across revisions/variants sharing source lineage.",
+    "provenance": "Must identify EOT-original or legally usable source and usage restrictions.",
+    "difficulty": "Profile plus qualitative axes; never claim empirical calibration without evidence.",
+    "diagnostic": "Must state what the item can discriminate and what one response cannot prove.",
+    "promotion": "Offline state never implies current-repo production promotion."
+  },
+  "family_payload_requirements": {
+    "VOCABULARY": {
+      "shape": "single selected-response lexical item",
+      "requirements": [
+        "4 unique options",
+        "1 keyed answer",
+        "context supports a single best answer",
+        "recognition/discrimination only"
+      ]
+    },
+    "COMPREHENSIVE": {
+      "shape": "passage with 5 blanks",
+      "requirements": [
+        "5 blanks",
+        "4 unique options per blank",
+        "all answer IDs valid",
+        "no unintended second answer"
+      ]
+    },
+    "CONTEXTUAL_FILL": {
+      "shape": "10x10 shared-bank set",
+      "requirements": [
+        "10 blanks",
+        "10 unique options",
+        "10 unique answers",
+        "answer bank == used answers",
+        "natural reconstruction"
+      ]
+    },
+    "DISCOURSE": {
+      "shape": "4-gap/5-option set",
+      "requirements": [
+        "4 blanks",
+        "5 unique options",
+        "4 distinct keyed option IDs",
+        "1 unused option",
+        "before/after fit"
+      ]
+    },
+    "READING": {
+      "shape": "passage + question set",
+      "requirements": [
+        ">=3 questions",
+        "4 unique options per selected-response question",
+        "valid answer ID",
+        "operation metadata",
+        "evidence-bounded key"
+      ]
+    },
+    "MIXED": {
+      "shape": "integrated source + part-scoped tasks",
+      "requirements": [
+        ">=2 parts",
+        "part-scoped rubric",
+        "constructed-response semantics bounded when present",
+        "cross-part leakage tracked"
+      ]
+    },
+    "TRANSLATION": {
+      "shape": "Chinese-to-English production",
+      "requirements": [
+        "meaning units",
+        "natural paraphrases allowed",
+        "exact-string authority forbidden",
+        "learner-authorship evidence policy"
+      ]
+    },
+    "WRITING": {
+      "shape": "learner writing production",
+      "requirements": [
+        "task requirements",
+        "multiple valid ideas/structures",
+        "bounded rubric dimensions",
+        "model rewrite not learner evidence"
+      ]
+    }
+  }
+}

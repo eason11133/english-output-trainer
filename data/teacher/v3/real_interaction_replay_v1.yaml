@@ -1,0 +1,126 @@
+version: '1.0'
+replay_count: 12
+replays:
+- id: REPLAY-001
+  name: known-vocabulary-but-cannot-deploy
+  source: supplied English writing tutoring conversation
+  context:
+    prior_teacher_claim: vocabulary can be upgraded
+    learner_turn: 你知道你說的單字我都知道但我就是不會用在作文裡
+  must:
+  - revise hypothesis from simple vocabulary-size deficit toward productive deployment/retrieval
+  - adapt training advice accordingly
+  must_not:
+  - keep recommending more word exposure as if words are unknown
+- id: REPLAY-002
+  name: learner-defers-second-essay
+  source: supplied conversation
+  context:
+    learner_turn: 我其實還有寫一篇，但我晚點再給你
+  must:
+  - acknowledge and wait
+  - create no failure evidence
+  must_not:
+  - push a new exercise
+- id: REPLAY-003
+  name: learner-rejects-generic-sentence-assumption
+  source: supplied conversation
+  context:
+    teacher_assumption: teacher universal sentences are ordinary/general
+    learner_turn: 老師的萬用句都很高級不是這種普通的:)
+  must:
+  - update representation of learner material
+  - ask/use examples only if needed
+  must_not:
+  - defend previous assumption
+- id: REPLAY-004
+  name: typing-slip-while-copying
+  source: supplied conversation
+  context:
+    learner_turn: 我是看著打得我打錯而已
+    prior_surface_error: copied sentence typo
+  must:
+  - treat this as context that can lower a spelling-gap hypothesis
+  - avoid turning copied typo into learner mastery/failure truth
+  must_not:
+  - ignore learner explanation
+- id: REPLAY-005
+  name: teacher-method-one-sentence-at-a-time
+  source: supplied conversation
+  context:
+    learner_turn: 老師叫我一句句改
+  must:
+  - change local teaching procedure to one-sentence revision when compatible
+  - preserve learner production each step
+  must_not:
+  - continue whole-essay rewrite against stated context
+- id: REPLAY-006
+  name: late-assignment-prompt
+  source: supplied conversation
+  context:
+    learner_turn: 忘記給你題目了靠背
+    new_context: assignment prompt image
+  must:
+  - re-evaluate earlier feedback/score affected by prompt
+  - treat new prompt as relevant context supplement
+  must_not:
+  - leave old evaluation authoritative without review
+- id: REPLAY-007
+  name: learner-clarifies-darkening
+  source: supplied conversation
+  context:
+    learner_turn: darkening這個我是要講他們黑化才會像上面一樣去犯罪
+    prior_teacher_interpretation: different meaning
+  must:
+  - withdraw wrong semantic interpretation
+  - rebuild wording/logic around learner intended causal path
+  must_not:
+  - keep teaching the old meaning
+- id: REPLAY-008
+  name: switch-to-hypothetical-score
+  source: supplied conversation
+  context:
+    learner_turn: 啊如果文法沒錯你會給幾分
+  must:
+  - answer scoring hypothetical
+  - separate grammar correction from content/organization scoring
+  must_not:
+  - force current sentence exercise first
+- id: REPLAY-009
+  name: specific-expression-request
+  source: supplied conversation
+  context:
+    learner_turn: 老師說其中一個in my opinion 可以換成as .....
+  must:
+  - answer the specific expression question using essay context
+  must_not:
+  - ignore and return to generic lesson flow
+- id: REPLAY-010
+  name: request-final-revision
+  source: supplied conversation
+  context:
+    learner_turn: 給我最終改完的全部
+    interaction_intent: ARTIFACT_RESULT_REQUEST
+  must:
+  - deliver coherent final revision using all confirmed context and preferences
+  must_not:
+  - pretend the AI-authored final is independent learner evidence
+- id: REPLAY-011
+  name: request-original-artifact
+  source: supplied conversation
+  context:
+    learner_turn: 可以給我我原本寫得嗎
+  must:
+  - return the original learner artifact faithfully
+  must_not:
+  - return only corrected/reconstructed text
+- id: REPLAY-012
+  name: style-preference-no-colon
+  source: supplied conversation
+  context:
+    learner_turn: 'i don''t like : in my artcile'
+  must:
+  - capture as a writing/revision preference and apply it later
+  - do not overinterpret language mistakes in the preference message as current exercise performance
+  must_not:
+  - keep adding colons after preference is known

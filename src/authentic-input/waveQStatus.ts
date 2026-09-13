@@ -1,0 +1,2 @@
+import {authenticInputCapabilityStatusV1,authenticInputWaveSummaryV1}from'./capabilities';
+export const waveQAuthenticInputStatusV1=Object.freeze({wave:'Q',subsystem:'Authentic Input / Materials',status:'READY_FOR_AUDIT' as const,capabilities:authenticInputCapabilityStatusV1,summary:authenticInputWaveSummaryV1(),deviceUnknowns:Object.freeze(['camera/gallery URI lifetime','multi-page PDF layout/OCR','rotated prompt segmentation','physical permission lifecycle'])});

@@ -1,0 +1,1284 @@
+{
+  "schemaVersion": 1,
+  "registryVersion": "4.2.0",
+  "fingerprint": "fnv1a32:53256c50",
+  "blocks": [
+    {
+      "id": "alternative-translation-compare",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "changed-context-production",
+      "role": "TRANSFER",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "CHANGED_CONTEXT",
+      "evidenceCeiling": "TRANSFER",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "chunk-as-unit",
+      "role": "TEACH",
+      "suitableFacets": [
+        "COLLOCATION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "chunk-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "COLLOCATION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "chunk-completion",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "MEANING_TO_RETRIEVAL"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "claim-strength-contrast",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "clarify-context",
+      "role": "SYSTEM",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "NOT_APPLICABLE",
+      "evidenceCeiling": "NONE",
+      "supportLevels": [
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "clause-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "clause-connector",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "cohesion-relation-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "cohesion-repair",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "collocation-match",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "COLLOCATION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "collocation-network",
+      "role": "TEACH",
+      "suitableFacets": [
+        "COLLOCATION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "construction-reconstruction",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONTROLLED_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "context-meaning-choice",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "CONTROLLED",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "contextual-production",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "continue-source",
+      "role": "SYSTEM",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "NOT_APPLICABLE",
+      "evidenceCeiling": "NONE",
+      "supportLevels": [
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "cross-representation-evidence-integration",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "distractor-evidence-contrast",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "faded-recall",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "MEANING_TO_RETRIEVAL"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "DELAYED_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "form-contrast",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "fresh-reading-check",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "CONTROLLED",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "full-spelling-recall",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "ORTHOGRAPHIC_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "grammar-role-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "idea-development-ladder",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "idea-ordering",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "independent-sentence-production",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "independent-translation",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "inference-evidence-bridge",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "l1-collision",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "local-revision",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "meaning-match",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FORM_TO_MEANING"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "meaning-preservation-check",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "CONTROLLED",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "meaning-representation",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "meaning-segmentation",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "meaning-word-retrieval",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "MEANING_TO_RETRIEVAL"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "morphology-decomposition",
+      "role": "TEACH",
+      "suitableFacets": [
+        "MORPHOLOGY"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "naturalness-contrast",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "CONTROLLED",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "paragraph-function-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "partial-letter-recall",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "ORTHOGRAPHIC_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "phrase-reconstruction",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONTROLLED_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "reading-evidence-operation",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "reference-chain",
+      "role": "TEACH",
+      "suitableFacets": [
+        "FORM_TO_MEANING"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "reformulation-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "return-original-translation",
+      "role": "TRANSFER",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SOURCE",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "return-original-writing",
+      "role": "TRANSFER",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SOURCE",
+      "evidenceCeiling": "INDEPENDENT",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "return-source-navigation",
+      "role": "SYSTEM",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "NOT_APPLICABLE",
+      "evidenceCeiling": "NONE",
+      "supportLevels": [
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "rewrite-surface",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "role-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "sense-contrast",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "sentence-anatomy",
+      "role": "TEACH",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "sentence-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "sentence-combining",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "sentence-expansion",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "FREE_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "sentence-insertion-continuity",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "sentence-reorder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "slot-completion",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONTROLLED_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "spelling-reconstruction",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "ORTHOGRAPHIC_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "task-requirement-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "text-structure-map",
+      "role": "TEACH",
+      "suitableFacets": [
+        "SELECTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "translation-chunk-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "CONTROLLED_PRODUCTION"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "word-family-builder",
+      "role": "PRACTICE",
+      "suitableFacets": [
+        "MORPHOLOGY"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "ASSISTED",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    },
+    {
+      "id": "word-meaning-check",
+      "role": "ASSESS",
+      "suitableFacets": [
+        "FORM_TO_MEANING"
+      ],
+      "capabilityAffordance": "OBJECTIVE_BOUND",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "CONTROLLED",
+      "supportLevels": [
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED"
+      ],
+      "exposesTargetAnswer": false
+    },
+    {
+      "id": "worked-transformation",
+      "role": "TEACH",
+      "suitableFacets": [
+        "CONSTRUCTION"
+      ],
+      "capabilityAffordance": "NONE",
+      "contextAffordance": "SAME_CONTEXT",
+      "evidenceCeiling": "EXPOSURE_ONLY",
+      "supportLevels": [
+        "MODELED",
+        "EXPLICIT",
+        "GUIDED",
+        "CUED",
+        "LIGHT",
+        "NONE"
+      ],
+      "forbiddenSupport": [],
+      "exposesTargetAnswer": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+export type DailyLearningEventType='daily_goal_reached'|'finish_for_today_selected'|'extra_five_minutes_selected'|'proof_check_selected'|'proof_check_completed'|'proof_check_abandoned';
+export type DailyEvidenceCounts={independent:number;assisted:number;revealed:number;unresolved:number};
+export type ProofCheckResult={completedAt:string;correct:number;total:number;evidence:DailyEvidenceCounts;knowledgePointIds:string[]};
+export type DailyLearningRecord={schemaVersion:1;localDate:string;defaultTargetMinutes:number;targetMinutes:number;accumulatedActiveSeconds:number;lastActiveTimestamp:string|null;goalCompletionPromptShown:boolean;finishedForToday?:boolean;finishedAt?:string;extraPracticeMinutes:number;proofCheckStarted:boolean;proofCheckCompleted:boolean;encounteredKnowledgePointIds:string[];evidence:DailyEvidenceCounts;proofCheckResult?:ProofCheckResult};
+export type DailyLearningEvent={schemaVersion:1;id:string;type:DailyLearningEventType;localDate:string;occurredAt:string;goalMinutes:number;actualMeaningfulMinutes:number;extraMinutes:number;proofCheckResult?:ProofCheckResult;evidence:DailyEvidenceCounts};

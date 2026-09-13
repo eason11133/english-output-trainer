@@ -1,0 +1,155 @@
+{
+  "baseline": {
+    "live": 528,
+    "authoredPromoted": 500,
+    "legacy": 28
+  },
+  "promotion": {
+    "processed": 100,
+    "promoted": 100,
+    "quarantined": 0,
+    "promotedByFamily": {
+      "COMPREHENSIVE": 15,
+      "CONTEXTUAL_FILL": 15,
+      "DISCOURSE": 15,
+      "MIXED": 10,
+      "READING": 30,
+      "TRANSLATION": 10,
+      "WRITING": 5
+    },
+    "promotedByProfile": {
+      "FOUNDATION": 30,
+      "GSAT_STANDARD": 33,
+      "HIGH_SCORE": 37
+    },
+    "bindingsCreated": 100,
+    "bindingsReused": 0,
+    "receiptsGenerated": 100,
+    "semanticRubricsGenerated": 25,
+    "quarantinedTasks": [],
+    "live": {
+      "total": 628,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 73,
+        "CONTEXTUAL_FILL": 63,
+        "DISCOURSE": 63,
+        "READING": 103,
+        "MIXED": 53,
+        "TRANSLATION": 104,
+        "WRITING": 46
+      },
+      "byProfile": {
+        "FOUNDATION": 191,
+        "GSAT_STANDARD": 206,
+        "HIGH_SCORE": 203,
+        "LEGACY_UNPROFILED": 28
+      }
+    }
+  },
+  "qc": {
+    "processed": 100,
+    "R3Issues": 0
+  },
+  "grounding": {
+    "processed": 2000,
+    "grounded": 1911,
+    "blocked": 89,
+    "blockedReasonCounts": {
+      "CORPUS_LEMMA_SENSE_MISSING": 89,
+      "PRODUCTION_SAFE_LICENSED_GROUNDING_MISSING": 16
+    },
+    "byFamily": {
+      "COMPREHENSIVE": 200,
+      "CONTEXTUAL_FILL": 200,
+      "DISCOURSE": 120,
+      "MIXED": 100,
+      "READING": 150,
+      "TRANSLATION": 130,
+      "VOCABULARY": 911,
+      "WRITING": 100
+    },
+    "byProfile": {
+      "FOUNDATION": 629,
+      "GSAT_STANDARD": 641,
+      "HIGH_SCORE": 641
+    },
+    "byOperation": {
+      "CAUSE_STRENGTH": 21,
+      "CLAIM_STRENGTH": 19,
+      "COLLOCATION": 80,
+      "COLLOCATION_CHUNK": 109,
+      "COLLOCATION_RETRIEVAL": 21,
+      "COMPARISON": 22,
+      "CONDITIONAL": 22,
+      "CONTEXTUAL_SENSE": 109,
+      "COPYABLE": 17,
+      "DELAYED_TRANSFER_AND_NEAR_SYNONYM": 39,
+      "DETAIL": 19,
+      "DISCOURSE_CONNECTION": 40,
+      "DISTRACTOR_ANALYSIS": 18,
+      "FORM_PRECISE": 17,
+      "FULL_ANALYSIS": 17,
+      "FULL_DATA_INTERPRETATION": 16,
+      "FULL_PROBLEM_SOLUTION": 16,
+      "GLOBAL_CONTEXT": 40,
+      "GRAMMAR_SLOT": 40,
+      "INFERENCE": 19,
+      "LEXICAL_COHESION": 24,
+      "LEXICAL_SENSE": 40,
+      "LOCAL_GLOBAL_CONTEXT": 40,
+      "LOGICAL_RELATION": 24,
+      "MAIN_IDEA": 19,
+      "MEANING_UNITS": 22,
+      "MICRO_PERSONAL": 17,
+      "MORPHOLOGY": 40,
+      "MORPH_CHANGE": 17,
+      "MULTI_SOURCE_SYNTHESIS": 16,
+      "NEAR_SYNONYM_DISCRIMINATION": 109,
+      "NEGATION_MODALITY": 22,
+      "OLD_NEW_INFO": 24,
+      "PARAGRAPH_EXPLANATION": 17,
+      "PARAGRAPH_POSITION": 17,
+      "PARAGRAPH_ROLE": 18,
+      "PARAPHRASE": 17,
+      "PHRASAL_OR_MULTIWORD_USAGE": 109,
+      "POLYSEMY_OR_WRONG_SENSE": 109,
+      "POOL_COMPETITION": 40,
+      "PREPOSITION_OR_CONSTRUCTION": 109,
+      "REFERENCE": 19,
+      "REFERENCE_CHAIN": 24,
+      "SENTENCE_FUNCTION": 24,
+      "SHARED_BANK_LEXEME": 40,
+      "SHORT_RESPONSE_REASONING": 16,
+      "TRANSFER_CONTEXT_DISCRIMINATION": 109,
+      "VOCAB_IN_CONTEXT": 19,
+      "WORD_FAMILY_MORPHOLOGY": 109
+    },
+    "vocabulary": {
+      "uniqueTargetSurfaces": 97,
+      "uniqueLemmas": 97,
+      "multiSenseJobs": 863,
+      "morphologySupportedJobs": 787,
+      "relationSupportedJobs": 895,
+      "exampleGroundedJobs": 911
+    },
+    "limitations": {
+      "canonicalGraphCoarseForOtherFamilies": 1000,
+      "licenseRejections": 0,
+      "corpusMissing": 89,
+      "canonicalMissing": 0
+    }
+  },
+  "cohorts": {
+    "VOCABULARY": 911,
+    "COMPREHENSIVE": 200,
+    "CONTEXTUAL_FILL": 200,
+    "DISCOURSE": 120,
+    "READING": 150,
+    "MIXED": 100,
+    "TRANSLATION": 130,
+    "WRITING": 100
+  },
+  "authoringInputNotATask": true,
+  "candidateFirewallPreserved": true
+}

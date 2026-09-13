@@ -1,0 +1,35 @@
+EOT PUBLIC MVP — CODEX ENTRY — 2026-08-19
+
+Repository:
+D:\school\english-output-trainer-starter\english-output-trainer-starter\english-output-trainer
+
+STOP the patch/hotfix approach.
+
+This is a full-repo learner-path consolidation and public-MVP rebuild.
+
+Before editing:
+1. Read AGENTS.md and use exact Expo 57 docs for framework/API changes.
+2. Read EOT_RECONCILIATION_2026-08-19.md.
+3. Read EOT_PUBLIC_MVP_REBUILD_CONTRACT_FOR_CODEX_2026-08-19.md.
+4. Treat docs/EOT_v1.1_READY_FOR_CODEX as historical only when it conflicts with the new contract.
+5. Inspect the complete active call path before changing production code.
+
+Critical rule:
+DO NOT add another parallel architecture. Remove old governing authority.
+
+The finished product must have one active learner path:
+Today → Mission → Result → My English → Next Frontier → next Today,
+with Journey/History as a meaningful long-term projection.
+
+No mandatory Placement.
+Progressive diagnosis inside real learning.
+One canonical evidence/learner truth.
+Gold fixtures are dev/test only, not the production learner universe.
+Repeated failure must reach real reteaching, not only more hints.
+General and Exam share truth but use different policy.
+User must not be used as integration QA.
+
+Do not stop after one screen or one subsystem.
+Run the full scenario harness and internal gates before handing back for user acceptance.
+
+Return the full handoff required by section 31 of the contract.

@@ -1,0 +1,1477 @@
+{
+  "schemaVersion": 1,
+  "processed": 500,
+  "wavesProcessed": 5,
+  "accepted": 335,
+  "quarantined": [
+    {
+      "taskId": "V10-MIX-001",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-MIX-003",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-MIX-005",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-MIX-002",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-MIX-004",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-MIX-006",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-001",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-011",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-001",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-021",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-041",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-002",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-022",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-042",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-003",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-023",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-043",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-004",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-024",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-044",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-005",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-025",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-045",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-006",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-026",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-046",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-001",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-003",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-005",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-002",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-004",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V10-WRITE-006",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-01",
+      "wave": 1,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-022",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-002",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-012",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-023",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-003",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-013",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-024",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-004",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-007",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-027",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-047",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-008",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-028",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-048",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-009",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-029",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-049",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-010",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-030",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-050",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-011",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-031",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-051",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-012",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-032",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-052",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-01",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-01",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-02",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-02",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-02",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-03",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-03",
+      "wave": 2,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-014",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-025",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-005",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-015",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-026",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-006",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-016",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-027",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-013",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-033",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-053",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-014",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-034",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-054",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-015",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-035",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-055",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-016",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-036",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-056",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-017",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-037",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-057",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-018",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-038",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-058",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-03",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-04",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-04",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-04",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-05",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-05",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-05",
+      "wave": 3,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-007",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-017",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-028",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-008",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-018",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-029",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-009",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-019",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-019",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-039",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-059",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-020",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-040",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V17-TRANS-060",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-001",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-007",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-014",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-002",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-008",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-015",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-003",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-009",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-016",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-004",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-010",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-017",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-06",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-06",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-06",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-07",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-07",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-07",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-08",
+      "wave": 4,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-030",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-010",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-020",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-031",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-MIX-F-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-MIX-021",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-MIX-H-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-MIX-S-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-005",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-011",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-018",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-006",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-012",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-019",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-TRANS-F-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V18-TRANS-013",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-TRANS-H-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-TRANS-S-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-006",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-002",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-003",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-007",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-004",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-008",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V9-TRANS-005",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-08",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-H-08",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-F-09",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V19-WRITE-S-09",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-WRITE-H-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-WRITE-F-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    },
+    {
+      "taskId": "V6-WRITE-S-001",
+      "wave": 5,
+      "reasons": [
+        "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+      ]
+    }
+  ],
+  "acceptedByFamily": {
+    "COMPREHENSIVE": 55,
+    "CONTEXTUAL_FILL": 45,
+    "DISCOURSE": 45,
+    "READING": 70,
+    "VOCABULARY": 120
+  },
+  "acceptedByProfile": {
+    "FOUNDATION": 107,
+    "GSAT_STANDARD": 116,
+    "HIGH_SCORE": 112
+  },
+  "quarantinedByReason": {
+    "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE": [
+      "V10-MIX-001",
+      "V10-MIX-003",
+      "V10-MIX-005",
+      "V10-MIX-002",
+      "V10-MIX-004",
+      "V10-MIX-006",
+      "V19-MIX-001",
+      "V19-MIX-011",
+      "V17-TRANS-001",
+      "V17-TRANS-021",
+      "V17-TRANS-041",
+      "V17-TRANS-002",
+      "V17-TRANS-022",
+      "V17-TRANS-042",
+      "V17-TRANS-003",
+      "V17-TRANS-023",
+      "V17-TRANS-043",
+      "V17-TRANS-004",
+      "V17-TRANS-024",
+      "V17-TRANS-044",
+      "V17-TRANS-005",
+      "V17-TRANS-025",
+      "V17-TRANS-045",
+      "V17-TRANS-006",
+      "V17-TRANS-026",
+      "V17-TRANS-046",
+      "V10-WRITE-001",
+      "V10-WRITE-003",
+      "V10-WRITE-005",
+      "V10-WRITE-002",
+      "V10-WRITE-004",
+      "V10-WRITE-006",
+      "V19-WRITE-F-01",
+      "V19-MIX-022",
+      "V19-MIX-002",
+      "V19-MIX-012",
+      "V19-MIX-023",
+      "V19-MIX-003",
+      "V19-MIX-013",
+      "V19-MIX-024",
+      "V19-MIX-004",
+      "V17-TRANS-007",
+      "V17-TRANS-027",
+      "V17-TRANS-047",
+      "V17-TRANS-008",
+      "V17-TRANS-028",
+      "V17-TRANS-048",
+      "V17-TRANS-009",
+      "V17-TRANS-029",
+      "V17-TRANS-049",
+      "V17-TRANS-010",
+      "V17-TRANS-030",
+      "V17-TRANS-050",
+      "V17-TRANS-011",
+      "V17-TRANS-031",
+      "V17-TRANS-051",
+      "V17-TRANS-012",
+      "V17-TRANS-032",
+      "V17-TRANS-052",
+      "V19-WRITE-S-01",
+      "V19-WRITE-H-01",
+      "V19-WRITE-F-02",
+      "V19-WRITE-S-02",
+      "V19-WRITE-H-02",
+      "V19-WRITE-F-03",
+      "V19-WRITE-S-03",
+      "V19-MIX-014",
+      "V19-MIX-025",
+      "V19-MIX-005",
+      "V19-MIX-015",
+      "V19-MIX-026",
+      "V19-MIX-006",
+      "V19-MIX-016",
+      "V19-MIX-027",
+      "V17-TRANS-013",
+      "V17-TRANS-033",
+      "V17-TRANS-053",
+      "V17-TRANS-014",
+      "V17-TRANS-034",
+      "V17-TRANS-054",
+      "V17-TRANS-015",
+      "V17-TRANS-035",
+      "V17-TRANS-055",
+      "V17-TRANS-016",
+      "V17-TRANS-036",
+      "V17-TRANS-056",
+      "V17-TRANS-017",
+      "V17-TRANS-037",
+      "V17-TRANS-057",
+      "V17-TRANS-018",
+      "V17-TRANS-038",
+      "V17-TRANS-058",
+      "V19-WRITE-H-03",
+      "V19-WRITE-F-04",
+      "V19-WRITE-S-04",
+      "V19-WRITE-H-04",
+      "V19-WRITE-F-05",
+      "V19-WRITE-S-05",
+      "V19-WRITE-H-05",
+      "V19-MIX-007",
+      "V19-MIX-017",
+      "V19-MIX-028",
+      "V19-MIX-008",
+      "V19-MIX-018",
+      "V19-MIX-029",
+      "V19-MIX-009",
+      "V19-MIX-019",
+      "V17-TRANS-019",
+      "V17-TRANS-039",
+      "V17-TRANS-059",
+      "V17-TRANS-020",
+      "V17-TRANS-040",
+      "V17-TRANS-060",
+      "V18-TRANS-001",
+      "V18-TRANS-007",
+      "V18-TRANS-014",
+      "V18-TRANS-002",
+      "V18-TRANS-008",
+      "V18-TRANS-015",
+      "V18-TRANS-003",
+      "V18-TRANS-009",
+      "V18-TRANS-016",
+      "V18-TRANS-004",
+      "V18-TRANS-010",
+      "V18-TRANS-017",
+      "V19-WRITE-F-06",
+      "V19-WRITE-S-06",
+      "V19-WRITE-H-06",
+      "V19-WRITE-F-07",
+      "V19-WRITE-S-07",
+      "V19-WRITE-H-07",
+      "V19-WRITE-F-08",
+      "V19-MIX-030",
+      "V19-MIX-010",
+      "V19-MIX-020",
+      "V19-MIX-031",
+      "V6-MIX-F-001",
+      "V19-MIX-021",
+      "V6-MIX-H-001",
+      "V6-MIX-S-001",
+      "V18-TRANS-005",
+      "V18-TRANS-011",
+      "V18-TRANS-018",
+      "V18-TRANS-006",
+      "V18-TRANS-012",
+      "V18-TRANS-019",
+      "V6-TRANS-F-001",
+      "V18-TRANS-013",
+      "V6-TRANS-H-001",
+      "V9-TRANS-001",
+      "V6-TRANS-S-001",
+      "V9-TRANS-006",
+      "V9-TRANS-002",
+      "V9-TRANS-003",
+      "V9-TRANS-007",
+      "V9-TRANS-004",
+      "V9-TRANS-008",
+      "V9-TRANS-005",
+      "V19-WRITE-S-08",
+      "V19-WRITE-H-08",
+      "V19-WRITE-F-09",
+      "V19-WRITE-S-09",
+      "V6-WRITE-H-001",
+      "V6-WRITE-F-001",
+      "V6-WRITE-S-001"
+    ]
+  },
+  "canonicalBindings": {
+    "created": 335,
+    "reused": 0,
+    "canonicalTargetFacetPairsReused": 6
+  },
+  "receiptsGenerated": 335,
+  "finalLivePromoted": {
+    "total": 363,
+    "byFamily": {
+      "VOCABULARY": 123,
+      "COMPREHENSIVE": 58,
+      "CONTEXTUAL_FILL": 48,
+      "DISCOURSE": 48,
+      "READING": 73,
+      "MIXED": 3,
+      "TRANSLATION": 4,
+      "WRITING": 6
+    },
+    "byProfile": {
+      "FOUNDATION": 107,
+      "GSAT_STANDARD": 116,
+      "HIGH_SCORE": 112,
+      "LEGACY_UNPROFILED": 28
+    }
+  },
+  "reachableByRole": {
+    "TEACH": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "GUIDED_PRACTICE": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "FADE": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "INDEPENDENT_ASSESS": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "TRANSFER": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "REVIEW_REACTIVATION": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    },
+    "DISCRIMINATING_PROBE": {
+      "total": 363,
+      "byFamily": {
+        "VOCABULARY": 123,
+        "COMPREHENSIVE": 58,
+        "CONTEXTUAL_FILL": 48,
+        "DISCOURSE": 48,
+        "READING": 73,
+        "MIXED": 3,
+        "TRANSLATION": 4,
+        "WRITING": 6
+      }
+    }
+  },
+  "targetFacetCoverage": {
+    "lexical.contextual-fit#CONTEXTUAL_APPROPRIACY": 812,
+    "lexical.contextual-fit#COLLOCATION": 33,
+    "reading.logic-structure#SELECTION": 250,
+    "reading.meaning-decomposition#SELECTION": 74,
+    "reading.reference-tracking#SELECTION": 1,
+    "reading.inference#SELECTION": 128
+  },
+  "remainingShallowOrUnavailable": {
+    "MIXED": "3 legacy promoted; 40 V35 candidates quarantined",
+    "TRANSLATION": "4 legacy promoted; 90 V35 candidates quarantined",
+    "WRITING": "6 legacy promoted; 35 V35 candidates quarantined",
+    "reason": "CURRENT_BOUNDED_SEMANTIC_RUBRIC_UNAVAILABLE"
+  },
+  "candidateFirewallPreserved": true
+}

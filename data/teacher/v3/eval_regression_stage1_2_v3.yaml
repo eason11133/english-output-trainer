@@ -1,0 +1,1829 @@
+version: '3.0'
+purpose: EOT Stage 1–2 architecture and pedagogy release gate for Writing/Translation-centered adaptive learning.
+case_count: 123
+cases:
+- id: GND-001
+  name: bare-forgot
+  category: grounding
+  setup:
+    teacher_prompt: Rewrite the sentence in two clearer clauses.
+    learner_turn: 我忘記了
+  must:
+  - mark referent/meaning unresolved
+  - clarify the referent minimally before diagnosing
+  - write no capability-failure evidence
+  must_not:
+  - infer task-too-hard
+  - increase support automatically
+  - supply a model sentence
+  - invent what the learner forgot
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+- id: GND-002
+  name: forgot-original-intent-explicit
+  category: grounding
+  setup:
+    artifact_age: old
+    learner_turn: 我忘記我當時想表達什麼了
+  must:
+  - treat memory-of-intent as unavailable context, not English failure
+  - recover what can be inferred from prompt and surrounding artifact
+  - defer intent-dependent diagnosis if needed
+  must_not:
+  - lower composition capability because of memory failure
+  - force autobiographical reconstruction
+  - invent a single original meaning
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CLARIFY
+  - DEFER
+  contrast_group: FORGOT
+- id: GND-003
+  name: forgot-word-explicit
+  category: grounding
+  setup:
+    current_focus: lexical retrieval
+    learner_turn: 我忘記那個英文單字了
+  must:
+  - treat as lexical-help signal only if target provenance/context supports it
+  - use minimal retrieval support appropriate to history
+  must_not:
+  - treat as forgotten original intent
+  - diagnose broad vocabulary weakness
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: FORGOT
+- id: GND-004
+  name: forgot-instruction-explicit
+  category: grounding
+  setup:
+    teacher_instruction: 只改後半句
+    learner_turn: 我忘記你剛剛要我做什麼
+  must:
+  - restate current task succinctly
+  - write no capability evidence
+  must_not:
+  - teach English content merely because instruction was forgotten
+  - record failure
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+  - ACKNOWLEDGE
+  contrast_group: FORGOT
+- id: GND-005
+  name: bare-dont-know-after-error-notice
+  category: grounding
+  setup:
+    teacher_prompt: 你看得出哪裡怪嗎？
+    learner_turn: 不知道
+  must:
+  - interpret as inability to identify the issue only with current prompt grounding
+  - choose contingent support without claiming underlying knowledge absent
+  must_not:
+  - declare grammar concept unknown as fact
+  - dump full answer automatically
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: DONT_KNOW
+- id: GND-006
+  name: bare-dont-know-after-intent-question
+  category: grounding
+  setup:
+    teacher_prompt: 你當時這裡想說「工作種類」還是「未來的工作世界」？
+    artifact_age: old
+    learner_turn: 不知道
+  must:
+  - recognize intended meaning remains unavailable
+  - defer meaning-dependent correction
+  - continue only with independent issues
+  must_not:
+  - treat as English semantic inability
+  - pick an intent for learner
+  hard_gate: true
+  expected_action_family:
+  - DEFER
+  contrast_group: DONT_KNOW
+- id: GND-007
+  name: bare-no
+  category: grounding
+  setup:
+    teacher_turn: 你是想說父母的管教會直接造成犯罪嗎？
+    learner_turn: 不是
+  must:
+  - treat as rejection of Teacher interpretation
+  - withdraw the rejected semantic hypothesis
+  - ask only if additional clarification is necessary
+  must_not:
+  - treat as wrong answer
+  - continue teaching against rejected meaning
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CLARIFY
+- id: GND-008
+  name: huh-after-explanation
+  category: grounding
+  setup:
+    previous_teacher_move: long explanation of allow
+    learner_turn: 蛤
+  must:
+  - treat as possible grounding/teacher-induced confusion
+  - check/reframe rather than infer learner deficit
+  must_not:
+  - repeat same explanation longer
+  - record grammar failure from this turn
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+  - CHANGE_STRATEGY
+- id: GND-009
+  name: weird-ambiguous
+  category: grounding
+  setup:
+    learner_turn: 怪怪的
+  must:
+  - identify what the comment likely refers to or ask minimal clarification when material
+  - write no capability evidence until grounded
+  must_not:
+  - assume the exact grammar issue
+  - force an exercise
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+- id: GND-010
+  name: sort-of
+  category: grounding
+  setup:
+    teacher_turn: 這是你原本想表達的意思嗎？
+    learner_turn: 差不多
+  must:
+  - preserve partial grounding
+  - keep uncertainty visible if exact intent matters
+  - avoid treating tentative meaning as fully learner-confirmed
+  must_not:
+  - convert to fully confirmed semantic provenance when exact distinction matters
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CLARIFY
+- id: GND-011
+  name: short-help
+  category: grounding
+  setup:
+    learner_turn: 不會
+  must:
+  - use current task context to determine what scope is actually being claimed
+  - if scope remains ambiguous, clarify before choosing remediation
+  must_not:
+  - map string directly to UNKNOWN_WORD or GRAMMAR_GAP
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+  - INTERVENE
+- id: GND-012
+  name: question-is-not-attempt
+  category: grounding
+  setup:
+    active_task: write a sentence
+    learner_turn: flying colours 是什麼意思？
+  must:
+  - classify as learner question
+  - answer/support the question based on current context
+  - do not score the wording as task output
+  must_not:
+  - evaluate it as failed production
+  - force the original task before answering
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: GND-013
+  name: social-turn
+  category: grounding
+  setup:
+    learner_turn: 哈囉廢物又來啦，一樣的模式給我
+  must:
+  - separate social tone from instructional request
+  - recover the referenced prior interaction mode if available
+  must_not:
+  - treat profanity as learning evidence
+  - restart onboarding
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: GND-014
+  name: multiple-plausible-referents
+  category: grounding
+  setup:
+    recent_context:
+    - teacher corrected spelling
+    - teacher asked about meaning
+    learner_turn: 我說的是前面那個
+  must:
+  - resolve referent before teaching if both candidates imply different actions
+  must_not:
+  - guess one referent and commit evidence
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+- id: GND-015
+  name: ambiguity-irrelevant-to-action
+  category: grounding
+  setup:
+    learner_turn: 我忘了
+    context: learner is asking to pause and no diagnosis is needed
+  must:
+  - allow defer/pause without forcing clarification when ambiguity does not change a safe next action
+  - write no capability evidence
+  must_not:
+  - interrogate merely to eliminate all uncertainty
+  hard_gate: true
+  expected_action_family:
+  - DEFER
+  - ACKNOWLEDGE
+- id: OLD-001
+  name: old-essay-no-intent-required-spelling
+  category: old_work
+  setup:
+    artifact_age: 3 weeks
+    learner_turn: 我不記得當時在想什麼
+    artifact: '... enviroment ...'
+  must:
+  - may address spelling/form issues independent of original intent
+  - keep original-intent state unavailable
+  must_not:
+  - require intent recall before every correction
+  - count memory gap as English weakness
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - DEFER
+- id: OLD-002
+  name: old-essay-intent-required-word-choice
+  category: old_work
+  setup:
+    artifact_age: 1 month
+    span: future job
+    learner_turn: 真的忘了當時是想說工作種類還是未來工作
+  must:
+  - defer meaning-changing substitution
+  - may explain alternatives without asserting which was intended
+  must_not:
+  - replace with future jobs or future of work as learner truth
+  hard_gate: true
+  expected_action_family:
+  - DEFER
+  - ANSWER
+- id: OLD-003
+  name: teacher-invents-meaning
+  category: old_work
+  setup:
+    artifact_age: old
+    learner_intent: unavailable
+    teacher_candidate_sentence: When teenagers commit crimes, people often blame their parents.
+  must:
+  - label Teacher semantic content as TEACHER_SUPPLIED if used
+  - prevent later completion from proving independent composition
+  must_not:
+  - silently treat teacher-authored meaning as learner-originated
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: OLD-004
+  name: prompt-recovers-context
+  category: old_work
+  setup:
+    artifact_age: old
+    assignment_prompt: Discuss whether parents should be responsible for teenage crime
+    surrounding_text: parents... teenagers... crime
+    learner_intent: unavailable
+  must:
+  - use prompt/artifact as ARTIFACT_SUPPORTED context
+  - distinguish what is supported from what remains speculative
+  must_not:
+  - ask learner to remember information already in artifact
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - CLARIFY
+- id: OLD-005
+  name: old-work-meaning-options
+  category: old_work
+  setup:
+    span: darkening
+    artifact_context: forced children may go toward crime
+    learner_intent: unavailable
+  must:
+  - present tentative interpretations only if necessary and allow not-remembered
+  - keep semantic provenance tentative
+  must_not:
+  - force one interpretation
+  - turn confirmation into scored English task
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+- id: OLD-006
+  name: fresh-work-contrast
+  category: old_work
+  setup:
+    artifact_age: fresh
+    learner_turn: 我是要講他們黑化才會像上面一樣去犯罪
+  must:
+  - accept learner stated meaning as authoritative for intent
+  - rebuild semantic advice around it
+  must_not:
+  - continue prior incompatible interpretation
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - INTERVENE
+  contrast_group: INTENT_RECENCY
+- id: OLD-007
+  name: memory-unavailable-no-evidence
+  category: old_work
+  setup:
+    learner_turn: 我忘記以前為什麼這樣寫
+  must:
+  - create no negative composition evidence from memory unavailability
+  must_not:
+  - record NO_PROGRESS as composition failure
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: OLD-008
+  name: source-remains-immutable
+  category: old_work
+  setup:
+    learner_requests: 給我我原本寫的
+  must:
+  - return/recover immutable original artifact exactly
+  - do not require a teaching task
+  must_not:
+  - return only revised text
+  - overwrite original with correction
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+  - RETURN_TO_SOURCE
+- id: GOAL-001
+  name: switch-to-score
+  category: goal_shift
+  setup:
+    current_activity: sentence revision
+    learner_turn: 啊如果文法沒錯你會給幾分
+  must:
+  - recognize local goal shift to scoring analysis
+  - answer the scoring question with appropriate uncertainty
+  must_not:
+  - force current exercise completion first
+  - classify question as task failure
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: GOAL-002
+  name: missing-prompt-late
+  category: goal_shift
+  setup:
+    prior_action: essay evaluation
+    learner_turn: 忘記給你題目了靠背
+    new_artifact: assignment prompt image
+  must:
+  - treat new prompt as context supplement that can change prior evaluation
+  - reassess prior claims affected by prompt
+  must_not:
+  - pretend prior evaluation is unchanged
+  - treat prompt upload as new unrelated lesson
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - INTERVENE
+- id: GOAL-003
+  name: teacher-method-constraint
+  category: goal_shift
+  setup:
+    learner_turn: 老師叫我一句句改
+  must:
+  - update the local task method/goal when compatible with learning
+  - preserve learner ownership of each revision
+  must_not:
+  - continue whole-essay rewrite as if instruction absent
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - INTERVENE
+- id: GOAL-004
+  name: specific-phrase-question
+  category: goal_shift
+  setup:
+    current_activity: essay revision
+    learner_turn: 老師說其中一個 in my opinion 可以換成 as .....
+  must:
+  - answer the targeted phrase question
+  - use actual context when proposing alternatives
+  must_not:
+  - launch unrelated grammar drill
+  - ignore the specific request
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: GOAL-005
+  name: request-final-version
+  category: goal_shift
+  setup:
+    current_activity: teaching
+    learner_turn: 給我最終改完的全部
+  must:
+  - switch to completion/delivery goal
+  - preserve previously confirmed meaning and user style constraints
+  must_not:
+  - force another exercise before delivery
+  - erase provenance of changes
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: GOAL-006
+  name: request-original-version
+  category: goal_shift
+  setup:
+    current_activity: after final revision
+    learner_turn: 可以給我我原本寫得嗎
+  must:
+  - return original source, not regenerated approximation
+  - no capability update
+  must_not:
+  - teach instead of complying
+  - return revised version
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+  - RETURN_TO_SOURCE
+- id: GOAL-007
+  name: learner-defers-work
+  category: goal_shift
+  setup:
+    learner_turn: 我其實還有寫一篇，但我晚點再給你
+  must:
+  - acknowledge defer without forcing continuation
+  - no negative evidence
+  must_not:
+  - push a new exercise
+  - treat defer as disengagement weakness
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: GOAL-008
+  name: learner-prefers-no-colon
+  category: goal_shift
+  setup:
+    learner_turn: 'i don''t like : in my artcile'
+    current_activity: revision
+  must:
+  - treat as writing-style preference/context, not necessarily grammar failure
+  - apply preference to later revision when compatible
+  must_not:
+  - score the preference sentence as the current writing task
+  - ignore the preference
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: CORR-001
+  name: learner-corrects-darkening-intent
+  category: teacher_corrigibility
+  setup:
+    teacher_prior_interpretation: darkening means becoming dark
+    learner_turn: darkening這個我是要講他們黑化才會像上面一樣去犯罪
+  must:
+  - withdraw incompatible prior interpretation
+  - rebuild feedback using clarified intent
+  - mark old semantic hypothesis contradicted
+  must_not:
+  - defend original interpretation
+  - continue scoring against wrong meaning
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - INTERVENE
+- id: CORR-002
+  name: learner-says-copy-typing-slip
+  category: teacher_corrigibility
+  setup:
+    teacher_prior_hypothesis: spelling weakness
+    learner_turn: 我是看著打得我打錯而已
+    history: strong spelling evidence
+  must:
+  - lower spelling-gap hypothesis if context supports slip
+  - do not force spelling lesson
+  must_not:
+  - treat learner explanation as irrelevant
+  - keep gap high without evidence
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - ACKNOWLEDGE
+- id: CORR-003
+  name: teacher-valid-alternative-error
+  category: teacher_corrigibility
+  setup:
+    teacher_target: significant
+    learner_output: major
+    learner_turn: major 不是也可以嗎
+  must:
+  - accept valid alternative if semantics/register fit
+  - correct Teacher expectation
+  must_not:
+  - force significant because it was planned
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: CORR-004
+  name: learner-challenges-more-books
+  category: teacher_corrigibility
+  setup:
+    teacher_rule: more should go after verbs
+    learner_turn: but more books is correct, right?
+  must:
+  - correct the overgeneralized rule
+  - explain category/function distinction accurately
+  must_not:
+  - double down on false absolute rule
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: CORR-005
+  name: teacher-explanation-confused-learner
+  category: teacher_corrigibility
+  setup:
+    previous_move: GUIDED_REVISION
+    learner_turn: I don't understand that explanation about allow. Who is missing?
+  must:
+  - consider teacher-induced confusion
+  - change representation/strategy
+  must_not:
+  - repeat same wording
+  - count confusion as evidence of broader learner weakness
+  hard_gate: true
+  expected_action_family:
+  - CHANGE_STRATEGY
+- id: CORR-006
+  name: new-prompt-invalidates-old-score
+  category: teacher_corrigibility
+  setup:
+    prior_score_reasoning: based on assumed prompt
+    new_prompt: actual prompt differs materially
+  must:
+  - recompute affected scoring/feedback
+  - state what prior assumption changed
+  must_not:
+  - preserve old score merely for consistency
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-001
+  name: model-copy
+  category: evidence
+  setup:
+    visible_model: Schools should allow students to use phones for learning.
+    learner_output: Schools should allow students to use phones for learning.
+  must:
+  - cap production evidence at MODELED/GUIDED
+  - record model exposure
+  must_not:
+  - commit INDEPENDENT
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-002
+  name: independent-transfer-after-model
+  category: evidence
+  setup:
+    prior_visible_model: Schools should allow students to use phones for learning.
+    current_context: new
+    learner_output: This app allows users to save their work.
+    model_hidden_now: true
+  must:
+  - record new-context independent evidence if otherwise unsupported
+  - keep prior modeled evidence separate
+  must_not:
+  - rewrite history so modeled attempt becomes independent
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: EVD-003
+  name: ocr-correction-not-learning
+  category: evidence
+  setup:
+    event: learner selects OCR alternative significant over signigicant
+  must:
+  - classify as OCR correction/transcript grounding
+  - reject capability-success evidence
+  must_not:
+  - record spelling self-repair
+  - record independent production
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: EVD-004
+  name: bare-question-not-performance
+  category: evidence
+  setup:
+    learner_turn: 這個是什麼意思？
+  must:
+  - create no negative English-production evidence
+  must_not:
+  - score grammar/spelling of question as failed task
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: EVD-005
+  name: goal-shift-not-failure
+  category: evidence
+  setup:
+    learner_turn: 先給我原稿
+  must:
+  - create no failed-attempt evidence for previous task
+  must_not:
+  - treat as refusal/failure
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: EVD-006
+  name: teacher-supplied-meaning-completion
+  category: evidence
+  setup:
+    teacher_supplied_meaning: poor parenting can increase teenage crime
+    learner_completes: increase
+  must:
+  - restrict evidence to the linguistic scope actually produced with visible support
+  - do not claim independent composition/idea development
+  must_not:
+  - credit whole-sentence composition as learner-originated
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-007
+  name: partial-local-positive
+  category: evidence
+  setup:
+    output: Parents encourage kids to more read.
+  must:
+  - allow local positive evidence for encourage O to V when justified
+  - separate word-order problem
+  must_not:
+  - mark entire pattern absent
+  - mark whole sentence correct
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-008
+  name: allow-to-negative
+  category: evidence
+  setup:
+    output: Schools should allow to use phones.
+  must:
+  - do not create successful allow O to V evidence
+  must_not:
+  - count allow+to token presence as target success
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-009
+  name: valid-alternative-target-unobserved
+  category: evidence
+  setup:
+    target_history: improve
+    learner_output: make the environment better
+  must:
+  - accept communicative output
+  - record target improve as unobserved separately
+  must_not:
+  - mark output wrong solely for target mismatch
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: EVD-010
+  name: immediate-self-repair
+  category: evidence
+  setup:
+    history: 3 independent correct significant spellings
+    output: signigicant
+    learner_repair: significant without hint
+  must:
+  - record self-repair/slip-compatible evidence
+  - reduce need for spelling remediation
+  must_not:
+  - promote spelling gap as fact
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: EVD-011
+  name: source-success-transfer-failure
+  category: evidence
+  setup:
+    source: independent success
+    new_context: failure
+  must:
+  - keep source control and transfer separate
+  - record transfer failure/uncertainty without erasing source success
+  must_not:
+  - claim stable mastery
+  - erase earlier source success
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: EVD-012
+  name: one-failure-not-inability
+  category: evidence
+  setup:
+    single_failure: article omission
+    history: unknown
+  must:
+  - preserve uncertainty
+  - treat as observation supporting multiple hypotheses
+  must_not:
+  - set permanent weakness/mastery percentage
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - DEFER
+- id: STR-001
+  name: strong-history-typo
+  category: strategy
+  setup:
+    output: signigicant
+    history: strong spelling evidence
+    learner_response: immediate independent repair
+  must:
+  - stop spelling intervention
+  - return to authentic work
+  must_not:
+  - continue spelling drill
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  contrast_group: SIGNIFICANT
+- id: STR-002
+  name: recurrent-spelling-gap
+  category: strategy
+  setup:
+    output: signigicant
+    history: recurrent unsupported misspellings
+    learner_turn: 我每次都忘記怎麼拼
+  must:
+  - raise orthographic hypothesis
+  - teach form without reteaching meaning by default
+  must_not:
+  - treat as simple slip
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: SIGNIFICANT
+- id: STR-003
+  name: recognition-gap
+  category: strategy
+  setup:
+    output: signigicant
+    learner_turn: significant 跟 signigicant 我看不出哪個對
+  must:
+  - target written-form discrimination/representation
+  - distinguish recognition from production
+  must_not:
+  - use only write-it-again drill
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: SIGNIFICANT
+- id: STR-004
+  name: same-explanation-failed
+  category: strategy
+  setup:
+    previous_moves:
+    - EXPLAIN
+    - EXPLAIN
+    learner_state: still confused
+  must:
+  - classify failure
+  - change representation or diagnosis
+  must_not:
+  - repeat longer explanation
+  hard_gate: true
+  expected_action_family:
+  - CHANGE_STRATEGY
+- id: STR-005
+  name: no-need-to-teach
+  category: strategy
+  setup:
+    learner_attempt: adequate
+    history: strong relevant control
+  must:
+  - continue/acknowledge or seek broader proof only if useful
+  must_not:
+  - manufacture correction because a fancier answer exists
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - ACKNOWLEDGE
+- id: STR-006
+  name: multi-error-priority
+  category: strategy
+  setup:
+    artifact: paragraph with 8 candidate issues
+    time_budget: short
+  must:
+  - prioritize one or few highest-value issues
+  - defer/ignore lower-value issues
+  - preserve writing flow
+  must_not:
+  - open 8 simultaneous micro-lessons
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - DEFER
+- id: STR-007
+  name: learner-question-during-task
+  category: strategy
+  setup:
+    active_task: rewrite
+    learner_turn: 為什麼這裡不能用 with?
+  must:
+  - answer the learner question because it is the active need
+  - then resume task when appropriate
+  must_not:
+  - ignore question and repeat rewrite prompt
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: STR-008
+  name: learner-wants-final-answer
+  category: strategy
+  setup:
+    history: several teaching turns
+    learner_turn: 給我最終改完的全部
+  must:
+  - respect current goal and provide final artifact when appropriate
+  - do not falsely treat delivered final text as learner production evidence
+  must_not:
+  - force endless tutoring
+  - credit AI-written final as learner mastery
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: CTX-001
+  name: same-output-strong-history
+  category: context_sensitivity
+  setup:
+    output: allow students to use
+    history: multiple independent correct uses
+    current_issue: minor unrelated typo
+  must:
+  - avoid reteaching allow frame
+  must_not:
+  - ignore strong history and teach target anyway
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  contrast_group: ALLOW_HISTORY
+- id: CTX-002
+  name: same-output-weak-history
+  category: context_sensitivity
+  setup:
+    output: allow to use
+    history: recurrent same error
+  must:
+  - treat allow construction as stronger candidate bottleneck
+  must_not:
+  - pretend history is irrelevant
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: ALLOW_HISTORY
+- id: CTX-003
+  name: strategy-history-contrast-effective
+  category: context_sensitivity
+  setup:
+    target: grammar construction
+    interaction_history: form contrast helped in 3 comparable episodes; long rule explanation confused twice
+  must:
+  - prefer/reuse form contrast when current evidence does not contradict it
+  - keep strategy history as evidence not destiny
+  must_not:
+  - default to long rule explanation without reason
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: STRATEGY_HISTORY
+- id: CTX-004
+  name: strategy-history-new-target
+  category: context_sensitivity
+  setup:
+    target: spelling representation
+    interaction_history: form contrast helped grammar construction
+  must:
+  - avoid overgeneralizing strategy preference across unrelated domain without evidence
+  must_not:
+  - apply form contrast simply because it worked elsewhere
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: STRATEGY_HISTORY
+- id: CTX-005
+  name: copying-tendency
+  category: context_sensitivity
+  setup:
+    interaction_history: learner frequently copies visible models
+    current_plan: MODEL
+  must:
+  - recognize evidence risk of visible model
+  - use model only when pedagogically justified and plan later unsupported production
+  must_not:
+  - treat modeled success as proof
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: CTX-006
+  name: unknown-learner
+  category: context_sensitivity
+  setup:
+    learner_history: sparse/unknown
+    current_output: single article error
+  must:
+  - act with calibrated uncertainty
+  - avoid fabricating profile/personalized history
+  must_not:
+  - claim recurring weakness without evidence
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - DEFER
+- id: OCR-001
+  name: uncertain-spelling-region
+  category: ocr
+  setup:
+    vision_candidates:
+    - significant
+    - signigicant
+    confidence: LOW
+    candidate_teaching: spelling
+  must:
+  - clarify transcript before spelling diagnosis
+  must_not:
+  - teach possibly machine-created spelling error
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+- id: OCR-002
+  name: teacher-red-ink-channel
+  category: ocr
+  setup:
+    learner_text: future job
+    teacher_annotation: jobs
+  must:
+  - keep learner and teacher channels separate
+  must_not:
+  - record jobs as learner production
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: OCR-003
+  name: printed-prompt-channel
+  category: ocr
+  setup:
+    printed_prompt: How will AI change future work?
+    learner_text: AI will...
+  must:
+  - use prompt as task context, not learner production
+  must_not:
+  - score prompt language as learner evidence
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: OCR-004
+  name: unknown-mark
+  category: ocr
+  setup:
+    segment: UNKNOWN
+    confidence: LOW
+    location: margin
+  must:
+  - ignore or clarify only if decision relevant
+  must_not:
+  - force clarification for irrelevant noise
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - DEFER
+- id: NI-001
+  name: adequate-original-sentence
+  category: non_intervention
+  setup:
+    output: This app allows users to save their work.
+    goal: practice allow O to V
+  must:
+  - acknowledge/continue; no extra correction required
+  must_not:
+  - invent stylistic issue to keep teaching
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - ACKNOWLEDGE
+- id: NI-002
+  name: learner-pauses
+  category: non_intervention
+  setup:
+    learner_turn: 我晚點再給你
+  must:
+  - acknowledge pause
+  - no ability evidence
+  must_not:
+  - push next drill
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: NI-003
+  name: request-original
+  category: non_intervention
+  setup:
+    learner_turn: 給我原本的
+  must:
+  - perform source-recovery action
+  - no teaching required
+  must_not:
+  - turn into quiz
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+  - RETURN_TO_SOURCE
+- id: NI-004
+  name: teacher-already-wrong
+  category: non_intervention
+  setup:
+    learner_output: have a major impact on
+    teacher_expected: have a significant impact on
+  must:
+  - accept valid alternative
+  - do not intervene
+  must_not:
+  - correct major to significant
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CONTINUE
+- id: NI-005
+  name: stylistic-preference
+  category: non_intervention
+  setup:
+    learner_preference: no colon in article
+    draft_contains_no_colon: true
+  must:
+  - do nothing; preference already satisfied
+  must_not:
+  - create a lesson about punctuation
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: NI-006
+  name: question-answered-no-proof-needed
+  category: non_intervention
+  setup:
+    learner_question: what does reek of mean?
+    goal: meaning lookup only
+  must:
+  - answer meaning; do not force immediate production unless broader learning goal justifies it
+  must_not:
+  - automatically create a mastery test
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: LOOP-001
+  name: return-source-after-teaching
+  category: closed_loop
+  setup:
+    teaching: allow frame resolved with support
+    next: original essay
+  must:
+  - return to original artifact for learner-owned revision
+  - preserve source immutability
+  must_not:
+  - close episode only because micro-task was correct
+  hard_gate: true
+  expected_action_family:
+  - RETURN_TO_SOURCE
+- id: LOOP-002
+  name: same-context-not-transfer
+  category: closed_loop
+  setup:
+    source_rewrite: correct
+    context: same sentence with small edit
+  must:
+  - do not call transfer supported
+  must_not:
+  - merge source success with transfer
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: LOOP-003
+  name: new-context-transfer
+  category: closed_loop
+  setup:
+    source: Schools should allow students to use phones.
+    new: This app allows users to save their work.
+    support: none
+  must:
+  - record changed-context evidence separately
+  must_not:
+  - call delayed retention if no delay occurred
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: LOOP-004
+  name: delayed-retention
+  category: closed_loop
+  setup:
+    prior_target: allow O to V
+    delay: days
+    new_context: new
+    support: none
+    success: true
+  must:
+  - allow retention evidence if timing/provenance genuinely support it
+  - keep transfer/retention dimensions distinguishable
+  must_not:
+  - retroactively mark every prior assisted success independent
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: LOOP-005
+  name: controlled-success-source-failure
+  category: closed_loop
+  setup:
+    controlled_task: correct after support fade
+    original_artifact: same target wrong again
+  must:
+  - record controlled success and unresolved source control
+  must_not:
+  - close target as learned
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: LOOP-006
+  name: transfer-failure-after-source-success
+  category: closed_loop
+  setup:
+    source: independent success
+    new_context: failure
+  must:
+  - continue targeted transfer work if worthwhile
+  - preserve source success
+  must_not:
+  - erase source success or claim stable mastery
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: OUT-001
+  name: writing-is-outcome-not-error-list
+  category: outer_loop
+  setup:
+    recent_artifact: essay with 8 issues
+    learner_goal: improve writing
+    history: allow-frame repeated; 5 other one-off slips
+  must:
+  - prioritize a small high-leverage need
+  - preserve deferred issues without teaching all
+  - explain why-now from evidence
+  must_not:
+  - teach all detected errors
+  - create eight sequential lessons
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: OUT-002
+  name: planned-learning-without-new-artifact
+  category: outer_loop
+  setup:
+    learner_model: allow O to V transfer failed twice
+    no_new_artifact: true
+  must:
+  - allow a planned transfer/learning task
+  - link task to longitudinal evidence and Writing/Translation relevance
+  must_not:
+  - require learner to upload work before any learning
+  - ask learner to choose module
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: OUT-003
+  name: retention-due-beats-new-low-value-error
+  category: outer_loop
+  setup:
+    retention_due: significant orthography
+    new_artifact_low_value_error: one-off article slip
+    time_minutes: 5
+  must:
+  - consider delayed retention need as candidate
+  - weigh outcome impact and recurrence
+  must_not:
+  - always prioritize newest visible error
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - CONTINUE
+- id: OUT-004
+  name: low-confidence-diagnostic-not-remediation
+  category: outer_loop
+  setup:
+    evidence: one ambiguous collocation failure
+    confidence: LOW
+  must:
+  - prefer minimal diagnostic when information value is high
+  - avoid broad remediation claim
+  must_not:
+  - declare collocation weakness permanent
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - DEFER
+- id: OUT-005
+  name: do-not-interrupt-authentic-flow-low-value
+  category: outer_loop
+  setup:
+    artifact: essay drafting in progress
+    issue: minor low-impact punctuation
+    learner_flow: active
+  must:
+  - allow CONTINUE when interruption cost exceeds learning value
+  must_not:
+  - interrupt every detected issue
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: OUT-006
+  name: learner-does-not-pick-module
+  category: product
+  setup:
+    today_state: system has strong learner evidence
+    available_needs:
+    - chunk transfer
+    - grammar retention
+  must:
+  - system selects/presents next useful action from evidence
+  - keep rationale system-owned
+  must_not:
+  - open with what do you want to learn
+  - require choosing Vocabulary Grammar Writing module
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: TSK-001
+  name: recognition-does-not-prove-retrieval
+  category: task_model
+  setup:
+    task: choose significant from four options
+    result: correct
+  must:
+  - permit recognition evidence only
+  - block retrieval/spelling/deployment claims
+  must_not:
+  - mark word mastered
+  - mark productive retrieval successful
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: TSK-002
+  name: cued-retrieval-not-uncued
+  category: task_model
+  setup:
+    task: 重大 → im...
+    result: improve
+  must:
+  - record cue exposure
+  - limit claim to cued retrieval if target provenance valid
+  must_not:
+  - claim spontaneous retrieval
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: TSK-003
+  name: translation-valid-alternative
+  category: task_model
+  setup:
+    source: 改善環境
+    learner: make the environment better
+    target_word_hint: null
+  must:
+  - accept semantically valid English
+  - separate target improve retrieval from overall translation quality
+  must_not:
+  - mark translation wrong solely for not using improve
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CONTINUE
+- id: TSK-004
+  name: naked-target-without-provenance
+  category: task_model
+  setup:
+    prompt: 改善 → ?
+    learner_history: no known improve target
+  must:
+  - block target-specific retrieval inference
+  - accept multiple valid realizations or redesign task
+  must_not:
+  - assume improve was learned target
+  hard_gate: true
+  expected_action_family:
+  - DEFER
+- id: TSK-005
+  name: source-revision-not-transfer
+  category: task_model
+  setup:
+    source_sentence: allow to use
+    feedback: model shown
+    learner_revision: allow students to use
+  must:
+  - classify revision as assisted/source evidence
+  - schedule independent/new-context evidence separately
+  must_not:
+  - mark transfer complete
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: TSK-006
+  name: delayed-new-context-stronger
+  category: task_model
+  setup:
+    later_task: This app allows users to save work.
+    delay_days: 7
+    support: NONE
+  must:
+  - allow stronger retention+transfer evidence
+  - preserve original evidence chain
+  must_not:
+  - collapse into same source success event
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+- id: WRT-001
+  name: mixed-writing-preserve-positive-frame
+  category: writing
+  setup:
+    output: Parents encourage kids to more read.
+  must:
+  - preserve positive evidence for encourage O to V
+  - isolate read more issue
+  - avoid whole-sentence failure label
+  must_not:
+  - reteach encourage frame as absent
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: WRT-002
+  name: spelling-slip-history-strong
+  category: writing
+  setup:
+    output: signigicant
+    history: strong spelling + rare slip
+    next: immediate independent significant
+  must:
+  - revise slip hypothesis upward
+  - stop unnecessary spelling lesson
+  - preserve contextual deployment evidence
+  must_not:
+  - force spelling reconstruction after successful self-repair
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  contrast_group: SIGNIFICANT
+- id: WRT-003
+  name: spelling-gap-history-recurrent
+  category: writing
+  setup:
+    output: signigicant
+    history: repeated orthographic failures
+    learner: I always forget how to spell it
+  must:
+  - target orthographic production
+  - do not reteach meaning if strong
+  must_not:
+  - treat identical surface as mere slip
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  contrast_group: SIGNIFICANT
+- id: WRT-004
+  name: composition-idea-good-language-bottleneck
+  category: writing
+  setup:
+    artifact: clear original argument but unstable English construction
+  must:
+  - preserve idea/content strength
+  - target language bottleneck rather than invent new ideas
+  must_not:
+  - rewrite argument and count as learner composition
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: WRT-005
+  name: teacher-supplied-idea-not-composition-evidence
+  category: writing
+  setup:
+    teacher_supplies: When teenagers commit crimes, people often blame their parents.
+    learner_completes: They believe poor parenting can increase teenage crime.
+  must:
+  - mark semantic provenance teacher-supplied where applicable
+  - do not use as independent idea-generation evidence
+  must_not:
+  - claim independent composition of idea
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: TRN-001
+  name: translation-meaning-preservation-before-target-word
+  category: translation
+  setup:
+    source: 科技將對未來工作產生重大影響
+    learner: Technology will greatly change future work.
+  must:
+  - evaluate meaning preservation and English validity
+  - separate missing target chunk from translation correctness unless target provenance exists
+  must_not:
+  - force have a significant impact on as only correct answer
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CONTINUE
+- id: TRN-002
+  name: translation-l1-interference-hypothesis-not-label
+  category: translation
+  setup:
+    output: Although he is tired, but he keeps working.
+    history: first occurrence
+  must:
+  - treat L1 interference as competing hypothesis only
+  - teach form/meaning if intervention value high
+  must_not:
+  - store permanent L1 interference trait from one event
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: TRN-003
+  name: translation-alternative-register
+  category: translation
+  setup:
+    source: 這項政策造成嚴重影響
+    learner: This policy had a big impact.
+    context: formal essay
+  must:
+  - distinguish semantic correctness from register/lexical precision
+  - offer/teach alternatives without calling meaning wrong
+  must_not:
+  - mark whole translation incorrect
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - ACKNOWLEDGE
+- id: TRN-004
+  name: translation-source-comprehension-uncertain
+  category: translation
+  setup:
+    source_sentence: ambiguous Chinese source
+    learner_translation: one plausible interpretation
+  must:
+  - check source ambiguity before diagnosing English
+  - avoid penalizing valid interpretation
+  must_not:
+  - assume one Chinese meaning and diagnose English error
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+  - ACKNOWLEDGE
+- id: LEX-001
+  name: recognition-only-word
+  category: lexical
+  setup:
+    history: multiple recognition successes, no retrieval
+    task: independent sentence
+  must:
+  - treat production as new stronger evidence opportunity
+  - do not assume retrieval mastered from recognition
+  must_not:
+  - skip because word already learned
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+  - CONTINUE
+- id: LEX-002
+  name: collocation-grammatical-but-unnatural
+  category: lexical
+  setup:
+    output: do a decision
+    meaning: make a decision
+  must:
+  - target collocation/chunk not general grammar
+  - use contrast/retrieval appropriate to history
+  must_not:
+  - label sentence grammar failure only
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: LEX-003
+  name: formulaic-overuse
+  category: formulaic
+  setup:
+    essay: uses In my opinion four times
+    learner_knows_phrase: true
+  must:
+  - treat as deployment/appropriacy/variation issue
+  - preserve knowledge of phrase
+  must_not:
+  - reteach meaning of phrase
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: LEX-004
+  name: idiom-context-inappropriate
+  category: formulaic
+  setup:
+    learner: I passed the test with flying colours.
+    context: formal academic report
+  must:
+  - distinguish meaning knowledge from register appropriacy
+  - teach alternative if relevant
+  must_not:
+  - mark idiom unknown
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: LEX-005
+  name: reusable-sentence-slot-manipulation
+  category: formulaic
+  setup:
+    frame: There is no denying that ...
+    learner: copies exact model content
+  must:
+  - keep modeled status
+  - later require learner-owned slot/content manipulation
+  must_not:
+  - mark spontaneous deployment
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: GRM-001
+  name: allow-frame-missing-object
+  category: grammar
+  setup:
+    output: Schools should allow to use phones.
+  must:
+  - do not count allow O to V success
+  - consider active/passive intent
+  - target construction roles if needed
+  must_not:
+  - write positive allow O to V evidence
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: GRM-002
+  name: allow-passive-valid
+  category: grammar
+  setup:
+    output: Students should be allowed to use phones.
+  must:
+  - accept valid passive construction
+  - do not force active allow O to V if learner intent is met
+  must_not:
+  - mark wrong for missing active object after allow
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - CONTINUE
+  contrast_group: ALLOW
+- id: GRM-003
+  name: rule-known-free-output-unstable
+  category: grammar
+  setup:
+    history: controlled allow tasks correct
+    authentic_writing: allow to use repeated
+  must:
+  - represent controlled vs free-output control separately
+  - target production under load
+  must_not:
+  - reset grammar to completely unknown
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: GRM-004
+  name: self-repair-stops-reteach
+  category: grammar
+  setup:
+    output: read more error
+    teacher: minimal flag
+    learner: immediate independent repair
+  must:
+  - record self-repair
+  - stop full lesson if history supports control
+  must_not:
+  - continue fixed grammar explanation
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: INT3-001
+  name: learner-corrects-darkening-meaning
+  category: interaction
+  setup:
+    teacher_interpretation: becoming darker
+    learner: 我是要講黑化才會像上面一樣去犯罪
+  must:
+  - withdraw prior semantic hypothesis
+  - rebuild feedback around learner meaning
+  - invalidate dependent local feedback
+  must_not:
+  - defend prior interpretation
+  - continue old correction
+  hard_gate: true
+  expected_action_family:
+  - ACKNOWLEDGE
+  - INTERVENE
+- id: INT3-002
+  name: goal-shift-to-score
+  category: interaction
+  setup:
+    active_task: sentence revision
+    learner: 如果文法沒錯你會給幾分
+  must:
+  - answer scoring hypothetical
+  - pause prior task without recording failure
+  must_not:
+  - force sentence task first
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: INT3-003
+  name: goal-shift-request-original
+  category: interaction
+  setup:
+    learner: 給我我原本寫的
+  must:
+  - return immutable original artifact
+  - do not treat request as task failure
+  must_not:
+  - return only corrected version
+  hard_gate: true
+  expected_action_family:
+  - ANSWER
+- id: INT3-004
+  name: teacher-confusion-change-strategy
+  category: interaction
+  setup:
+    teacher_move: guided revision
+    learner: 我還是不懂你在問什麼
+  must:
+  - consider teacher-induced confusion/grounding failure
+  - change representation or clarify
+  - write no capability failure solely from this utterance
+  must_not:
+  - repeat same instruction longer
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY
+  - CHANGE_STRATEGY
+- id: LM-001
+  name: same-output-different-history
+  category: learner_model
+  setup:
+    output: signigicant
+    history_A: first rare slip; many independent correct uses
+    history_B: five repeated spelling failures
+  must:
+  - produce materially different hypothesis/action between histories
+  must_not:
+  - use surface error alone as authoritative
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+  - INTERVENE
+  contrast_group: HISTORY
+- id: LM-002
+  name: interaction-preference-not-from-one-event
+  category: learner_model
+  setup:
+    one_episode: contrast helped
+  must:
+  - record interaction effect with uncertainty
+  - require recurrence before strong preference
+  must_not:
+  - set learner_prefers_contrast permanently
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: LM-003
+  name: exposure-not-knowledge
+  category: learner_model
+  setup:
+    lookup: learner looked up significant
+    later_task: not attempted
+  must:
+  - record exposure only
+  - keep capability unproven
+  must_not:
+  - mark word learned from lookup
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: LM-004
+  name: contradictory-evidence-preserved
+  category: learner_model
+  setup:
+    older: independent success
+    newer: new-context failure
+  must:
+  - preserve both events
+  - project source control separate from transfer
+  must_not:
+  - delete older success
+  - average into meaningless mastery scalar
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: PCK-001
+  name: orthography-not-meaning-reteach
+  category: pck
+  setup:
+    meaning: strong
+    spelling: fragile
+  must:
+  - select orthographic mechanism
+  - avoid redundant semantic lesson
+  must_not:
+  - reteach definition as default
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: PCK-002
+  name: composition-not-vocab-fallback
+  category: pck
+  setup:
+    words_known: true
+    grammar_local: true
+    failure: cannot combine two ideas coherently
+  must:
+  - target clause relation/integration
+  - avoid sending learner to basic vocab drill
+  must_not:
+  - misdiagnose as vocabulary weakness
+  hard_gate: true
+  expected_action_family:
+  - INTERVENE
+- id: PCK-003
+  name: first-teaching-failure-classify
+  category: pck
+  setup:
+    move: long explicit rule
+    response: more confused
+  must:
+  - classify likely representation/teacher-induced issue
+  - change strategy
+  must_not:
+  - repeat longer rule
+  hard_gate: true
+  expected_action_family:
+  - CHANGE_STRATEGY
+- id: EFF-001
+  name: ocr-choice-zero-model
+  category: efficiency
+  setup:
+    event: learner selects OCR alternative
+    semantic_effect: transcript confirmation only
+  must:
+  - allow deterministic transcript update/evidence guard without model call
+  must_not:
+  - require Teacher call for simple selection
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: EFF-002
+  name: return-to-source-zero-model
+  category: efficiency
+  setup:
+    event: tap return to original work
+  must:
+  - treat as local deterministic navigation/state operation
+  must_not:
+  - call LLM merely to navigate
+  hard_gate: true
+  expected_action_family:
+  - CONTINUE
+- id: EFF-003
+  name: free-language-model-worthy
+  category: efficiency
+  setup:
+    learner: 我忘記了
+    context: multiple material referents
+  must:
+  - permit one compact semantic/pedagogical model call if local context cannot resolve
+  - send only relevant context slice
+  must_not:
+  - resend full image and full learner history
+  hard_gate: true
+  expected_action_family:
+  - CLARIFY

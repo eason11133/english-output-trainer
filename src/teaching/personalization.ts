@@ -1,0 +1,14 @@
+import type { BlockSupportV4 } from '../domain/v4/LearningBlockV4';
+import type { TeachingRequestV1, TeachingTreatmentObservationV1, TreatmentConfoundV1, TreatmentResponseStrengthV1 } from './types';
+
+export interface LocalTreatmentSignalV1{mechanismId:string;strength:TreatmentResponseStrengthV1;comparableCount:number;positiveCount:number;negativeCount:number;avoidLocally:boolean;reasonCodes:readonly string[];canWriteMastery:false;canQualifyEvidence:false}
+
+const assisted=(support:BlockSupportV4)=>support!=='NONE';
+export function treatmentConfoundsV1(input:{support:BlockSupportV4;taskLoadAttribution?:TeachingTreatmentObservationV1['taskLoadAttribution'];recentModelPrime?:string;contextChanged?:boolean}):readonly TreatmentConfoundV1[]{const c:TreatmentConfoundV1[]=[];if(assisted(input.support))c.push('MORE_SUPPORT');if(input.recentModelPrime&&input.recentModelPrime!=='NONE')c.push('ANSWER_OR_MODEL_EXPOSURE');if(input.taskLoadAttribution==='TASK_LOAD_CONFOUND'||input.taskLoadAttribution==='MIXED')c.push('CHANGED_LOAD');if(input.contextChanged)c.push('CHANGED_CONTEXT_FAMILIARITY');return Object.freeze(c)}
+export function localTreatmentHistoryV1(request:TeachingRequestV1,mechanismId:string):readonly TeachingTreatmentObservationV1[]{return Object.freeze(request.recentTreatment.filter(item=>item.mechanismId===mechanismId&&(!item.targetRef||item.targetRef===request.targetRef)&&(!item.facet||item.facet===request.facet)&&(!item.contextFamily||!request.contextFamily||item.contextFamily===request.contextFamily)))}
+export function deriveLocalTreatmentSignalV1(request:TeachingRequestV1,mechanismId:string):LocalTreatmentSignalV1{
+  const history=localTreatmentHistoryV1(request,mechanismId),comparable=history.filter(item=>!(item.confounds?.length)&&item.taskLoadAttribution!=='TASK_LOAD_CONFOUND'),positive=comparable.filter(item=>item.outcome==='SUCCESS'&&item.support==='NONE'&&(item.responseSignal==='HELPED'||item.responseSignal==='INDEPENDENT_SUCCESS'||item.learnerActionObserved)),negative=comparable.filter(item=>item.outcome==='FAILURE'||item.responseSignal==='NO_PROGRESS'||item.responseSignal==='CONFUSED');
+  const conflicting=positive.length>0&&negative.length>0;let strength:TreatmentResponseStrengthV1='TR_OBSERVED_RESPONSE';const reasons:string[]=[];
+  if(positive.length>=2&&!conflicting){strength='TR_STRONG_LOCAL_EFFECT_SIGNAL';reasons.push('REPEATED_COMPARABLE_LOCAL_INDEPENDENT_RESPONSE')}else if((positive.length||negative.length)&&!conflicting){strength='TR_CONTEXTUAL_PREFERENCE_SIGNAL';reasons.push('LOCAL_CONTEXT_SIGNAL_ONLY')}else reasons.push(conflicting?'CONFLICTING_HISTORY_NEUTRAL':'SPARSE_OR_CONFOUNDED_HISTORY_NEUTRAL');
+  return Object.freeze({mechanismId,strength,comparableCount:comparable.length,positiveCount:positive.length,negativeCount:negative.length,avoidLocally:negative.length>=1&&positive.length===0,reasonCodes:Object.freeze(reasons),canWriteMastery:false,canQualifyEvidence:false});
+}

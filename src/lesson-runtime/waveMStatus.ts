@@ -1,0 +1,2 @@
+import {lessonRuntimeCapabilityStatesV1,lessonRuntimeWaveSummaryV1} from './capabilities';
+export const waveMLessonRuntimeStatusV1=Object.freeze({wave:'M',subsystem:'Lesson / Session Runtime',status:'READY_FOR_AUDIT' as const,capabilities:lessonRuntimeCapabilityStatesV1,summary:lessonRuntimeWaveSummaryV1(),nativeUnknowns:Object.freeze(['physical process-death recovery','AppState background/foreground delivery','concurrent lifecycle race under Android/iOS','keyboard/IME interruption'])});

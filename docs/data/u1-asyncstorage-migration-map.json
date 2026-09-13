@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "status": "DESIGN_ONLY",
+  "rules": [
+    {
+      "key_pattern": "eot.product-context.v2:{learnerId}",
+      "classification": "MIGRATE_CANONICAL",
+      "target_entities": ["learner_identities", "product_profiles", "product_context_revisions"],
+      "validator": "ProductProfileV2 schemaVersion=2 + normalizeProductProfileV2",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.teacher-core.profile.v1",
+      "classification": "MIGRATION_INPUT_DEMO_ONLY",
+      "target_entities": ["product_profiles", "product_context_revisions"],
+      "validator": "migrateLegacyProductContextV1ToV2; local/demo learner only",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.canonical-observation-ledger.v1",
+      "classification": "MIGRATE_CANONICAL_APPEND_ONLY",
+      "target_entities": ["learner_observations"],
+      "validator": "LearnerObservationV1 schemaVersion=1, immutable=true, stable id",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.canonical-evidence-ledger.v3",
+      "classification": "MIGRATE_CANONICAL_APPEND_ONLY",
+      "target_entities": ["evidence_candidates", "evidence_admission_decisions", "canonical_evidence"],
+      "validator": "CanonicalEvidenceEventV3 schemaVersion=3, immutable=true, dedup/conflict reconciliation",
+      "notes": "Create explicit MIGRATION_ADMISSION lineage; do not reinterpret capability semantics.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.stage4.original-artifacts.v4",
+      "classification": "MIGRATE_WITH_OBJECT_RECONCILIATION",
+      "target_entities": ["material_sources", "artifacts", "artifact_versions", "artifact_objects"],
+      "validator": "OriginalArtifactV4 schemaVersion=4, immutable=true",
+      "notes": "Text is migratable. Picker/cache URI must be copied and hashed if still readable; otherwise quarantine as MISSING_SOURCE_BYTES.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.stage4.runtimes.v4",
+      "classification": "DECOMPOSE_AND_MIGRATE",
+      "target_entities": ["lesson_plan_snapshots", "lesson_sessions", "session_lifecycle_events", "session_checkpoints", "task_instances", "block_instances", "block_events", "learner_observations", "evidence_candidates", "qualified_teacher_decisions"],
+      "validator": "Stage4RuntimeV4 schema + cross-check embedded observations/evidence against canonical ledgers",
+      "notes": "Embedded observation/evidence copies never override canonical ledger rows.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.v2.evidence.events",
+      "classification": "QUARANTINE_LEGACY_UNQUALIFIED",
+      "target_entities": ["evidence_candidates", "evidence_admission_decisions"],
+      "validator": "Dedicated legacy V2 migration validator; rejected by default",
+      "notes": "Never map legacy mastery/result directly to canonical evidence.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.teacher.artifacts.v1",
+      "classification": "MIGRATION_INPUT_LEGACY",
+      "target_entities": ["artifacts", "artifact_versions"],
+      "validator": "Legacy OriginalArtifact provenance reconciliation",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.teacher.observed-spans.v1",
+      "classification": "MIGRATION_INPUT_LEGACY",
+      "target_entities": ["artifact_spans"],
+      "validator": "Artifact identity and extractor/source provenance required",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.teacher.transcript-corrections.v1",
+      "classification": "MIGRATION_INPUT_LEGACY",
+      "target_entities": ["source_confirmations"],
+      "validator": "Must reference a migrated artifact/span; never overwrite artifact version",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.teacher.episodes.v1",
+      "classification": "MIGRATE_TREATMENT_HISTORY_ONLY",
+      "target_entities": ["teaching_moves", "treatment_responses"],
+      "validator": "Legacy TeachingEpisode structural validator",
+      "notes": "Any embedded EvidenceEvent stays quarantined and cannot become C truth.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "eot.stage5a.adaptive.output.workspace.v2",
+      "classification": "KEEP_UI_CACHE_COMPATIBILITY",
+      "target_entities": [],
+      "validator": "Best-effort UI draft only",
+      "notes": "Never promote draft/cache state to learner truth.",
+      "delete_after_migration": false
+    },
+    {
+      "key_pattern": "Supabase auth storage keys",
+      "classification": "KEEP_SDK_OWNED",
+      "target_entities": [],
+      "validator": "Supabase SDK",
+      "delete_after_migration": false
+    }
+  ]
+}

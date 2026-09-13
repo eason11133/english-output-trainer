@@ -1,0 +1,6 @@
+import { Href, Link, Stack } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { founderProductScenariosV21 } from '../../src/evaluation';
+export default function FounderProductV21(){return <ScrollView style={s.page}><Stack.Screen options={{title:'Founder Product Slice V21'}}/><Text style={s.title}>Founder Product Slice · Engineering Harness</Text><Text style={s.warning}>這是實際 production route 的驗收入口，不是 Founder Product Accepted。Student View 與工程 assertion 明確分開。</Text>{founderProductScenariosV21.map(item=><View key={item.id}style={s.card}><Text style={s.surface}>{item.studentSurface}</Text><Link href={item.productionRoute as Href}style={s.link}>開啟實際產品畫面</Link><Text style={s.debug}>DEBUG · {item.id} · {item.assertion}{item.physicalVerificationRequired?' · 需要實機確認':''}</Text></View>)}</ScrollView>}
+const s=StyleSheet.create({page:{flex:1,backgroundColor:'#F5F2EA',padding:20},title:{fontSize:26,fontWeight:'900',color:'#2B211C',marginBottom:8},warning:{fontSize:14,lineHeight:22,color:'#75655A',marginBottom:18},card:{padding:16,borderWidth:1,borderColor:'#DED1C1',borderRadius:14,backgroundColor:'#FFFDFC',marginBottom:12,gap:8},surface:{fontSize:16,fontWeight:'900',color:'#2B211C'},link:{fontSize:15,fontWeight:'800',color:'#A75E2D'},debug:{fontSize:11,color:'#806D59'}});

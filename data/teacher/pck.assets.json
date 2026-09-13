@@ -1,0 +1,3351 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-VOC-SEMANTIC-CONFUSION-V1",
+      "kind": "CONFUSION_SET",
+      "domain": "LEXICAL",
+      "family": "VOCABULARY",
+      "targetRefs": [],
+      "facets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "learnerStates": [
+        "learner recognizes candidate words but selects the wrong contextually appropriate sense"
+      ],
+      "compatibleMechanismIds": [
+        "SENSE_CONTRAST",
+        "EXAMPLE_CONTRAST",
+        "SEMANTIC_ROLE_MAP"
+      ],
+      "representation": "contrast two candidate meanings inside the actual sentence context",
+      "learnerAction": "state which sense fits and why the competing sense does not",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not use when the failure is primarily orthographic/form or collocation"
+      ],
+      "recomposeConditions": [
+        "if meaning contrast remains unclear, switch to concrete paraphrase/example contrast"
+      ],
+      "fadeConditions": [
+        "remove visible options/contrast and require fresh contextual production"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "1,5-8",
+        "originalTextHash": "a5ae9686a4dea9b1e478f78b5c62f059da2f7867b9c8555d646923f167cdb3bc",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Vocabulary decoy analysis distinguishes semantic confusion from other error types."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-VOC-FORM-CONFUSION-V1",
+      "kind": "CONFUSION_SET",
+      "domain": "LEXICAL",
+      "family": "VOCABULARY",
+      "targetRefs": [],
+      "facets": [
+        "MORPHOLOGY"
+      ],
+      "learnerStates": [
+        "learner knows meaning but confuses visually/formally similar words"
+      ],
+      "compatibleMechanismIds": [
+        "MORPHEME_HIGHLIGHT",
+        "WORD_FAMILY_CONTRAST",
+        "SPELLING_RECONSTRUCTION"
+      ],
+      "representation": "show the differentiating letters/morphemes and bind each form to function/meaning",
+      "learnerAction": "identify the distinguishing form then retrieve the target without the visible model",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not diagnose semantic ignorance solely from look-alike confusion"
+      ],
+      "recomposeConditions": [
+        "if visual contrast fails, switch to morphology/word-family representation"
+      ],
+      "fadeConditions": [
+        "remove highlighted form and require retrieval/production"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "2",
+        "originalTextHash": "ce7a21214425e66929caefb5ffbb0abebc97077dce2885d401f503879aec8e08",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Vocabulary Decoy 2 explicitly focuses on form/shape confusion."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-VOC-COLLOCATION-CONFUSION-V1",
+      "kind": "COLLOCATION_CHUNK",
+      "domain": "LEXICAL",
+      "family": "VOCABULARY",
+      "targetRefs": [
+        "translation.naturalness-precision"
+      ],
+      "facets": [
+        "COLLOCATION"
+      ],
+      "learnerStates": [
+        "learner knows component words separately but selects an unnatural combination"
+      ],
+      "compatibleMechanismIds": [
+        "COLLOCATION_CONTRAST",
+        "CHUNK_BUILDER",
+        "SLOT_COMPLETION"
+      ],
+      "representation": "represent the relation/chunk rather than two independent dictionary entries",
+      "learnerAction": "select then produce the partner word/chunk in a fresh context",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not generalize a collocation across unrelated senses of the lemma"
+      ],
+      "recomposeConditions": [
+        "if recognition succeeds but free use fails, move from match -> cued -> free production"
+      ],
+      "fadeConditions": [
+        "fade partner-word choices before fresh production"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "3",
+        "originalTextHash": "c7932752236f139107b2608c0ecf20a09b24b93fcb4fdbd132cbb404b2d9decc",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Vocabulary Decoy 3 explicitly focuses on collocation confusion."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-VOC-CONTEXT-LOGIC-V1",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "DISCOURSE",
+      "family": "VOCABULARY",
+      "targetRefs": [
+        "reading.logic-structure"
+      ],
+      "facets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "learnerStates": [
+        "learner knows option meanings but ignores clause-to-clause logical relation"
+      ],
+      "compatibleMechanismIds": [
+        "RELATION_MAP",
+        "CONNECTOR_CONTRAST",
+        "PARAPHRASE"
+      ],
+      "representation": "map contrast/cause/result/replacement/polarity relation before testing candidates",
+      "learnerAction": "name the local relation and choose the word that fits it",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not reduce this to dictionary-definition memorization"
+      ],
+      "recomposeConditions": [
+        "if relation itself is unclear, switch to discourse representation"
+      ],
+      "fadeConditions": [
+        "remove relation labels and use a fresh sentence"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "4",
+        "originalTextHash": "20deff814670df5b0d0fef29e03ff9e4e659410a7408537f39ecbfd12554b046",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Vocabulary Decoy 4 explicitly focuses on logical/contextual confusion."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-CONTEXT-POS-SCREEN-V1",
+      "kind": "CONTEXTUAL_FILL_STRATEGY",
+      "domain": "EXAM",
+      "family": "CONTEXTUAL_FILL",
+      "targetRefs": [],
+      "facets": [
+        "MORPHOLOGY"
+      ],
+      "learnerStates": [
+        "learner spends time semantically translating all options before using decisive structural constraints"
+      ],
+      "compatibleMechanismIds": [
+        "POS_SCREEN",
+        "SUFFIX_CUE",
+        "SLOT_COMPLETION"
+      ],
+      "representation": "identify likely grammatical role from local structure, then narrow by meaning/collocation",
+      "learnerAction": "label the blank's grammatical role before choosing among surviving options",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "suffixes are probabilistic; do not force POS-first when syntax does not decide"
+      ],
+      "recomposeConditions": [
+        "if role remains ambiguous, widen context instead of guessing"
+      ],
+      "fadeConditions": [
+        "remove POS labels and use a fresh contextual-fill item"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "17-23",
+        "originalTextHash": "3f25dbd82f93a1a6fdc306d5e9464292ddfa5dbef3a36630709666b1bd361395",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Suffix tables and the explicit '五秒判斷' section support structural screening as an exam procedure."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-READ-MAIN-IDEA-SCOPE-V1",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [
+        "reading.logic-structure"
+      ],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner overweights a vivid true detail and misses the dominant passage purpose"
+      ],
+      "compatibleMechanismIds": [
+        "GIST_COMPRESSION",
+        "SCOPE_CONTRAST"
+      ],
+      "representation": "compress topic + author purpose into one sentence and compare option scope",
+      "learnerAction": "produce a one-sentence gist and reject one too-narrow distractor",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not require full translation of every sentence"
+      ],
+      "recomposeConditions": [
+        "if gist is unstable, step back to paragraph-function or key-sentence comprehension"
+      ],
+      "fadeConditions": [
+        "remove gist scaffold and use a fresh passage"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "32-33",
+        "originalTextHash": "a00b87a012444049d526af036fc15b3f84f30c9e3156d1f78a9f45030fb050de",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Reading Strategy 1 is explicitly main-idea oriented."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-READ-NOT-MENTIONED-V1",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [
+        "reading.reference-tracking"
+      ],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner selects a contradicted/unfamiliar option instead of the truly unsupported one"
+      ],
+      "compatibleMechanismIds": [
+        "OPTION_AS_CLAIM",
+        "SUPPORT_MAP",
+        "PARAPHRASE_MATCH"
+      ],
+      "representation": "treat each option as a claim and mark support/absence in the passage",
+      "learnerAction": "point to support for surviving options and distinguish absent from false",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not use world knowledge as passage evidence"
+      ],
+      "recomposeConditions": [
+        "if paraphrase recognition is the bottleneck, switch to equivalence contrast"
+      ],
+      "fadeConditions": [
+        "remove support table and use a fresh NOT-mentioned item"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "39-40",
+        "originalTextHash": "f1b6b4ada26b43076c34b7c7426520a50fad07148f19dfcc6880b37b26662d98",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Reading Strategy 4 is explicitly 未提及資訊."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-READ-SEQUENCING-V1",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [
+        "reading.logic-structure"
+      ],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner confuses narration order with event/process order"
+      ],
+      "compatibleMechanismIds": [
+        "TIMELINE",
+        "DEPENDENCY_ARROWS"
+      ],
+      "representation": "extract temporal/causal anchors into a minimal timeline",
+      "learnerAction": "identify at least two ordering anchors and derive the sequence",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not use for non-sequence questions"
+      ],
+      "recomposeConditions": [
+        "if time markers are absent, switch to causal/dependency ordering"
+      ],
+      "fadeConditions": [
+        "fade external timeline and solve a fresh sequence item"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "41-43",
+        "originalTextHash": "820717724eaa4055576896711e95741eb930975f9801dc27a1eaf12a4d9a0e5d",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Reading Strategy 5 is explicitly SEQUENCING."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-READ-PICTURE-MAP-V1",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [
+        "reading.meaning-decomposition"
+      ],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner understands text locally but maps relations incorrectly to picture/map"
+      ],
+      "compatibleMechanismIds": [
+        "TEXT_TO_CONSTRAINTS",
+        "SPATIAL_SKETCH"
+      ],
+      "representation": "convert text into a small set of spatial/feature constraints before viewing options",
+      "learnerAction": "state the decisive textual constraint for the selected visual",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not choose by overall visual resemblance"
+      ],
+      "recomposeConditions": [
+        "if relation vocabulary is unknown, teach language first; if language is known, switch to sketch/constraint representation"
+      ],
+      "fadeConditions": [
+        "remove sketch and use a fresh visual item"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "44",
+        "originalTextHash": "387d73dc758cc4ad03c3971f9efab25c3eb4f21105ae57717366e536c8b60f46",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Reading Strategy 6 is explicitly PICTURES."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "GSAT-MIXED-SOURCE-OUTPUT-SPLIT-V1",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "MIXED",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner locates the correct information but loses points converting it into required English output form"
+      ],
+      "compatibleMechanismIds": [
+        "SOURCE_MAP",
+        "OUTPUT_FORM_TRANSFORMATION"
+      ],
+      "representation": "separate source-evidence correctness from answer-form correctness",
+      "learnerAction": "identify the source fact then produce the minimal response satisfying content + form constraints",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not rediagnose reading when evidence retrieval is already correct"
+      ],
+      "recomposeConditions": [
+        "if meaning is correct but morphology/form is wrong, recompose to form-focused teaching"
+      ],
+      "fadeConditions": [
+        "remove output frame and use a fresh mixed subitem"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "pdf",
+        "sourceLocation": "45-48",
+        "originalTextHash": "2043e8f1906130c10689183aab358edd3fd513c82a55d49fe02c44e57f0e5ed9",
+        "attribution": "PRINTED_TEACHING_MATERIAL | 學測滿分攻略整本.pdf | Mixed/fill-in-reading pages combine text/image information and short output."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00",
+      "examTiming": {
+        "recurringTimeFailurePattern": "learner locates the correct information but loses points converting it into required English output form",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "RESEARCH-EXPLICIT-FOCUS-V1",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "GRAMMAR",
+      "family": "GENERAL",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner benefits from a focused rule/contrast/representation before production"
+      ],
+      "compatibleMechanismIds": [
+        "EXPLICIT_REPRESENTATION",
+        "CONTRAST"
+      ],
+      "representation": "short focused representation of the target relation",
+      "learnerAction": "apply the representation in controlled then fresh output",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not use when learner already understands the rule and only retrieval/deployment is weak"
+      ],
+      "recomposeConditions": [
+        "if explanation does not change learner response, switch representation"
+      ],
+      "fadeConditions": [
+        "remove visible rule/frame before fresh production"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "norris-ortega-2000",
+        "originalTextHash": "d17e9ccf4c781e1af144fd2b25dfb069786a42a2a87181fd40c6654eeb666429",
+        "attribution": "VALIDATED_EXTERNAL_RESEARCH | Norris & Ortega (2000) | Focused/explicit L2 instruction showed large effects on average; generalizability caveats retained."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "RESEARCH-PRODUCTIVE-REDEPLOY-V1",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "WRITING",
+      "family": "GENERAL",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "target objective requires independent productive use"
+      ],
+      "compatibleMechanismIds": [
+        "GUIDED_PRODUCTION",
+        "FRESH_PRODUCTION",
+        "RETURN_TO_OUTPUT"
+      ],
+      "representation": "learner constructs/repairs language instead of only recognizing it",
+      "learnerAction": "produce, then redeploy with reduced support",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "temporarily step back to comprehension/representation if production overload shows prerequisite absence"
+      ],
+      "recomposeConditions": [
+        "if output collapses after fade, re-add less support or switch representation"
+      ],
+      "fadeConditions": [
+        "progress toward fresh/source/changed-context production"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "shintani-li-ellis-2013",
+        "originalTextHash": "6636409a279fc7f64e0c94ddd015f30b6bf934dbd31b1fd3e3665114507c883d",
+        "attribution": "VALIDATED_EXTERNAL_RESEARCH | Shintani, Li & Ellis (2013) | Both comprehension- and production-based grammar instruction were effective; production-based instruction showed delayed productive advantages."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "RESEARCH-PROMPTED-REPAIR-V1",
+      "kind": "RECOMPOSE_RULE",
+      "domain": "GRAMMAR",
+      "family": "GENERAL",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner plausibly possesses the needed knowledge and can repair with a bounded cue"
+      ],
+      "compatibleMechanismIds": [
+        "PROMPTED_REPAIR",
+        "ELICITATION",
+        "RECONSTRUCTION"
+      ],
+      "representation": "short cue or reconstruction prompt before full answer replacement",
+      "learnerAction": "repair the target form",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "prerequisite absent; repeated prompt failure; integrity constraints"
+      ],
+      "recomposeConditions": [
+        "switch to explicit representation/model when bounded prompting yields no progress"
+      ],
+      "fadeConditions": [
+        "reduce cue specificity before fresh attempt"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "lyster-saito-2010",
+        "originalTextHash": "461557e72a88e945e536d79a4a8a04ddcd0849dbd1b9f6dc5e2996458dfdde38",
+        "attribution": "VALIDATED_EXTERNAL_RESEARCH | Lyster & Saito (2010) | Oral-classroom corrective-feedback meta-analysis favored prompts over recasts on average; scope caveat retained."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "RESEARCH-SPACED-REENCOUNTER-V1",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "LEXICAL",
+      "family": "RETENTION",
+      "targetRefs": [],
+      "facets": [
+        "SPONTANEOUS_DEPLOYMENT"
+      ],
+      "learnerStates": [
+        "positive independent evidence has created a future durability need"
+      ],
+      "compatibleMechanismIds": [
+        "DELAYED_REENCOUNTER"
+      ],
+      "representation": "changed/delayed context without answer exposure",
+      "learnerAction": "retrieve or produce after delay",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "elapsed time alone is not negative learner evidence"
+      ],
+      "recomposeConditions": [
+        "failed delayed attempt reopens the need and may change support/teaching"
+      ],
+      "fadeConditions": [
+        "no support unless required by current learner state"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "kim-webb-2022",
+        "originalTextHash": "5544139ead4123d0e41660d7448586e55403962253a550677233c0c92558a691",
+        "attribution": "VALIDATED_EXTERNAL_RESEARCH | Kim & Webb (2022) | L2 spacing meta-analysis found medium-to-large spacing effects with important moderators."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00"
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CEEC-READ-EVIDENCE-WINDOW-V1",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "READING",
+      "targetRefs": [
+        "reading.inference"
+      ],
+      "facets": [
+        "SELECTION"
+      ],
+      "learnerStates": [
+        "learner is accurate but repeatedly uses an oversized evidence window or rereads unnecessarily"
+      ],
+      "compatibleMechanismIds": [
+        "MINIMUM_EVIDENCE_WINDOW",
+        "READ_DEPTH_ESCALATION",
+        "STOP_RULE"
+      ],
+      "representation": "localize relevant evidence and expand only when unresolved",
+      "learnerAction": "identify the smallest passage window that safely supports the answer",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "REDUCED",
+        "MINIMAL"
+      ],
+      "contraindications": [
+        "do not force local-only reasoning when global discourse evidence is required"
+      ],
+      "recomposeConditions": [
+        "if multiple options survive, escalate read depth"
+      ],
+      "fadeConditions": [
+        "fade explicit evidence-window prompts"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "ceec-gsat-english-exam-descriptions-115-analysis",
+        "originalTextHash": "a260e71c2278a9798e76ce2f58128e2a201ed28c631b8d8ca1e19a62aa215994",
+        "attribution": "CEEC_OFFICIAL | CEEC GSAT English exam descriptions / 115 analysis | CEEC 115 emphasizes reading skill, fast reading, contextual inference, main idea/detail/reference/inference/integration; GSAT has a shared 100-minute budget."
+      },
+      "confidence": "HIGH",
+      "status": "VALIDATED_PCK",
+      "productionEligible": false,
+      "reviewedBy": "ChatGPT-EOT-research-pass",
+      "reviewedAt": "2026-09-01T00:00:00+08:00",
+      "examTiming": {
+        "readDepthEscalation": "local -> sentence -> paragraph/global as needed",
+        "stopRule": "stop when answer uniquely and safely supported",
+        "recurringTimeFailurePattern": "learner is accurate but repeatedly uses an oversized evidence window or rereads unnecessarily",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CLOZE-TOPIC-KEYWORD",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "CLOZE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner knows word meaning but misses why it fits the paragraph's central function"
+      ],
+      "compatibleMechanismIds": [
+        "TOPIC_SENTENCE_MAP",
+        "PARAGRAPH_GIST",
+        "LEXICAL_CONTEXT"
+      ],
+      "representation": "mark the topic sentence/key concept and how later details support it",
+      "learnerAction": "state the paragraph's job, then choose the lexical item that carries that job",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not use when a purely local grammar construction uniquely determines answer"
+      ],
+      "recomposeConditions": [
+        "if learner cannot form paragraph gist, step back to sentence comprehension"
+      ],
+      "fadeConditions": [
+        "remove topic labels and use a fresh cloze paragraph"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CLOZE-TOPIC-KEYWORD",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "0c1fb780926a3964970a332cebab8f2815bd9e4cd33baf18a7078059d53e0806",
+        "attribution": "CEEC 115+ examples: immediate/cultural/end/necessity; user Cloze material"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CLOZE-PARTICIPLE-ROLE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "CLOZE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner selects participle form without mapping subject-action relation"
+      ],
+      "compatibleMechanismIds": [
+        "ROLE_MAP",
+        "ACTIVE_PASSIVE_CONTRAST",
+        "TIMELINE"
+      ],
+      "representation": "map subject -> action/state, then decide active/passive/completion relation",
+      "learnerAction": "identify who performs/experiences the action before choosing form",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not present all participle rules if only one relation is at issue"
+      ],
+      "recomposeConditions": [
+        "if role mapping succeeds but aspect fails, switch to timeline/completion representation"
+      ],
+      "fadeConditions": [
+        "remove arrows and require fresh form selection"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CLOZE-PARTICIPLE-ROLE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "cce32ba490320098ac87f6ea5f8dafad12074de794337b0a8d8095cabb1dee01",
+        "attribution": "CEEC completed-participle sample + user Practice item 11/related grammar"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CLOZE-TENSE-DISCOURSE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "CLOZE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner knows tense forms but ignores temporal/discourse anchors"
+      ],
+      "compatibleMechanismIds": [
+        "TIMELINE",
+        "ANCHOR_WORD_MAP",
+        "CONTRAST"
+      ],
+      "representation": "place event(s) relative to explicit time anchors and surrounding events",
+      "learnerAction": "mark anchor and explain why one tense/aspect fits the discourse",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not reduce to memorized keyword if discourse contradicts it"
+      ],
+      "recomposeConditions": [
+        "if anchor exists but learner cannot map event relation, switch to timeline"
+      ],
+      "fadeConditions": [
+        "fade visible timeline"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CLOZE-TENSE-DISCOURSE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "bf470437d78147ba598cb5b347516c22f3dbe94ad39098fb2705fbc6de9494c8",
+        "attribution": "CEEC book-town example; user grammar/cloze materials"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CLOZE-IDIOM-MWE",
+      "kind": "COLLOCATION_CHUNK",
+      "domain": "LEXICAL",
+      "family": "CLOZE",
+      "targetRefs": [],
+      "facets": [
+        "COLLOCATION"
+      ],
+      "learnerStates": [
+        "learner parses a conventional phrase word-by-word and selects wrong option"
+      ],
+      "compatibleMechanismIds": [
+        "CHUNK_BINDING",
+        "MWE_CONTRAST",
+        "CONTEXT_PARAPHRASE"
+      ],
+      "representation": "bind phrase as a unit, show one contrast with literal/nearby alternatives",
+      "learnerAction": "retrieve or reconstruct the whole expression",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not overgeneralize phrase to unrelated sense/context"
+      ],
+      "recomposeConditions": [
+        "if meaning is understood but form recall fails, switch to chunk reconstruction"
+      ],
+      "fadeConditions": [
+        "remove full phrase model"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CLOZE-IDIOM-MWE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "cff165015a3cbd8784fa41304c0381958376022435f4dfe127fbf6d59d1ce596",
+        "attribution": "CEEC includes phrases/idioms; examples such as home to / left unchecked; user Practice"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CONTEXT-TOPIC-COHESION",
+      "kind": "CONTEXTUAL_FILL_STRATEGY",
+      "domain": "EXAM",
+      "family": "CONTEXTUAL_FILL",
+      "targetRefs": [],
+      "facets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "learnerStates": [
+        "learner passes POS screening but chooses a semantically isolated option"
+      ],
+      "compatibleMechanismIds": [
+        "COHESION_CHAIN",
+        "PARAGRAPH_GIST",
+        "SEMANTIC_FIELD"
+      ],
+      "representation": "trace repeated/related concepts across the paragraph",
+      "learnerAction": "link candidate word to at least one prior/later semantic cue",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force semantic-field matching when collocation is decisive"
+      ],
+      "recomposeConditions": [
+        "if several candidates remain, add collocation/local syntax evidence"
+      ],
+      "fadeConditions": [
+        "remove highlighted cohesion chain"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CONTEXT-TOPIC-COHESION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "2da3d944da9a6c9c4f748e25a99b0a1f82e0e62c93d9d1c930177f30589c42d7",
+        "attribution": "CEEC contextual-fill explanations; user pp19-23"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-CONTEXT-WORD-FORM-OUTPUT",
+      "kind": "CONTEXTUAL_FILL_STRATEGY",
+      "domain": "EXAM",
+      "family": "CONTEXTUAL_FILL",
+      "targetRefs": [],
+      "facets": [
+        "CONTEXTUAL_APPROPRIACY"
+      ],
+      "learnerStates": [
+        "learner identifies correct base word but inserts wrong grammatical form"
+      ],
+      "compatibleMechanismIds": [
+        "WORD_FAMILY_MAP",
+        "SLOT_COMPLETION",
+        "MORPHOLOGY_RETRIEVAL"
+      ],
+      "representation": "base lemma -> required slot role -> target form",
+      "learnerAction": "generate the required form without a visible list",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not count correct lemma recognition as correct output"
+      ],
+      "recomposeConditions": [
+        "if form-generation repeatedly fails, teach morphology family explicitly"
+      ],
+      "fadeConditions": [
+        "fade suffix/word-family scaffold"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-CONTEXT-WORD-FORM-OUTPUT",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "343221653f7195415475ec025aaa386f8591735c71dbfb0ad4737ca0ec4a35b5",
+        "attribution": "CEEC mixed fill explicitly permits/needs word-form change; user suffix materials"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-DISC-GLOBAL-INTRO",
+      "kind": "DISCOURSE_STRATEGY",
+      "domain": "DISCOURSE",
+      "family": "DISCOURSE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner cannot choose the opening/general sentence even after local pair checks"
+      ],
+      "compatibleMechanismIds": [
+        "GLOBAL_GIST",
+        "SCOPE_MATCH",
+        "PARAGRAPH_FUNCTION"
+      ],
+      "representation": "infer common topic across subsequent paragraphs and match option scope",
+      "learnerAction": "summarize later paragraph set in one phrase before choosing opener",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not insist on local-adjacency cue for an explicitly global blank"
+      ],
+      "recomposeConditions": [
+        "if global gist fails due language, remediate key paragraph comprehension"
+      ],
+      "fadeConditions": [
+        "remove gist prompt"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-DISC-GLOBAL-INTRO",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "1a9c0ae8202721edb3b0ab226ad566641913dbd66cc24234cf09ff6c206d7cba",
+        "attribution": "CEEC sample discourse Q31"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-DISC-TOPIC-DETAIL",
+      "kind": "DISCOURSE_STRATEGY",
+      "domain": "DISCOURSE",
+      "family": "DISCOURSE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner places a detail where a paragraph-level topic sentence is required"
+      ],
+      "compatibleMechanismIds": [
+        "TOPIC_DETAIL_LADDER",
+        "SCOPE_CONTRAST"
+      ],
+      "representation": "compare generality level of candidate sentence vs following details",
+      "learnerAction": "label candidate as general claim or supporting detail",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not rely only on lexical overlap"
+      ],
+      "recomposeConditions": [
+        "if both candidates are general, add semantic-function comparison"
+      ],
+      "fadeConditions": [
+        "remove scope labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-DISC-TOPIC-DETAIL",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "a3eeecc7834323cdf2795b4e3e69900eccaa6396509c761b1c8cc8bebdc6cf73",
+        "attribution": "CEEC sample discourse Q32"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-DISC-LOCAL-COHERENCE",
+      "kind": "DISCOURSE_STRATEGY",
+      "domain": "DISCOURSE",
+      "family": "DISCOURSE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner chooses a sentence that is topically related but does not connect to immediate neighbors"
+      ],
+      "compatibleMechanismIds": [
+        "BEFORE_AFTER_LINK",
+        "REFERENCE_CHAIN",
+        "TRANSITION_RELATION"
+      ],
+      "representation": "test option against both left and right context",
+      "learnerAction": "name one backward and one forward connection",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not demand global reread if local two-sided evidence is decisive"
+      ],
+      "recomposeConditions": [
+        "if one side is clear but the other is not, switch to reference/transition mechanism"
+      ],
+      "fadeConditions": [
+        "remove explicit two-sided checklist"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-DISC-LOCAL-COHERENCE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "bbb3ef2948d879ac2644b0945a6548545893e7eb44ddd136dc927c7de26c972f",
+        "attribution": "CEEC sample discourse Q33"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-DISC-MACRO-CONCLUSION",
+      "kind": "DISCOURSE_STRATEGY",
+      "domain": "DISCOURSE",
+      "family": "DISCOURSE",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner misses final step/conclusion because sentence-level coherence looks acceptable"
+      ],
+      "compatibleMechanismIds": [
+        "MACRO_SEQUENCE",
+        "PARAGRAPH_ROLE_MAP"
+      ],
+      "representation": "map passage progression and identify what logical stage is still missing",
+      "learnerAction": "state what the prior paragraphs accomplished and what final step should follow",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force conclusion mechanism on middle-paragraph blanks"
+      ],
+      "recomposeConditions": [
+        "if macro sequence is unclear, summarize paragraph roles first"
+      ],
+      "fadeConditions": [
+        "fade role labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-DISC-MACRO-CONCLUSION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "2e94170415817d1415395fa298f98a92914cf2f0928b096842995aedd0aaafb3",
+        "attribution": "CEEC sample discourse Q34"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-READ-DETAIL-PARAPHRASE",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner finds relevant sentence but rejects correct paraphrase or accepts relation reversal"
+      ],
+      "compatibleMechanismIds": [
+        "EVIDENCE_LOCALIZATION",
+        "PARAPHRASE_EQUIVALENCE",
+        "RELATION_MAP"
+      ],
+      "representation": "source proposition -> option proposition comparison",
+      "learnerAction": "state whether entity/action/degree/time relation is preserved",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not teach keyword matching as sufficient"
+      ],
+      "recomposeConditions": [
+        "if source sentence itself is unreadable, route to language bottleneck"
+      ],
+      "fadeConditions": [
+        "remove comparison labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-READ-DETAIL-PARAPHRASE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "51a9f7651efc6ffd29fb4f5af8e39e7dedd2c272f2b2ff2b01f5b4e09d1e63cb",
+        "attribution": "CEEC hard-hat/Zanzibar detail examples; user reading cluster"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-READ-REFERENCE-LEXCOH",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner understands individual synonyms but fails to see they refer to the same entity"
+      ],
+      "compatibleMechanismIds": [
+        "REFERENCE_CHAIN",
+        "LEXICAL_COHESION_MAP"
+      ],
+      "representation": "connect pronoun/synonym/renaming expressions to one discourse referent",
+      "learnerAction": "trace each expression back to its referent",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not treat every semantic neighbor as co-reference"
+      ],
+      "recomposeConditions": [
+        "if referent ambiguity remains, use syntactic/semantic compatibility"
+      ],
+      "fadeConditions": [
+        "remove chain markings"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-READ-REFERENCE-LEXCOH",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "0ad97247f9e073b2e34c99730dd410f4ebe0aca9793aec37e1f2f16a0c26fa90",
+        "attribution": "CEEC hard-hat Q42; Zanzibar Q46; 115 official analysis"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-READ-INFERENCE-BOUND",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner chooses a plausible world-knowledge conclusion not supported by passage"
+      ],
+      "compatibleMechanismIds": [
+        "EVIDENCE_SET",
+        "INFERENCE_BRIDGE",
+        "SUPPORTED_VS_PLAUSIBLE"
+      ],
+      "representation": "list the minimum premises in text and the permitted inference step",
+      "learnerAction": "show which textual facts license the conclusion",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not accept general plausibility as passage inference"
+      ],
+      "recomposeConditions": [
+        "if key premise misunderstood, remediate comprehension before inference"
+      ],
+      "fadeConditions": [
+        "fade premise list"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-READ-INFERENCE-BOUND",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "fccc9a33337063e3b3c799f6b2f54c894df6049800a4c1e389739e13d3cab6cc",
+        "attribution": "CEEC Zanzibar inference; 115 analysis"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-READ-CONTEXT-MEANING",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner stops because target expression is unfamiliar despite enough contextual evidence"
+      ],
+      "compatibleMechanismIds": [
+        "CONTEXT_CLUE_MAP",
+        "CONTRAST_RELATION",
+        "PARAPHRASE_GENERATION"
+      ],
+      "representation": "use surrounding relation, examples, contrast or restatement to infer meaning",
+      "learnerAction": "produce a short paraphrase before checking options",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not teach invented dictionary meaning when passage only supports a coarse contextual meaning"
+      ],
+      "recomposeConditions": [
+        "if context insufficient, allow abstention / wider context"
+      ],
+      "fadeConditions": [
+        "remove highlighted clue"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-READ-CONTEXT-MEANING",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "c7da6c9d46566743d8c4567910baf3048156add3472b2713890dfc8ae4e5e6a1",
+        "attribution": "CEEC 115 analysis emphasizes contextual word/sentence inference"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-READ-STANCE",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner extracts facts but misses conditional approval/negative stance"
+      ],
+      "compatibleMechanismIds": [
+        "STANCE_MARKER_MAP",
+        "CONCESSION_CONTRAST",
+        "PARAPHRASE"
+      ],
+      "representation": "identify evaluative language, concession and condition",
+      "learnerAction": "summarize speaker stance with condition if present",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not infer attitude from topic alone"
+      ],
+      "recomposeConditions": [
+        "if evaluative vocabulary is unknown, teach that first"
+      ],
+      "fadeConditions": [
+        "remove stance labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-READ-STANCE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "2a0498f9067f27e8f1292171b5d40f10da23878c2e88de700d557fdf8f505e9a",
+        "attribution": "CEEC GreenBurger mixed attitude item, transferable to reading/pragmatics"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-MIX-SUMMARY-TRANSFORM",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "MIXED",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner finds correct source concept but fails summary slot or word-form adaptation"
+      ],
+      "compatibleMechanismIds": [
+        "GIST_TO_SLOT",
+        "WORD_FORM_TRANSFORM"
+      ],
+      "representation": "source concept -> summary semantic role -> grammatical form",
+      "learnerAction": "choose source concept and generate correct form separately",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not collapse semantic selection and morphology into one failure"
+      ],
+      "recomposeConditions": [
+        "if concept wrong, route to gist; if form wrong, route to morphology"
+      ],
+      "fadeConditions": [
+        "remove summary frame assistance"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-MIX-SUMMARY-TRANSFORM",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "e07352dc8d0cd105804f1fbaa9dc5fc4ea6c2f7d409329b885f4b7c8d5999df9",
+        "attribution": "CEEC 115 mixed analysis: innovative/tradition contrast + form change; bug-catcher examples"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false,
+      "examTiming": {
+        "recurringTimeFailurePattern": "learner finds correct source concept but fails summary slot or word-form adaptation",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-MIX-CLASSIFY-COMPARE",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "MIXED",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner can read each source but fails to group/compare them"
+      ],
+      "compatibleMechanismIds": [
+        "ATTRIBUTE_TABLE",
+        "SOURCE_MAP",
+        "COMPARE_CONTRAST"
+      ],
+      "representation": "extract only attributes required by the question, then compare",
+      "learnerAction": "fill a minimal source x attribute map",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not reread all prose if required attributes are known"
+      ],
+      "recomposeConditions": [
+        "if source facts are wrong, route back to local comprehension"
+      ],
+      "fadeConditions": [
+        "fade table"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-MIX-CLASSIFY-COMPARE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "3bcf0b288e40addcb8d1265128f0559df7b9b66a4adbb637e5385e7dc88e2fe7",
+        "attribution": "CEEC Refugee/GreenBurger mixed examples"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false,
+      "examTiming": {
+        "recurringTimeFailurePattern": "learner can read each source but fails to group/compare them",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-MIX-PHRASE-MEANING-EXPRESSION",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "MIXED",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner senses phrase meaning but cannot express a concise equivalent"
+      ],
+      "compatibleMechanismIds": [
+        "CONTEXT_PARAPHRASE",
+        "FUNCTION_MATCH",
+        "OUTPUT_CONSTRAINT"
+      ],
+      "representation": "infer communicative function/meaning then express a concise equivalent",
+      "learnerAction": "produce one short paraphrase consistent with context",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not require dictionary-style exhaustive definition"
+      ],
+      "recomposeConditions": [
+        "if meaning inference weak, return to context clues; if wording weak, offer bounded lexical support"
+      ],
+      "fadeConditions": [
+        "fade candidate paraphrases"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-MIX-PHRASE-MEANING-EXPRESSION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "ba2c874a6c8ef145cc4d51f8344c89f411cb0b8742df88e16e105de94b85defa",
+        "attribution": "CEEC 'does the trick'/asylum examples"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false,
+      "examTiming": {
+        "recurringTimeFailurePattern": "learner senses phrase meaning but cannot express a concise equivalent",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-TRANS-SEGMENT-RELATIONS",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner translates word-by-word and loses relation between Chinese meaning units"
+      ],
+      "compatibleMechanismIds": [
+        "MEANING_SEGMENTATION",
+        "RELATION_MAP",
+        "ROLE_MAP"
+      ],
+      "representation": "split source into propositions/relations before English generation",
+      "learnerAction": "state the core meaning units and relation, then produce sentence",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not expose complete target answer during diagnosis"
+      ],
+      "recomposeConditions": [
+        "if segmentation is right but English form fails, route to construction"
+      ],
+      "fadeConditions": [
+        "fade segmentation labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-TRANS-SEGMENT-RELATIONS",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "70b6aacfc03d4843472a30eb348b53cbe37951433bcdb55f71ec250aa82d9ffd",
+        "attribution": "CEEC translation objective + EOT Translation recovery; user Translation TOC"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-TRANS-BASIC-CONSTRUCTION",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner knows words but cannot assemble basic English sentence structure"
+      ],
+      "compatibleMechanismIds": [
+        "CONSTRUCTION_FRAME",
+        "SLOT_COMPLETION",
+        "GUIDED_REORDER"
+      ],
+      "representation": "minimal English frame with semantic slots",
+      "learnerAction": "fill/reorder slots then regenerate without frame",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not teach rare transformation if a basic construction expresses source cleanly"
+      ],
+      "recomposeConditions": [
+        "if frame is misunderstood, switch to role map; if frame copied, fade aggressively"
+      ],
+      "fadeConditions": [
+        "remove frame"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-TRANS-BASIC-CONSTRUCTION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "79e710a31f5ebb185a0eceb5678bf92b8b7c623ce7228ddd157599365ad3e464",
+        "attribution": "CEEC explicitly says translation uses high-school basic sentence patterns"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-TRANS-ALTERNATIVE-VALID",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner produces a different but semantically valid wording"
+      ],
+      "compatibleMechanismIds": [
+        "SEMANTIC_EQUIVALENCE_CHECK",
+        "COLLOCATION_NATURALNESS"
+      ],
+      "representation": "compare meaning coverage + grammaticality + conventional use, not exact-string match",
+      "learnerAction": "justify whether alternative preserves meaning and is natural enough",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force reference-answer wording"
+      ],
+      "recomposeConditions": [
+        "if meaning preserved but awkward, teach only naturalness/collocation"
+      ],
+      "fadeConditions": [
+        "no unnecessary rewrite after valid independent output"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-TRANS-ALTERNATIVE-VALID",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "fc638d4612786974d4ff277ee48a6a6e76b0f423da54c8a842becf12dc2a6506",
+        "attribution": "CEEC reference answers explicitly show multiple acceptable lexical/construction alternatives"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-TRANS-NOT-BUT",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner translates contrast literally and produces malformed or semantically shifted structure"
+      ],
+      "compatibleMechanismIds": [
+        "CONSTRUCTION_CONTRAST",
+        "PARALLELISM_FRAME"
+      ],
+      "representation": "not A but B with parallel semantic units",
+      "learnerAction": "identify A/B units and construct parallel English expression",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not use if source relation is concession rather than replacement/contrast"
+      ],
+      "recomposeConditions": [
+        "if parallel structure fails, decompose unit shapes"
+      ],
+      "fadeConditions": [
+        "remove frame"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-TRANS-NOT-BUT",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "7350b6d75d41ae30d07f3a6efadc35b22d12b6a1326ee99ffb2ac64e4637264c",
+        "attribution": "CEEC pet translation example uses not...but..."
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-TRANS-ADVERBIAL-CLAUSE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner expresses two propositions but relation/time clause is malformed"
+      ],
+      "compatibleMechanismIds": [
+        "CLAUSE_RELATION_FRAME",
+        "SUBJECT_CONTROL_CHECK"
+      ],
+      "representation": "main clause + dependent time/condition clause",
+      "learnerAction": "choose conjunction and ensure clause subject/verb structure is complete",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force participial reduction when full clause is clearer"
+      ],
+      "recomposeConditions": [
+        "if reduced clause causes subject mismatch, return to full clause"
+      ],
+      "fadeConditions": [
+        "fade relation labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-TRANS-ADVERBIAL-CLAUSE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "79db862d7d1c42d1a767a764cd81982f409efdea172ce1c11084715681a2b5dc",
+        "attribution": "CEEC pet translation example; user Translation includes participial phrases as separate PCK"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-WRITE-TASK-FULFILLMENT",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "learner's English is locally correct but prompt requirements/details are incomplete"
+      ],
+      "compatibleMechanismIds": [
+        "PROMPT_REQUIREMENT_MAP",
+        "CONTENT_GAP",
+        "DETAIL_EXPANSION"
+      ],
+      "representation": "map required content roles before language correction",
+      "learnerAction": "identify missing prompt obligation and add one relevant supporting detail",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not spend feedback budget first on minor grammar if task fulfillment is failing"
+      ],
+      "recomposeConditions": [
+        "if content exists but organization fails, route to paragraph role/coherence"
+      ],
+      "fadeConditions": [
+        "remove requirement checklist"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-WRITE-TASK-FULFILLMENT",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "e4a51e4e7297981a7ae0abfe7100ad2f37cc43471018df7530032532cb152b67",
+        "attribution": "CEEC writing content rubric and prompt examples"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-WRITE-PARAGRAPH-ROLE",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "learner has relevant ideas but paragraphs/sequence do not serve prompt structure"
+      ],
+      "compatibleMechanismIds": [
+        "PARAGRAPH_ROLE_MAP",
+        "MACRO_SEQUENCE",
+        "TRANSITION_FUNCTION"
+      ],
+      "representation": "assign each paragraph a job and order ideas to support it",
+      "learnerAction": "state each paragraph's one-line purpose then revise order/transitions",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force fixed five-paragraph template"
+      ],
+      "recomposeConditions": [
+        "if paragraph roles are clear but sentences don't connect, switch to local cohesion"
+      ],
+      "fadeConditions": [
+        "fade role labels"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-WRITE-PARAGRAPH-ROLE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "ef5fe1797520002f21206f37334e71fc63b70244e188427ee515d6d412ac9f6a",
+        "attribution": "CEEC writing organization rubric + two-part prompt designs"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-WRITE-LEXICAL-PRECISION",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "learner repeats generic words or uses contextually imprecise vocabulary"
+      ],
+      "compatibleMechanismIds": [
+        "SENSE_CONTRAST",
+        "COLLOCATION_UPGRADE",
+        "PARAPHRASE_OPTIONS"
+      ],
+      "representation": "target one high-value word/chunk in learner's own sentence",
+      "learnerAction": "choose among bounded alternatives and redeploy in source writing",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not chase low-frequency sophistication for its own sake"
+      ],
+      "recomposeConditions": [
+        "if alternative causes unnatural collocation, revert to safer conventional wording"
+      ],
+      "fadeConditions": [
+        "remove options"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-WRITE-LEXICAL-PRECISION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "18f3dfc2cde5621db598df672bbbbd055e7bd768f67a916068dcd99364d86bd0",
+        "attribution": "CEEC writing vocab rubric + official 115 guidance favoring contextual/collocational use"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-WRITE-ERROR-PRIORITY",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "learner has multiple grammar, organization and lexical issues"
+      ],
+      "compatibleMechanismIds": [
+        "FEEDBACK_BUDGET",
+        "ROOT_CAUSE_CLUSTER",
+        "RETURN_TO_OUTPUT"
+      ],
+      "representation": "select one highest-value bottleneck based on task/meaning/repetition/redeploy value",
+      "learnerAction": "repair/learn one target and return to learner's draft",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not enumerate every visible error by default"
+      ],
+      "recomposeConditions": [
+        "if target cannot be acted on due prerequisite, replan to prerequisite"
+      ],
+      "fadeConditions": [
+        "after useful response, return to draft with reduced help"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-WRITE-ERROR-PRIORITY",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "c33b849fa6b20a95d079a54c3be67d27730356f035c3a08dc7376305ab871537",
+        "attribution": "CEEC four writing dimensions + EOT canonical Feedback Budget"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-EXAM-BASIC-GRAMMAR-PRIORITY",
+      "kind": "GRAMMAR_REPRESENTATION",
+      "domain": "GRAMMAR",
+      "family": "EXAM_ALLOCATION",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner spends large study time on rare advanced grammar while basic reading/deployment gaps dominate"
+      ],
+      "compatibleMechanismIds": [
+        "VALUE_ALLOCATION",
+        "FOUNDATION_GATE"
+      ],
+      "representation": "compare expected score impact/time cost of foundational vs rare-pattern study",
+      "learnerAction": "complete foundational target before low-value rare pattern unless evidence says otherwise",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not delete advanced grammar from General English"
+      ],
+      "recomposeConditions": [
+        "if learner already strong on foundations and rare pattern is recurrent/high-value, allow it"
+      ],
+      "fadeConditions": [
+        "n/a"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-EXAM-BASIC-GRAMMAR-PRIORITY",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "56848e1707276145ce857924f7b4d7c7ca5cb38271ed5f1a3c788581c53fbc43",
+        "attribution": "CEEC 115 official teaching guidance"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-RESEARCH-STRATEGY-BOUNDING",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "TEACHING_HEURISTIC",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner is taught many strategies but cannot select/use them under task pressure"
+      ],
+      "compatibleMechanismIds": [
+        "STRATEGY_SELECTION",
+        "WHEN_TO_USE",
+        "WHEN_NOT_TO_USE"
+      ],
+      "representation": "teach a small strategy with trigger, action and stopping condition",
+      "learnerAction": "identify cue -> select strategy -> execute -> evaluate",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not dump large strategy lists"
+      ],
+      "recomposeConditions": [
+        "if learner applies strategy mechanically in wrong context, teach contraindication/trigger discrimination"
+      ],
+      "fadeConditions": [
+        "remove strategy label after use stabilizes"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-RESEARCH-STRATEGY-BOUNDING",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "4f5f03bc44abefe4a0b8f70e5f753c5b71e031b164a5a5d526260e7ba4332c47",
+        "attribution": "Plonsky 2011 strategy-instruction meta-analysis; effectiveness moderated by strategy/context/intervention"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-RESEARCH-READ-LANGUAGE-GATE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "TEACHING_HEURISTIC",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "reading strategy appears to fail"
+      ],
+      "compatibleMechanismIds": [
+        "MINIMAL_LANGUAGE_PROBE",
+        "STRATEGY_PROBE"
+      ],
+      "representation": "discriminate language-comprehension bottleneck from strategy/execution bottleneck",
+      "learnerAction": "perform smallest probe: understand key sentence? locate evidence? infer relation?",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not infer strategy failure from a wrong reading answer"
+      ],
+      "recomposeConditions": [
+        "if key sentence comprehension fails, route to language; otherwise strategy"
+      ],
+      "fadeConditions": [
+        "n/a"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-RESEARCH-READ-LANGUAGE-GATE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "1c168d1eaecfc091a5fca237ed22f8a58ef779ed38ff050e8c57ee26e45ad9d7",
+        "attribution": "Jeon & Yamashita 2014 correlations + CEEC reading target"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-RESEARCH-PRODUCTIVE-VOCAB",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "TEACHING_HEURISTIC",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "digital/context exposure or recognition improves but learner still cannot produce target"
+      ],
+      "compatibleMechanismIds": [
+        "RETRIEVAL",
+        "CONTEXTUAL_PRODUCTION",
+        "CHUNK_PRODUCTION"
+      ],
+      "representation": "move from contextual recognition to cued then free productive use",
+      "learnerAction": "produce target sense/chunk in learner-generated sentence",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not mark receptive gain as productive mastery"
+      ],
+      "recomposeConditions": [
+        "if production overloads learner, re-add one cue dimension then fade"
+      ],
+      "fadeConditions": [
+        "remove definitions/options/models"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-RESEARCH-PRODUCTIVE-VOCAB",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "5afb54e2169de2788fa4470722529493b5185d58e2734105011b90389fce3ffd",
+        "attribution": "Technology-assisted vocabulary meta-analysis: productive gains weaker than receptive; EOT output goal"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-RESEARCH-INCIDENTAL-CAPTURE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "EXAM",
+      "family": "TEACHING_HEURISTIC",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner encounters useful unknown word/chunk during meaning-focused task"
+      ],
+      "compatibleMechanismIds": [
+        "CONTEXTUAL_LOOKUP",
+        "CAPTURE",
+        "LATER_RETRIEVAL"
+      ],
+      "representation": "resolve only necessary contextual sense now, optionally schedule later deliberate output work",
+      "learnerAction": "continue primary task after concise meaning support",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not derail every reading into a full vocabulary lesson"
+      ],
+      "recomposeConditions": [
+        "if word is central to task failure, escalate to active teaching; otherwise capture for later"
+      ],
+      "fadeConditions": [
+        "lookup support must not prove independence"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-RESEARCH-INCIDENTAL-CAPTURE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "7518e9de57a9a0cd6a4f5e7a2aa9d22c64af556022064be8dd6eca3eaed54ee7",
+        "attribution": "Webb et al. incidental vocabulary meta-analysis + EOT contextual lookup architecture"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B02-RESEARCH-MWE-FIRSTCLASS",
+      "kind": "COLLOCATION_CHUNK",
+      "domain": "LEXICAL",
+      "family": "TEACHING_HEURISTIC",
+      "targetRefs": [],
+      "facets": [
+        "COLLOCATION"
+      ],
+      "learnerStates": [
+        "learner repeatedly constructs unnatural combinations despite knowing individual words"
+      ],
+      "compatibleMechanismIds": [
+        "CHUNK_BINDING",
+        "COLLOCATION_PRODUCTION",
+        "FREQUENCY_SALIENCE"
+      ],
+      "representation": "store/teach conventional combination as relation-bearing unit",
+      "learnerAction": "retrieve/produce multiword sequence in context",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "processing advantage evidence does not justify teaching every frequent phrase"
+      ],
+      "recomposeConditions": [
+        "if learner knows chunk receptively but not productively, route to production/fade"
+      ],
+      "fadeConditions": [
+        "remove visible chunk"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V7_BATCH02:B02-RESEARCH-MWE-FIRSTCLASS",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V7_BATCH02/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "214092d95233f8c09ce60e38eeda2e512dfd6e5b578690845aa8e1cfa138d160",
+        "attribution": "Yi & Zhong 2024 MWS processing meta-analysis + CEEC collocation target"
+      },
+      "confidence": "HIGH",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-CROSS-LANGUAGE-COLLOCATION-CONTRAST",
+      "kind": "COLLOCATION_CHUNK",
+      "domain": "LEXICAL",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "COLLOCATION"
+      ],
+      "learnerStates": [
+        "actual evidence suggests literal Chinese->English combination is driving a recurring collocation error"
+      ],
+      "compatibleMechanismIds": [
+        "cross-language collocation contrast"
+      ],
+      "representation": "show intended Chinese relation, literal English mapping, conventional English chunk; contrast why conventional partner differs",
+      "learnerAction": "choose/produce conventional English chunk in a fresh context",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "learner error is unrelated to L1 mapping; learner already knows chunk but has retrieval issue",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "switch to monolingual context/examples if L1 contrast creates more confusion"
+      ],
+      "fadeConditions": [
+        "remove Chinese comparison and require English-only retrieval"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-CROSS-LANGUAGE-COLLOCATION-CONTRAST",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "5fa586bea5ef69b52132c60e300901fcf06e18a5dcb4f0ca0893301446b9c166",
+        "attribution": "Chinese-EFL collocation congruency/transfer literature"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-POLYSEMY-DECOUPLE",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "LEXICAL",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "learnerStates": [
+        "learner repeatedly maps one L1 word onto an inappropriate English sense"
+      ],
+      "compatibleMechanismIds": [
+        "decouple one Chinese translation from multiple English senses"
+      ],
+      "representation": "English sense A vs sense B by context/collocation; Chinese gloss is secondary",
+      "learnerAction": "select and produce sense-specific English item/chunk",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "learner simply does not know the English lemma at all",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "use concrete examples/images/context if abstract sense labels fail"
+      ],
+      "fadeConditions": [
+        "remove Chinese gloss and test contextual English retrieval"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-POLYSEMY-DECOUPLE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "7af9514fd96db2b544853ab1043b1ae7fcfbd15f04dff3ad48560743be9bfd05",
+        "attribution": "Chinese learner lexical-transfer research + EOT sense architecture"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-VERB-VALENCY",
+      "kind": "GRAMMAR_REPRESENTATION",
+      "domain": "GRAMMAR",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "verb choice is semantically plausible but object/preposition/complement pattern is malformed"
+      ],
+      "compatibleMechanismIds": [
+        "verb valency / complement frame"
+      ],
+      "representation": "verb + required semantic/syntactic slots",
+      "learnerAction": "fill slots then produce new sentence",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "error is purely spelling or tense morphology",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "switch to role arrows + example contrast"
+      ],
+      "fadeConditions": [
+        "remove frame"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-VERB-VALENCY",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "4915d85a11898de12366817c5a707ba15c80ee4db69b28ea6b2f05449d6fd7bd",
+        "attribution": "Chan 2004 transitivity evidence + user Cloze/Translation needs"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-NP-DETERMINER-NUMBER",
+      "kind": "GRAMMAR_REPRESENTATION",
+      "domain": "GRAMMAR",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "article/number errors recur and current evidence shows referent/countability confusion"
+      ],
+      "compatibleMechanismIds": [
+        "noun-phrase determiner/number frame"
+      ],
+      "representation": "meaning intent -> countability/number -> determiner -> noun form",
+      "learnerAction": "construct noun phrase under changed referent conditions",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "single isolated typo-like omission",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "contrast generic/definite/indefinite contexts"
+      ],
+      "fadeConditions": [
+        "remove NP frame"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-NP-DETERMINER-NUMBER",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "83e2da6a75598ef5c774ac67f9ce583cdf5d1b7cfd4bbca5502fc8342c3552e9",
+        "attribution": "Chinese/Taiwan EFL error evidence; not a universal Chinese learner rule"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-CLAUSE-BOUNDARY",
+      "kind": "GRAMMAR_REPRESENTATION",
+      "domain": "GRAMMAR",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "fragment/run-on/serial-verb output indicates clause packaging problem"
+      ],
+      "compatibleMechanismIds": [
+        "clause boundary / relation reconstruction"
+      ],
+      "representation": "box propositions, mark finite verbs, choose relation (coordinate/subordinate/complement)",
+      "learnerAction": "rebuild the sentence with explicit relation",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "surface punctuation is the only issue and relation is already correct",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "split into two simple clauses first if complex reconstruction overloads learner"
+      ],
+      "fadeConditions": [
+        "remove boxes/labels"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-CLAUSE-BOUNDARY",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "56303b2fc6914c0acf9183cb9f57f53c5593a90e1ca52332a65de25e4e3dcf1a",
+        "attribution": "Taiwan/Chinese EFL error analyses + EOT construction PCK"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "CN-PCK-EXISTENTIAL-PRESENTATIVE",
+      "kind": "GRAMMAR_REPRESENTATION",
+      "domain": "GRAMMAR",
+      "family": "PCK",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner intends existence/introduction but repeatedly uses malformed subject-first structure"
+      ],
+      "compatibleMechanismIds": [
+        "existential/presentative contrast"
+      ],
+      "representation": "existence/presentation meaning -> there be frame vs possession/location alternatives",
+      "learnerAction": "choose appropriate structure for new contexts",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "sentence meaning is possession or simple location rather than existential introduction",
+        "L1/Chinese-EFL hypothesis cannot be used without matching learner-specific evidence."
+      ],
+      "recomposeConditions": [
+        "semantic contrast among there is / have / be located"
+      ],
+      "fadeConditions": [
+        "remove structure choices"
+      ],
+      "productModes": [
+        "GENERAL",
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "INTERNALLY_INFERRED_PATTERN",
+        "sourceId": "mega-overnight-v2:V8_CHINESE_EFL:CN-PCK-EXISTENTIAL-PRESENTATIVE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V8_CHINESE_EFL/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "bcff2872c6aecafcee1f0b41ad0a807c9a781242c9de49f51c8a976479eb7048",
+        "attribution": "Chan 2004; hypothesis only until learner evidence"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-MIX-PARTIAL-LEXEME-FORM",
+      "kind": "EXAM_PROCEDURE",
+      "domain": "EXAM",
+      "family": "MIXED",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "learner selects the source word/concept correctly but inflects/derives/spells it incorrectly"
+      ],
+      "compatibleMechanismIds": [
+        "ERROR_LAYER_SPLIT",
+        "WORD_FAMILY_RETRIEVAL"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "first preserve correct source/meaning evidence; then generate required grammatical form",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not mark source reading wrong",
+        "do not reteach lemma meaning if already demonstrated"
+      ],
+      "recomposeConditions": [
+        "if form rule unknown, represent word family; if known but retrieval weak, use reconstruction/retrieval"
+      ],
+      "fadeConditions": [
+        "remove word-family scaffold"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-MIX-PARTIAL-LEXEME-FORM",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "920a7ca39d5fd04cfa3f4bfd9593e45387d31ecbfe2777deec484ee4481191da",
+        "attribution": "CEEC 115 mixed scoring gives partial credit for correct selection with form/spelling error"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false,
+      "examTiming": {
+        "recurringTimeFailurePattern": "learner selects the source word/concept correctly but inflects/derives/spells it incorrectly",
+        "languageAbilityInferenceAllowed": false
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-TRANS-COMPONENT-ERROR",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "one translation sentence contains several independently scorable issues"
+      ],
+      "compatibleMechanismIds": [
+        "MEANING_SEGMENTATION",
+        "ERROR_COMPONENT_MAP",
+        "FEEDBACK_BUDGET"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "identify which meaning unit / construction / lexical item / surface form actually caused point loss",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not treat whole sentence as one binary wrong answer",
+        "do not flood learner with every minor issue if one root cause explains several"
+      ],
+      "recomposeConditions": [
+        "if multiple errors share root construction, teach root; otherwise prioritize highest score/redeployment value"
+      ],
+      "fadeConditions": [
+        "return to original sentence after one bounded intervention"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-TRANS-COMPONENT-ERROR",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "ccd6597df2cf3982dcf90a6b8de8dd4b62a4aa4fcacd165dd70c66589b4a1e5c",
+        "attribution": "CEEC 115 translation errors independently deduct points"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-TRANS-OMISSION",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "sentence is grammatical but a Chinese meaning unit is missing"
+      ],
+      "compatibleMechanismIds": [
+        "SOURCE_MEANING_CHECKLIST",
+        "ROLE_RELATION_MAP"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "compare source propositions against produced propositions, then add missing unit without rewriting correct material",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not label omission as grammar failure"
+      ],
+      "recomposeConditions": [
+        "if omission stems from segmentation, teach segmentation; if deliberate compression changed meaning, teach fidelity"
+      ],
+      "fadeConditions": [
+        "remove checklist"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-TRANS-OMISSION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "b12cc2c563434195150cd8bc6d2855e1b4656f4ffa82a9952e8037d3da849f8b",
+        "attribution": "CEEC 115 sample analysis explicitly notes omitted source content"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-TRANS-VALID-ALTERNATIVE-RUBRIC",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "TRANSLATION",
+      "family": "TRANSLATION",
+      "targetRefs": [],
+      "facets": [
+        "FORM_MEANING_MAPPING"
+      ],
+      "learnerStates": [
+        "learner answer differs from reference wording but preserves meaning and is grammatical/natural"
+      ],
+      "compatibleMechanismIds": [
+        "SEMANTIC_EQUIVALENCE",
+        "CONSTRUCTION_VALIDITY",
+        "COLLOCATION_CHECK"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "judge meaning coverage and English validity rather than string identity",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not force reference wording",
+        "do not reward semantically shifted paraphrase merely because fluent"
+      ],
+      "recomposeConditions": [
+        "if validity uncertain, isolate disputed phrase and compare meaning/usage"
+      ],
+      "fadeConditions": [
+        "no correction when independent answer is genuinely valid"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-TRANS-VALID-ALTERNATIVE-RUBRIC",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "5f3ef572be9e6b86292b962e359b2661c994f609c2915179aa5d871128e8a23e",
+        "attribution": "CEEC translation scoring/reference practice accepts reasonable alternatives"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-WRITE-RUBRIC-TO-BOTTLENECK",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "scoring review shows weakness in multiple rubric dimensions"
+      ],
+      "compatibleMechanismIds": [
+        "RUBRIC_DIAGNOSIS",
+        "ROOT_CAUSE_CLUSTER",
+        "FEEDBACK_BUDGET"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "convert rubric symptom into one actionable underlying target instead of teaching the rubric label",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not say 'organization is weak' without a teachable cause",
+        "do not give four simultaneous lessons"
+      ],
+      "recomposeConditions": [
+        "if chosen target cannot explain observed failures, re-diagnose and change target"
+      ],
+      "fadeConditions": [
+        "return to learner draft with reduced support"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-WRITE-RUBRIC-TO-BOTTLENECK",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "7427bbd439390e31b9763631a5cae1d0cf9ba36c71c6ccfea4c0e450b345273d",
+        "attribution": "CEEC holistic writing scoring cross-checks four dimensions; EOT Feedback Budget"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-WRITE-FORMAT-NOT-ABILITY",
+      "kind": "WRITING_FRAME",
+      "domain": "WRITING",
+      "family": "WRITING",
+      "targetRefs": [],
+      "facets": [
+        "FREE_PRODUCTION"
+      ],
+      "learnerStates": [
+        "underlength or paragraph-format problem with otherwise adequate English"
+      ],
+      "compatibleMechanismIds": [
+        "TASK_REQUIREMENT_MAP",
+        "TIME_PLAN"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "identify explicit exam requirement and plan enough content/time to satisfy it",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not downgrade grammar/vocabulary state solely from formatting failure"
+      ],
+      "recomposeConditions": [
+        "if underlength is caused by inability to elaborate in English, route to content/language generation"
+      ],
+      "fadeConditions": [
+        "remove checklist"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-WRITE-FORMAT-NOT-ABILITY",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "148aa7cf776d290ee94478689eb34def5556f9265e09ff1534e690ca8464a662",
+        "attribution": "CEEC 115 writing format/penalty rules"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-READ-REFERENCE-DISCOURSE",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner knows candidate word meanings but cannot resolve what a phrase/pronoun refers to"
+      ],
+      "compatibleMechanismIds": [
+        "REFERENCE_CHAIN",
+        "DISCOURSE_COHESION"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "trace candidate antecedents using semantic and discourse compatibility",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not teach word definition if lexical meaning is already known"
+      ],
+      "recomposeConditions": [
+        "if reference fails because source sentence is misunderstood, route to language comprehension"
+      ],
+      "fadeConditions": [
+        "remove chain markings"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-READ-REFERENCE-DISCOURSE",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "d7b9510f272d1fa7676a0e6755641892d771b9cc3c243fb2b8841959985801dc",
+        "attribution": "CEEC 115 analysis explicitly highlights reference items Q40/Q44"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-READ-CONTEXTUAL-INFERENCE-NOVEL-WORD",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "unfamiliar/non-list word appears but passage gives sufficient discourse clues"
+      ],
+      "compatibleMechanismIds": [
+        "CONTEXT_CLUE_MAP",
+        "CONTRAST",
+        "GLOBAL_GIST"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "infer only the coarse meaning needed for the question from multiple contextual clues",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not stop reading to fully memorize the unknown word",
+        "do not invent precise dictionary sense beyond evidence"
+      ],
+      "recomposeConditions": [
+        "if local clue insufficient, widen to paragraph/whole-passage relation"
+      ],
+      "fadeConditions": [
+        "remove highlighted clues"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-READ-CONTEXTUAL-INFERENCE-NOVEL-WORD",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "58b24be00c7a029226458afd01432973992430dd1b9decd10cecea940376565c",
+        "attribution": "CEEC 115 Q45 example explicitly tests discourse inference rather than prior lexical knowledge"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-READ-FAST-NOT-SHALLOW",
+      "kind": "READING_STRATEGY",
+      "domain": "READING",
+      "family": "READING",
+      "targetRefs": [],
+      "facets": [
+        "FORM_TO_MEANING"
+      ],
+      "learnerStates": [
+        "learner either reads every word slowly or skims so shallowly that evidence is missed"
+      ],
+      "compatibleMechanismIds": [
+        "EVIDENCE_WINDOW",
+        "READ_DEPTH_ESCALATION",
+        "STOP_RULE"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "choose reading depth based on question demand and stop when evidence is sufficient",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "fast does not mean guessing",
+        "deep reading is still required when global/discourse inference demands it"
+      ],
+      "recomposeConditions": [
+        "if accuracy falls, increase evidence depth; if accurate but slow, compress path"
+      ],
+      "fadeConditions": [
+        "remove explicit procedure prompts"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "PRINTED_TEACHING_MATERIAL",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-READ-FAST-NOT-SHALLOW",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "47b81a73973646b5fa09f56d461f66d1b1e00b1b13fc0014ff3591a227b245c1",
+        "attribution": "CEEC 115 stresses fast reading plus deep discourse/inference"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-VOC-L1-CONCISE-EXPLANATION",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "LEXICAL",
+      "family": "VOCABULARY",
+      "targetRefs": [],
+      "facets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "learnerStates": [
+        "learner lacks a target sense and a concise zh-TW explanation would unlock task continuation"
+      ],
+      "compatibleMechanismIds": [
+        "CONCISE_L1_EXPLANATION",
+        "CONTEXT_EXAMPLE",
+        "RETRIEVAL"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "receive short context-bound zh-TW meaning, then retrieve/use English sense",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not turn lookup into a long bilingual lecture",
+        "do not let L1 explanation prove independence"
+      ],
+      "recomposeConditions": [
+        "if translation gloss causes sense confusion, switch to English context/contrast"
+      ],
+      "fadeConditions": [
+        "remove zh-TW gloss before fresh retrieval"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-VOC-L1-CONCISE-EXPLANATION",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "3736bf93d428e56876612dcece093654a222e67ab1d82244dad3c789bbbff216",
+        "attribution": "Lee 2022 meta-analysis + EOT contextual lookup"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-VOC-RETRIEVAL-SEMANTIC",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "LEXICAL",
+      "family": "VOCABULARY",
+      "targetRefs": [],
+      "facets": [
+        "SENSE_DISCRIMINATION"
+      ],
+      "learnerStates": [
+        "learner repeatedly recognizes target after exposure but cannot retrieve form/meaning without it"
+      ],
+      "compatibleMechanismIds": [
+        "RETRIEVAL_PRACTICE",
+        "SEMANTIC_ELABORATION",
+        "USER_GENERATION"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "retrieve target from cue and generate a meaningful contextual use",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "mere repeated rereading is not sufficient",
+        "do not require productive task before basic meaning representation exists"
+      ],
+      "recomposeConditions": [
+        "if retrieval repeatedly fails, temporarily re-present then shorten cue"
+      ],
+      "fadeConditions": [
+        "reduce cue specificity and space re-encounter"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-VOC-RETRIEVAL-SEMANTIC",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "ad170b9e05feede5e3178c0bb755056b19dae9edf7f649c2d995cd46d66a1092",
+        "attribution": "L2 vocabulary training review + Webb intentional vocabulary meta-analysis"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    },
+    {
+      "schemaVersion": 1,
+      "assetId": "B03-AI-FEEDBACK-EFFECTIVENESS-GUARD",
+      "kind": "TEACHING_HEURISTIC",
+      "domain": "GRAMMAR",
+      "family": "TEACHER_POLICY",
+      "targetRefs": [],
+      "facets": [
+        "CONSTRUCTION"
+      ],
+      "learnerStates": [
+        "Teacher output is rated fluent/helpful by evaluator but learner behavior does not improve"
+      ],
+      "compatibleMechanismIds": [
+        "LEARNER_ACTION_CHECK",
+        "TEACHING_VALIDITY_TRACE"
+      ],
+      "representation": "candidate representation pending review",
+      "learnerAction": "require observable learner action and later independent performance before product acceptance",
+      "supportCompatibility": [
+        "EXPLICIT",
+        "GUIDED",
+        "LIGHT",
+        "NONE"
+      ],
+      "contraindications": [
+        "do not treat emotional engagement or expert response rating as learning proof"
+      ],
+      "recomposeConditions": [
+        "if learner cannot act, simplify narrator/representation or change mechanism"
+      ],
+      "fadeConditions": [
+        "support must fade"
+      ],
+      "productModes": [
+        "EXAM"
+      ],
+      "provenance": {
+        "sourceKind": "VALIDATED_EXTERNAL_RESEARCH",
+        "sourceId": "mega-overnight-v2:V9_SCORING:B03-AI-FEEDBACK-EFFECTIVENESS-GUARD",
+        "sourceVersion": "2026-09-01",
+        "sourceLocation": "V9_SCORING/COMBINED_PCK_CANDIDATES.json",
+        "originalTextHash": "745248d19ee50c20b9f7e1f077fff3530d164e7ae43614c7879cc89978d88a03",
+        "attribution": "2026 System AI-assisted feedback meta-analysis: modest cognitive gains, high heterogeneity"
+      },
+      "confidence": "MEDIUM",
+      "status": "EXTRACTED_CANDIDATE",
+      "productionEligible": false
+    }
+  ],
+  "note": "Batch 01 (15 VALIDATED_PCK) plus Mega Overnight V2 Checkpoint A candidates (51 EXTRACTED_CANDIDATE). No candidate is production eligible; Chinese-EFL assets remain learner-evidence-gated hypotheses."
+}
