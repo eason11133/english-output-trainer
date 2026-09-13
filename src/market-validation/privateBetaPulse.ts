@@ -124,7 +124,7 @@ export async function shouldAskWeekOneSurveyV1(learnerId: string) {
   ]);
   const surveys = asArray<PrivateBetaWeekOneSurveyV1>(rawSurvey);
   if (surveys.some(value => value.learnerId === learnerId)) return false;
-  return privateBetaUsageDaysV1(pulses) >= 5;
+  return betaAnalytics.privateBetaUsageDaysV1(pulses) >= 5;
 }
 
 export async function savePrivateBetaWeekOneSurveyV1(input: Omit<PrivateBetaWeekOneSurveyV1, 'schemaVersion' | 'id' | 'submittedAt'> & { submittedAt?: string }) {

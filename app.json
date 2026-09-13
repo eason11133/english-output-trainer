@@ -2,7 +2,7 @@
   "expo": {
     "name": "English Output Trainer",
     "slug": "english-output-trainer",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "orientation": "portrait",
     "scheme": "englishoutputtrainer",
     "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
@@ -10,11 +10,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.easonsystems.englishoutputtrainer",
-      "buildNumber": "8"
+      "buildNumber": "9"
     },
     "android": {
       "package": "com.easonsystems.englishoutputtrainer",
-      "versionCode": 8,
+      "versionCode": 9,
       "softwareKeyboardLayoutMode": "resize",
       "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
       "adaptiveIcon": {
@@ -35,13 +35,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#F7F3ED"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
-      "releaseLabel": "build-8-uiux-teaching-2026-09-13",
+      "releaseLabel": "build-8-first-run-lock-2026-09-14",
       "router": {},
       "eas": {
         "projectId": "9f32a9ee-526a-4cb8-8c8c-4da9431b1150"

@@ -15,6 +15,11 @@ export function initialContextReady(profile: ProductProfileV2) {
 }
 export function firstDayResumeRoute(profile: ProductProfileV2): string {
   if(!firstDayActive(profile))return '/(tabs)';
+  if(!profile.onboarding.firstDay?.milestones.TODAY_STARTED){
+    const setupRoute={DATE:'/onboarding/date',TIME:'/onboarding/time',SIGNAL:'/onboarding/signal',MOCK_SCORE:'/onboarding/exam',QUICK_DIAG:'/quick-calibration',HANDOFF:'/onboarding/handoff'} as const;
+    const route=profile.onboarding.setupStage&&setupRoute[profile.onboarding.setupStage as keyof typeof setupRoute];
+    if(route)return route;
+  }
   const state=profile.onboarding.firstDay;
   if(!state)return profile.gsatBeta.hasRecentMock==='UNKNOWN'?'/onboarding/goals':'/onboarding/time';
   switch(nextTutorialScene(state)) {

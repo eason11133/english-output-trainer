@@ -25,7 +25,7 @@ const sections=[...wrongSections,...scoreSections];
 
 export default function RecentResult(){
   const{profile,updateProductContext}=useCanonicalProductData();
-  const[values,setValues]=useState<Record<string,string>>({});
+  const[values,setValues]=useState<Record<string,string>>({...profile.onboarding.mockScoreDraft});
   async function next(){
     const now=new Date().toISOString();
     const recentResults:GsatRecentResultV1[]=sections.flatMap(section=>{
@@ -34,11 +34,11 @@ export default function RecentResult(){
     });
     const history=[...profile.gsatBeta.recentResults,...recentResults].sort((a,b)=>a.reportedAt.localeCompare(b.reportedAt));
     const retained=history.filter((row,index,all)=>all.filter(candidate=>candidate.section===row.section).slice(-3).includes(row));
-    await updateProductContext({gsatBeta:{hasRecentMock:'YES',recentResults:retained,calibrationRequired:recentResults.length===0}});
-    router.push('/onboarding/time');
+    await updateProductContext({gsatBeta:{hasRecentMock:'YES',recentResults:retained,calibrationRequired:recentResults.length===0},onboarding:{setupStage:'HANDOFF'}});
+    router.push('/onboarding/handoff');
   }
-  const group=(title:string,helper:string,items:readonly Section[])=><View style={s.group}><Text style={s.groupTitle}>{title}</Text><Text style={s.helper}>{helper}</Text>{items.map(section=><View key={section.id} style={s.field}><View style={s.fieldCopy}><Text style={s.label}>{section.label}</Text><Text style={s.affordance}>{section.kind==='wrong'?`錯幾題（共 ${section.maxInput} 題）`:`拿幾分（滿分 ${section.maximum} 分）`}</Text></View><TextInput accessibilityLabel={`${section.label} ${section.kind==='wrong'?'錯幾題':'拿幾分'}`} keyboardType={section.kind==='score'?'decimal-pad':'number-pad'} returnKeyType="next" value={values[section.id]??''} onChangeText={value=>setValues(current=>({...current,[section.id]:normalizeGsatMockInputV1(value,section.kind==='wrong'?'WRONG_COUNT':'SCORE')}))} placeholder={section.kind==='wrong'?'錯題數':'得分'} style={s.input}/></View>)}</View>;
-  return <OnboardingShell step={2} title="填你記得的就好" subtitle="不知道的可以留白；這只是幫 EOT 安排第一步。">
+  const group=(title:string,helper:string,items:readonly Section[])=><View style={s.group}><Text style={s.groupTitle}>{title}</Text><Text style={s.helper}>{helper}</Text>{items.map(section=><View key={section.id} style={s.field}><View style={s.fieldCopy}><Text style={s.label}>{section.label}</Text><Text style={s.affordance}>{section.kind==='wrong'?`錯幾題（共 ${section.maxInput} 題）`:`拿幾分（滿分 ${section.maximum} 分）`}</Text></View><TextInput accessibilityLabel={`${section.label} ${section.kind==='wrong'?'錯幾題':'拿幾分'}`} keyboardType={section.kind==='score'?'decimal-pad':'number-pad'} returnKeyType="next" value={values[section.id]??''} onChangeText={value=>{const normalized=normalizeGsatMockInputV1(value,section.kind==='wrong'?'WRONG_COUNT':'SCORE');setValues(current=>{const next={...current,[section.id]:normalized};void updateProductContext({onboarding:{mockScoreDraft:next}});return next})}} placeholder={section.kind==='wrong'?'錯題數':'得分'} style={s.input}/></View>)}</View>;
+  return <OnboardingShell step={3} title="填你記得的就好" subtitle="不知道的可以留白；這只是幫 EOT 安排第一步。">
     {group('選擇題：填「錯幾題」','例如詞彙題錯 3 題，就填 3。',wrongSections)}
     {group('非選擇題：填「拿幾分」','混合題、中譯英和作文，請填老師給的分數。',scoreSections)}
     <LearnerAction label="繼續" onPress={()=>void next()}/>

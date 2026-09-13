@@ -29,6 +29,8 @@ export interface LearnerGoalContextV2 {
 export interface LearnerStudyContextV2 {
   dailyStudyMinutes: number;
   preferredSessionMinutes: number;
+  /** New-user semantic choice. Legacy numeric values remain authoritative and valid. */
+  dailyBudget?: 10 | 20 | '30_PLUS';
 }
 
 export interface ExamContextV2 {
@@ -86,6 +88,17 @@ export interface OnboardingContextV2 {
   version: 2;
   completedAt?: string;
   firstDay?: FirstDayTutorialState;
+  setupStage?: 'DATE'|'TIME'|'SIGNAL'|'MOCK_SCORE'|'QUICK_DIAG'|'HANDOFF'|'MISSION_STARTED';
+  examTargetDate?: string;
+  examTargetUnknown?: boolean;
+  initialSignalSource?: 'MOCK'|'QUICK_DIAG';
+  mockScoreDraft?: Readonly<Record<string,string>>;
+  quickDiagnosticPracticeFamily?: string;
+  firstMission?: {
+    family:string; taskLabel:string; reason:string; durationMinutes:number; route:string;
+    selectedAt:string; startedAt?:string;
+  };
+  activationHandoffCompleted?: boolean;
 }
 
 export interface ContextProvenanceV2 {

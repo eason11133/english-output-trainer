@@ -125,6 +125,7 @@ export function normalizeProductProfileV2(value: ProductProfileV2, seed: Product
     study: {
       dailyStudyMinutes: clampMinutes(study.dailyStudyMinutes, PRODUCT_CONTEXT_MIN_DAILY_MINUTES, PRODUCT_CONTEXT_MAX_DAILY_MINUTES, base.study.dailyStudyMinutes),
       preferredSessionMinutes: clampMinutes(study.preferredSessionMinutes, PRODUCT_CONTEXT_MIN_SESSION_MINUTES, PRODUCT_CONTEXT_MAX_SESSION_MINUTES, base.study.preferredSessionMinutes),
+      ...(study.dailyBudget===10||study.dailyBudget===20||study.dailyBudget==='30_PLUS'?{dailyBudget:study.dailyBudget}:{}),
     },
     exam: {
       ...base.exam,
@@ -168,6 +169,7 @@ export function applyLearnerProductContextMutationV2(profile: ProductProfileV2, 
     study: mutation.study ? {
       dailyStudyMinutes: clampMinutes(mutation.study.dailyStudyMinutes ?? profile.study.dailyStudyMinutes, PRODUCT_CONTEXT_MIN_DAILY_MINUTES, PRODUCT_CONTEXT_MAX_DAILY_MINUTES, profile.study.dailyStudyMinutes),
       preferredSessionMinutes: clampMinutes(mutation.study.preferredSessionMinutes ?? profile.study.preferredSessionMinutes, PRODUCT_CONTEXT_MIN_SESSION_MINUTES, PRODUCT_CONTEXT_MAX_SESSION_MINUTES, profile.study.preferredSessionMinutes),
+      ...((mutation.study.dailyBudget??profile.study.dailyBudget)!==undefined?{dailyBudget:mutation.study.dailyBudget??profile.study.dailyBudget}:{}),
     } : profile.study,
     exam: mutation.exam ? {
       ...profile.exam,
