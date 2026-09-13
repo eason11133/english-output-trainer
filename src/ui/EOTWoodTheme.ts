@@ -1,10 +1,10 @@
 /** Build 2 canonical wood/paper family. Reading remains on light paper. */
 export const EOTWood = {
   color: {
-    canvas: '#F5EFE5', canvasRaised: '#FBF7F0', card: '#FFFDFC', cardMuted: '#F0E7DA',
-    ink: '#2D241F', inkSoft: '#5E5148', inkMuted: '#8A7B70',
-    walnut900: '#3A251B', walnut800: '#4A3023', walnut700: '#5B3C2C',
-    walnut600: '#704B36', walnut500: '#8A6147', caramel600: '#A56E3A',
+    canvas: '#F7F3ED', canvasRaised: '#F7F3ED', card: '#FFFDFC', cardMuted: '#F1EAE2',
+    ink: '#2D2723', inkSoft: '#746A63', inkMuted: '#8A7B70',
+    walnut900: '#3A251B', walnut800: '#5A3B2C', walnut700: '#5A3B2C',
+    walnut600: '#5A3B2C', walnut500: '#8A6147', caramel600: '#A87446',
     caramel500: '#BC814A', amber400: '#D9A568', amber300: '#E8C08A',
     sand300: '#D8C8B5', sand200: '#E7DCCE', sand100: '#F2EADF',
     success: '#627A59', warning: '#A06B33', danger: '#A8584F',

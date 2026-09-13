@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { privateBetaEventLocalDateV1, privateBetaLocalDateV1, privateBetaReturnFollowThroughV1, privateBetaUsageDaysV1 } from './privateBetaAnalytics';
+import * as betaAnalytics from './privateBetaAnalytics';
 import{anonymousInstallIdV1}from'./privateBetaIdentity';
-export { privateBetaLocalDateV1, privateBetaReturnFollowThroughV1, privateBetaUsageDaysV1 } from './privateBetaAnalytics';
 
 export type PrivateBetaRatingV1 = 1 | 2 | 3 | 4 | 5;
 export type PrivateBetaReturnIntentV1 = 'YES' | 'MAYBE' | 'NO';
@@ -96,7 +95,7 @@ export async function savePrivateBetaPulseV1(input: Omit<PrivateBetaPulseV1, 'sc
     taskId: input.taskId,
     family: input.family,
     submittedAt: input.submittedAt ?? new Date().toISOString(),
-    localDate: privateBetaLocalDateV1(input.submittedAt ? new Date(input.submittedAt) : new Date()),
+    localDate: betaAnalytics.privateBetaLocalDateV1(input.submittedAt ? new Date(input.submittedAt) : new Date()),
     usefulness: input.usefulness,
     friction: input.friction,
     returnTomorrow: input.returnTomorrow,
@@ -158,7 +157,7 @@ export async function savePrivateBetaProductEventV1(input: Omit<PrivateBetaProdu
     taskId: input.taskId,
     family: input.family,
     occurredAt,
-    localDate: privateBetaLocalDateV1(new Date(occurredAt)),
+    localDate: betaAnalytics.privateBetaLocalDateV1(new Date(occurredAt)),
     type: input.type,
     phase: input.phase,
     interactionMode: input.interactionMode,
@@ -216,7 +215,7 @@ export async function buildPrivateBetaReportV1(learnerId: string) {
     result[pulse.returnTomorrow] += 1;
     return result;
   }, { YES: 0, MAYBE: 0, NO: 0 });
-  const returnFollowThrough = privateBetaReturnFollowThroughV1(pulses, events);
+  const returnFollowThrough = betaAnalytics.privateBetaReturnFollowThroughV1(pulses, events);
   const teacherInteractionSessions = new Set(events.filter(event => event.type === 'TEACHER_INTERACTION_SHOWN').map(event => event.sessionId)).size;
   const recomposedSessions = new Set(events.filter(event => event.type === 'TEACHER_RECOMPOSED').map(event => event.sessionId)).size;
   const completionRate = openedSessions ? completedSessions / openedSessions : null;
@@ -227,7 +226,7 @@ export async function buildPrivateBetaReportV1(learnerId: string) {
     generatedAt: new Date().toISOString(),
     learnerId,
     summary: Object.freeze({
-      usageDays: privateBetaUsageDaysV1(pulses),
+      usageDays: betaAnalytics.privateBetaUsageDaysV1(pulses),
       pulseCount: pulses.length,
       openedSessions,
       completedSessions,

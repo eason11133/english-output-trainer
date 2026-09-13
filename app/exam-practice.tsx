@@ -38,7 +38,8 @@ import {
 } from '../src/persistence/examOperationalPersistence';
 import type { LessonPlanV1, ProductContextV1 } from '../src/architecture/contracts';
 import type { QualifiedInnerTutorDecisionV1 } from '../src/teacher-runtime';
-import { hasPrivateBetaPulseV1, privateBetaLocalDateV1, savePrivateBetaProductEventV1, savePrivateBetaPulseV1, savePrivateBetaWeekOneSurveyV2, shouldAskWeekOneSurveyV1, type PrivateBetaRatingV1, type PrivateBetaReturnIntentV1 } from '../src/market-validation/privateBetaPulse';
+import { hasPrivateBetaPulseV1, savePrivateBetaProductEventV1, savePrivateBetaPulseV1, savePrivateBetaWeekOneSurveyV2, shouldAskWeekOneSurveyV1, type PrivateBetaRatingV1, type PrivateBetaReturnIntentV1 } from '../src/market-validation/privateBetaPulse';
+import { privateBetaLocalDateV1 } from '../src/market-validation/privateBetaAnalytics';
 import { eotLearnerTokensV1 as t } from '../src/ui';
 import { UniversalLookupText } from '../components/learning/UniversalLookupText';
 import {ContextualSpotlight} from '../components/experience/ContextualSpotlight';
@@ -113,6 +114,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const runtimeRef = useRef<ExamOperationalRuntimeV1 | null>(null);
   const submitInFlightRef=useRef(false);
   const exitInFlightRef=useRef(false);
+  const tapCommitPendingRef=useRef(false);
 
   const payload = task.payload;
   const firstUnit = task.canonicalBinding?.units[0];
@@ -391,12 +393,16 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const lookupMode=formal?'FORMAL_ASSESSMENT' as const:'NONE' as const;
   const recordLookup=(result:{senseId?:string;lemma?:string})=>{setLookupExposure(current=>[...new Set([...current,result.senseId??result.lemma??'lookup'])]);if(!coachMarks.lookup)markCoach('lookup')};
   const recordLookupResult=(result:{status:string})=>void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:result.status==='LOCKED'?'LOOKUP_LOCKED':result.status==='RESOLVED'?'LOOKUP_OPENED':'LOOKUP_UNRESOLVED',eventKey:`lookup:${result.status}:${runtimeRef.current?.attemptId??'pending'}`});
-  const option = (id: string, item: Option) => (<View key={item.id} style={[styles.option,answers[id]===item.id&&styles.selected]}><Pressable accessibilityRole="radio" accessibilityLabel={`選擇 ${item.id}`} accessibilityState={{selected:answers[id]===item.id}} onPress={()=>setAnswer(id,item.id)} style={styles.selector}><Text style={styles.selectorText}>{item.id}</Text></Pressable><View style={styles.optionLookup}><UniversalLookupText text={item.text} assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/></View></View>);
+  const option = (id: string, item: Option) => (<Pressable key={item.id} accessibilityRole="radio" accessibilityLabel={`選擇 ${item.id}，${item.text}`} accessibilityState={{selected:answers[id]===item.id}} onPress={()=>{tapCommitPendingRef.current=true;setAnswer(id,item.id)}} style={[styles.option,answers[id]===item.id&&styles.selected]}><View style={styles.selector}><Text style={styles.selectorText}>{item.id}</Text></View><View style={styles.optionLookup}><UniversalLookupText text={item.text} assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/></View></Pressable>);
   const blanks = (payload.blanks as (Blank | string)[] | undefined) ?? [];
   const questions = (payload.questions as Question[] | undefined) ?? [];
   const parts = (payload.parts as Question[] | undefined) ?? [];
   const shared = ((payload.options ?? payload.sentenceOptions) as Option[] | undefined) ?? [];
   const hasResponse=Object.values(answers).some(value=>value.trim().length>0);
+  const tapCommitsSingleChoice=task.family==='VOCABULARY'&&questions.length===1&&Boolean(questions[0]?.options?.length)&&!blanks.length&&!parts.length;
+  const sourceText=String(payload.passage||payload.source||'');
+  const sourceRepeatsPrompt=Boolean(sourceText&&questions.some(question=>question.prompt.trim()===sourceText.trim()));
+  useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(tapCommitsSingleChoice&&hydrated&&hasResponse&&!teacherDecision&&!done&&!busy)void submit()},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <Shell onBack={exitExam}>
     <View style={styles.progressRow}><Text style={styles.kicker}>考試練習</Text><Text style={styles.progressText}>{familyLabel[task.family]??'英文'}</Text></View>
@@ -405,10 +411,10 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
     {task.family === 'MIXED' ? <Button label={sourceOpen ? '收起素材' : '重新開啟素材'} onPress={() => setSourceOpen(value => !value)} /> : null}
     {formal&&!done?<Text style={styles.lockNotice}>模考中先不提供查字。交卷後可以查。</Text>:null}
-    {(payload.passage || payload.source) && sourceOpen ? <UniversalLookupText text={String(payload.passage || payload.source)} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
+    {sourceText&&sourceOpen&&!sourceRepeatsPrompt ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
 
     {!teacherDecision && !done ? <>
-      <ContextualSpotlight active={!coachMarks.mcq&&task.family!=='TRANSLATION'&&task.family!=='WRITING'} copy="選答案點圓圈；想查英文就直接點文字。"><View style={styles.answerArea}>
+      <ContextualSpotlight active={!coachMarks.mcq&&task.family!=='TRANSLATION'&&task.family!=='WRITING'} copy={tapCommitsSingleChoice?'點一下答案就會送出；想查英文可直接點文字。':'點一下答案；想查英文可直接點文字。'}><View style={styles.answerArea}>
       {task.family === 'COMPREHENSIVE' ? blanks.map(value => {
         const blank = value as Blank;
         return <View key={blank.id} style={styles.block}><Text style={styles.label}>第 {blank.id} 空</Text>{blank.options?.map(item => option(blank.id, item))}</View>;
@@ -426,7 +432,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       {task.family === 'TRANSLATION' ? (payload.chineseSentences as string[]).map((sentence, index) => <View key={sentence} style={styles.block}><Text style={styles.zh}>{sentence}</Text><TextInput multiline value={answers[String(index)] ?? ''} onChangeText={value => setAnswer(String(index), value)} style={styles.input} /></View>) : null}
       {task.family === 'WRITING' ? <><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction/>)}<TextInput multiline value={answers.writing ?? ''} onChangeText={value => setAnswer('writing', value)} style={[styles.input, styles.long]} />{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</> : null}
       </View></ContextualSpotlight>
-      <Button label={busy ? '正在確認…' : '送出答案'} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />
+      {tapCommitsSingleChoice?busy?<Text style={styles.checking}>正在看你的選擇…</Text>:null:<Button label={busy ? '正在確認…' : '送出答案'} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />}
     </> : null}
 
     {interaction ? <View style={styles.teacherCard}>
@@ -468,7 +474,6 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
         <Button label="送出第一週回饋" onPress={() => { void submitWeekOneSurvey(); }} />
       </View> : null}
     </> : null}
-    <Button label="回到練習" onPress={() => void exitExam()} />
   </Shell>;
 }
 
@@ -493,6 +498,6 @@ const styles = StyleSheet.create({
   kicker: { fontSize:12,fontWeight: '900', color: t.colors.midWood,letterSpacing:.7 }, title: { fontSize: 27,lineHeight:35, fontWeight: '900',letterSpacing:-.3,color:t.colors.ink }, passage: { fontSize: 17, lineHeight: 29,color:t.colors.ink }, zh: { fontSize: 18, lineHeight: 29,color:t.colors.ink },
   answerArea:{gap:10},teacherAction:{gap:14},block: { gap: 10, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 54, padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: t.radius.medium, flexDirection:'row',alignItems:'center',gap:12,backgroundColor: t.colors.paper },selector:{width:36,height:36,borderRadius:18,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionLookup:{flex:1}, selected: { borderColor: t.colors.deepWood, backgroundColor: t.colors.woodWash },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, blank: { minWidth: 58,minHeight:44,justifyContent:'center', padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: 10 }, input: { minHeight: 56, borderWidth: 1, borderColor: t.colors.line, borderRadius: t.radius.medium, padding: 15, backgroundColor: t.colors.paper,color:t.colors.ink,fontSize:16,lineHeight:24, textAlignVertical: 'top' }, long: { minHeight: 190 },
-  button: { minHeight: 56, borderRadius: t.radius.medium, backgroundColor: t.colors.deepWood, alignItems: 'center', justifyContent: 'center' },buttonDisabled:{opacity:.4},pressed:{opacity:.88,transform:[{scale:.99}]}, buttonText: { color: t.colors.paper,fontSize:16, fontWeight: '900' }, note: { padding: 13,borderRadius:12, backgroundColor: t.colors.successWash, color: t.colors.success,lineHeight:21 }, resume: { padding: 12, borderRadius: 11, backgroundColor: t.colors.woodWash, color: t.colors.deepWood, fontWeight: '800' }, teacherCard: { gap: 14, padding: 18, borderRadius: t.radius.xlarge, backgroundColor: t.colors.paper }, teacherEyebrow: { fontSize: 12, fontWeight: '900', color: t.colors.midWood }, teacherTitle: { fontSize: 22,lineHeight:30, fontWeight: '900', color: t.colors.ink }, secondary: { minHeight:44,textAlign: 'center',textAlignVertical:'center', fontWeight: '800', color: t.colors.midWood },
+  button: { minHeight: 56, borderRadius: t.radius.medium, backgroundColor: t.colors.deepWood, alignItems: 'center', justifyContent: 'center' },buttonDisabled:{opacity:.4},pressed:{opacity:.88,transform:[{scale:.99}]}, buttonText: { color: t.colors.paper,fontSize:16, fontWeight: '900' },checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,fontWeight:'800',color:t.colors.midWood}, note: { padding: 13,borderRadius:12, backgroundColor: t.colors.successWash, color: t.colors.success,lineHeight:21 }, resume: { padding: 12, borderRadius: 11, backgroundColor: t.colors.woodWash, color: t.colors.deepWood, fontWeight: '800' }, teacherCard: { gap: 14, paddingVertical: 8 }, teacherEyebrow: { fontSize: 12, fontWeight: '900', color: t.colors.midWood }, teacherTitle: { fontSize: 22,lineHeight:30, fontWeight: '900', color: t.colors.ink }, secondary: { minHeight:44,textAlign: 'center',textAlignVertical:'center', fontWeight: '800', color: t.colors.midWood },
   pulseCard: { gap: 12, padding: 16, borderRadius: 18, backgroundColor: woodTheme.colors.paper, borderWidth: 1, borderColor: woodTheme.colors.line }, pulseQuestion: { fontSize: 15, fontWeight: '800', color: woodTheme.colors.ink }, pulseChoice: { flex: 1, minWidth: 80, minHeight: 44, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ratingRow: { flexDirection: 'row', gap: 8 }, rating: { flex: 1, minHeight: 42, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }, ratingText: { fontWeight: '800' }, ratingLegend: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }, ratingLegendText: { fontSize: 11, color: woodTheme.colors.subtle }, pulseThanks: { fontSize: 12, color: woodTheme.colors.muted, textAlign: 'center' }, weekChoices: { gap: 8 },
 });

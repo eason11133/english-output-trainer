@@ -2,24 +2,24 @@
   "expo": {
     "name": "English Output Trainer",
     "slug": "english-output-trainer",
-    "version": "0.3.4",
+    "version": "0.4.0",
     "orientation": "portrait",
     "scheme": "englishoutputtrainer",
-    "icon": "./assets/images/eot-icon.png",
+    "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.easonsystems.englishoutputtrainer",
-      "buildNumber": "7"
+      "buildNumber": "8"
     },
     "android": {
       "package": "com.easonsystems.englishoutputtrainer",
-      "versionCode": 7,
+      "versionCode": 8,
       "softwareKeyboardLayoutMode": "resize",
-      "icon": "./assets/images/eot-icon.png",
+      "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/eot-adaptive-foreground.png",
-        "backgroundColor": "#F5F0E6"
+        "foregroundImage": "./assets/images/EOT_founder_approved_app_icon_v1.png",
+        "backgroundColor": "#F7F3ED"
       }
     },
     "plugins": [
@@ -27,13 +27,21 @@
       "expo-localization",
       "expo-sqlite",
       "expo-image",
-      "expo-splash-screen"
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/EOT_founder_approved_app_icon_v1.png",
+          "imageWidth": 240,
+          "resizeMode": "contain",
+          "backgroundColor": "#F7F3ED"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
-      "releaseLabel": "cloud-live-ai-physical-retest-2026-09-13",
+      "releaseLabel": "build-8-uiux-teaching-2026-09-13",
       "router": {},
       "eas": {
         "projectId": "9f32a9ee-526a-4cb8-8c8c-4da9431b1150"
