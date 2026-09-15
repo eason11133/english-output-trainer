@@ -38,7 +38,7 @@ import {
 } from '../src/persistence/examOperationalPersistence';
 import type { LessonPlanV1, ProductContextV1 } from '../src/architecture/contracts';
 import type { QualifiedInnerTutorDecisionV1 } from '../src/teacher-runtime';
-import { hasPrivateBetaPulseV1, savePrivateBetaProductEventV1, savePrivateBetaPulseV1, savePrivateBetaWeekOneSurveyV2, shouldAskWeekOneSurveyV1, type PrivateBetaRatingV1, type PrivateBetaReturnIntentV1 } from '../src/market-validation/privateBetaPulse';
+import { savePrivateBetaProductEventV1 } from '../src/market-validation/privateBetaPulse';
 import { privateBetaLocalDateV1 } from '../src/market-validation/privateBetaAnalytics';
 import { eotLearnerTokensV1 as t } from '../src/ui';
 import { UniversalLookupText } from '../components/learning/UniversalLookupText';
@@ -100,16 +100,6 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const [busy, setBusy] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [resumeMessage, setResumeMessage] = useState('');
-  const [pulseDone, setPulseDone] = useState(false);
-  const [pulseUsefulness, setPulseUsefulness] = useState<PrivateBetaRatingV1>();
-  const [pulseFriction, setPulseFriction] = useState<PrivateBetaRatingV1>();
-  const [pulseReturn, setPulseReturn] = useState<PrivateBetaReturnIntentV1>();
-  const [pulseNote, setPulseNote] = useState('');
-  const [weekSurveyDue, setWeekSurveyDue] = useState(false);
-  const [weekSurveyDone, setWeekSurveyDone] = useState(false);
-  const[missMost,setMissMost]=useState('');const[difference,setDifference]=useState('');const[keepUsing,setKeepUsing]=useState<PrivateBetaReturnIntentV1>();const[recommend,setRecommend]=useState<PrivateBetaReturnIntentV1>();const[paidReaction,setPaidReaction]=useState<'WOULD_CONSIDER'|'NOT_SURE'|'FREE_ONLY'|'WOULD_NOT_USE'>();
-  const [substitute, setSubstitute] = useState('');
-  const [weekReason, setWeekReason] = useState('');
   const[lookupExposure,setLookupExposure]=useState<string[]>([]);
   const runtimeRef = useRef<ExamOperationalRuntimeV1 | null>(null);
   const submitInFlightRef=useRef(false);
@@ -222,9 +212,6 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
           freshnessIdentity,
         });
       }
-      const [alreadyPulsed, shouldAskWeek] = await Promise.all([hasPrivateBetaPulseV1(learnerId, sessionId), shouldAskWeekOneSurveyV1(learnerId)]);
-      setPulseDone(alreadyPulsed);
-      setWeekSurveyDue(shouldAskWeek);
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: isResume ? 'SESSION_RESUMED' : 'SESSION_OPENED', phase: isResume ? resumed?.phase : 'ANSWERING', eventKey: `visit:${privateBetaLocalDateV1()}` });
       if(!isResume)await savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:'PRACTICE_STARTED',phase:'ANSWERING',eventKey:'practice-start'});
       setHydrated(true);
@@ -362,31 +349,6 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     }finally{setBusy(false)}
   }
 
-  async function submitBetaPulse() {
-    if (!pulseUsefulness || !pulseFriction || !pulseReturn) return;
-    await savePrivateBetaPulseV1({
-      learnerId,
-      sessionId,
-      taskId: task.task_id,
-      family: task.family,
-      usefulness: pulseUsefulness,
-      friction: pulseFriction,
-      returnTomorrow: pulseReturn,
-      redundantNote: pulseNote,
-    });
-    await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'PULSE_SUBMITTED', phase: 'COMPLETED', eventKey: 'pulse' });
-    setPulseDone(true);
-    setWeekSurveyDue(await shouldAskWeekOneSurveyV1(learnerId));
-  }
-
-  async function submitWeekOneSurvey() {
-    if(!missMost.trim()||!difference.trim()||!keepUsing||!recommend||!paidReaction||!substitute.trim())return;
-    await savePrivateBetaWeekOneSurveyV2({learnerId,missMost,difference,keepUsing,recommend,substitute,paidReaction,reason:weekReason});
-    await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'WEEK_ONE_SURVEY_SUBMITTED', phase: 'COMPLETED', eventKey: 'week-one' });
-    setWeekSurveyDone(true);
-    setWeekSurveyDue(false);
-  }
-
   function reportContent(){void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:'CONTENT_REPORTED',phase:'COMPLETED',eventKey:`content-report:${runtimeRef.current?.attemptId??'attempt'}`})}
 
   const setAnswer = (id: string, value: string) => {setAnswers(current => ({ ...current, [id]: value }));if(!coachMarks.mcq)markCoach('mcq')};
@@ -405,7 +367,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(tapCommitsSingleChoice&&hydrated&&hasResponse&&!teacherDecision&&!done&&!busy)void submit()},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <Shell onBack={exitExam}>
-    <View style={styles.progressRow}><Text style={styles.kicker}>考試練習</Text><Text style={styles.progressText}>{familyLabel[task.family]??'英文'}</Text></View>
+    <View style={styles.progressRow}><Text style={styles.kicker}>{familyLabel[task.family]??'英文'}</Text><Text style={styles.progressText}>{allocationPurpose==='FRESH_CHECK'?'獨立再試':'練習中'}</Text></View>
     <Text style={styles.title}>{String(payload.title ?? payload.sourceTitle ?? '英文練習')}</Text>
     {allocationPurpose==='REVIEW_ONLY'?<Text style={styles.lockNotice}>這題是複習題，不會當成一題全新的獨立能力確認。</Text>:null}
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
@@ -438,49 +400,16 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     {interaction ? <View style={styles.teacherCard}>
       <Text style={styles.teacherEyebrow}>Teacher</Text>
       <Text style={styles.teacherTitle}>{interaction.title}</Text>
-      {teacherDecision?.experience.narrator?.message ? <Text style={styles.note}>{teacherDecision.experience.narrator.message}</Text> : null}
       {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<View style={styles.teacherAction}><Text style={styles.passage}>提示已拿掉。接著換一份不同內容，由你自己完成。</Text><Button label={busy?'正在準備…':'開始新的無提示題'} disabled={busy} onPress={()=>void startFreshAttempt()}/></View>:<ContextualSpotlight active={!coachMarks.teacher} copy="先照這一步做，我會看你的答案再換下一步。"><View style={styles.teacherAction}><UniversalLookupText text={interaction.prompt} showHint={!coachMarks.lookup} assessmentMode="NONE" style={styles.passage} onLookupUsed={recordLookup}/>
       {['FREE_PRODUCTION','REPAIR'].includes(interaction.mode) ? <TextInput multiline value={interactionText} onChangeText={setInteractionText} placeholder={interaction.placeholder} style={[styles.input, styles.long]} /> : null}
-      {!['FREE_PRODUCTION','REPAIR','RETURN'].includes(interaction.mode) ? <View style={styles.block}>{interaction.options?.map(item=><Pressable accessibilityRole="radio" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.option,interactionText===item.id&&styles.selected]}><Text>{item.label}</Text></Pressable>)}</View> : null}
+      {!['FREE_PRODUCTION','REPAIR','RETURN'].includes(interaction.mode) ? <View style={styles.block}>{interaction.options?.map(item=><Pressable accessibilityRole="radio" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.teacherChoice,interactionText===item.id&&styles.selected]}><Text style={styles.teacherChoiceText}>{item.label}</Text></Pressable>)}</View> : null}
       <Button label={busy ? '處理中…' : interaction.mode === 'RETURN' ? '回到原作' : '完成這一步'} disabled={busy||(interaction.mode!=='RETURN'&&!interactionText.trim())} onPress={() => { if (!busy)void completeInteraction(interaction.mode === 'RETURN' ? 'RETURNED' : 'SUBMITTED'); }} /></View></ContextualSpotlight>}
       {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind!=='FRESH_ATTEMPT'&&interaction.mode !== 'RETURN' ? <Pressable disabled={busy} onPress={() => void completeInteraction('IMPASSE')}><Text style={styles.secondary}>我還是不會，換個方法</Text></Pressable> : null}
     </View> : null}
 
-    {done ? <>
-      <Text style={styles.note}>{teacherMessage}</Text>
-      <Button label="查看這次結果" onPress={()=>router.replace(`/result?origin=TODAY&practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(task.family))}&sessionId=${encodeURIComponent(sessionId)}` as Href)}/>
-      <Pressable accessibilityRole="button" onPress={reportContent}><Text style={styles.secondary}>回報內容問題</Text></Pressable>
-      {!pulseDone ? <View style={styles.pulseCard}>
-        <Text style={styles.teacherEyebrow}>10 秒回饋 · 不影響你的英文紀錄</Text>
-        <Text style={styles.pulseQuestion}>這次真的有幫助嗎？</Text>
-        <RatingRow value={pulseUsefulness} onChange={setPulseUsefulness} low="沒幫助" high="很有用" />
-        <Text style={styles.pulseQuestion}>這次有多累／多麻煩？</Text>
-        <RatingRow value={pulseFriction} onChange={setPulseFriction} low="很輕" high="很累" />
-        <Text style={styles.pulseQuestion}>明天沒人提醒，你會自己再打開嗎？</Text>
-        <View style={styles.row}>{(['YES','MAYBE','NO'] as PrivateBetaReturnIntentV1[]).map(value => <Pressable key={value} onPress={() => setPulseReturn(value)} style={[styles.pulseChoice, pulseReturn === value && styles.selected]}><Text>{value === 'YES' ? '會' : value === 'MAYBE' ? '可能' : '不會'}</Text></Pressable>)}</View>
-        <TextInput value={pulseNote} onChangeText={setPulseNote} placeholder="哪一步最煩、多餘或想改？（可空白）" style={styles.input} />
-        <Button label="送出回饋" onPress={() => { void submitBetaPulse(); }} />
-        <Pressable onPress={() => setPulseDone(true)}><Text style={styles.secondary}>先跳過</Text></Pressable>
-      </View> : <Text style={styles.pulseThanks}>謝謝，這次回饋已記下。</Text>}
-      {weekSurveyDue && !weekSurveyDone ? <View style={styles.pulseCard}>
-        <Text style={styles.teacherEyebrow}>第一週回饋 · 只問一次</Text>
-        <Text style={styles.pulseQuestion}>如果 EOT 消失，你最想念什麼？</Text><TextInput value={missMost}onChangeText={setMissMost}style={styles.input}/>
-        <Text style={styles.pulseQuestion}>它跟單字 App、講義或 ChatGPT 哪裡不一樣？</Text><TextInput value={difference}onChangeText={setDifference}style={styles.input}/>
-        <Text style={styles.pulseQuestion}>你自己會繼續用嗎？</Text><IntentRow value={keepUsing}onChange={setKeepUsing}/>
-        <Text style={styles.pulseQuestion}>你會推薦給另一位學測生嗎？</Text><IntentRow value={recommend}onChange={setRecommend}/>
-        <TextInput value={substitute} onChangeText={setSubstitute} placeholder="不用 EOT 的話，你會改用什麼？" style={styles.input} />
-        <Text style={styles.pulseQuestion}>如果需要付費，你現在的反應是？</Text><View style={styles.weekChoices}>{([['WOULD_CONSIDER','會考慮'],['NOT_SURE','不確定'],['FREE_ONLY','只用免費'],['WOULD_NOT_USE','不會使用']]as const).map(([value,label])=><Pressable key={value}onPress={()=>setPaidReaction(value)}style={[styles.pulseChoice,paidReaction===value&&styles.selected]}><Text>{label}</Text></Pressable>)}</View>
-        <TextInput value={weekReason} onChangeText={setWeekReason} placeholder="原因（可空白）" style={styles.input} />
-        <Button label="送出第一週回饋" onPress={() => { void submitWeekOneSurvey(); }} />
-      </View> : null}
-    </> : null}
+    {done ? <View style={styles.completion}><Text style={styles.completionMark}>✓</Text><Text style={styles.completionTitle}>完成了</Text>{teacherMessage?<Text style={styles.completionBody}>{teacherMessage}</Text>:null}<Button label="完成" onPress={()=>router.replace(`/result?origin=TODAY&practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(task.family))}&sessionId=${encodeURIComponent(sessionId)}` as Href)}/><Pressable accessibilityRole="button" onPress={reportContent}><Text style={styles.secondary}>回報內容問題</Text></Pressable></View> : null}
   </Shell>;
 }
-
-function RatingRow({ value, onChange, low, high }: { value?: PrivateBetaRatingV1; onChange: (value: PrivateBetaRatingV1) => void; low: string; high: string }) {
-  return <View><View style={styles.ratingRow}>{([1,2,3,4,5] as PrivateBetaRatingV1[]).map(item => <Pressable key={item} onPress={() => onChange(item)} style={[styles.rating, value === item && styles.selected]}><Text style={styles.ratingText}>{item}</Text></Pressable>)}</View><View style={styles.ratingLegend}><Text style={styles.ratingLegendText}>{low}</Text><Text style={styles.ratingLegendText}>{high}</Text></View></View>;
-}
-function IntentRow({value,onChange}:{value?:PrivateBetaReturnIntentV1;onChange:(value:PrivateBetaReturnIntentV1)=>void}){return <View style={styles.row}>{(['YES','MAYBE','NO']as const).map(x=><Pressable key={x}onPress={()=>onChange(x)}style={[styles.pulseChoice,value===x&&styles.selected]}><Text>{x==='YES'?'會':x==='MAYBE'?'可能':'不會'}</Text></Pressable>)}</View>}
 
 function Shell({ children,onBack }: { children: React.ReactNode;onBack?:()=>void }) {
   return <SafeAreaView style={styles.safe}><KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={90}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹ 返回</Text></Pressable>:null}{children}</KeyboardAwareScrollView></SafeAreaView>;
@@ -490,14 +419,14 @@ function Button({ label, onPress, disabled=false }: { label: string; onPress: ()
 }
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: t.colors.background },
-  content: { width: '100%', maxWidth: t.layout.learnerShellMaxWidth, alignSelf: 'center', padding: t.spacing.lg, paddingBottom: 100, gap: 16 },
+  content: { width: '100%', maxWidth: t.layout.learnerShellMaxWidth, alignSelf: 'center', paddingHorizontal:24,paddingTop:18, paddingBottom: 100, gap: 18 },
   back:{minHeight:44,alignSelf:'flex-start',justifyContent:'center',paddingRight:18},backText:{color:t.colors.deepWood,fontWeight:'800'},
   progressRow:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},progressText:{fontSize:12,fontWeight:'800',color:t.colors.subtle},
   lockNotice:{padding:12,borderRadius:12,backgroundColor:t.colors.focusWash,color:t.colors.focus,fontSize:13,lineHeight:20,fontWeight:'700'},
   coach:{padding:12,borderRadius:12,backgroundColor:t.colors.woodWash,borderWidth:2,borderColor:t.colors.deepWood},
-  kicker: { fontSize:12,fontWeight: '900', color: t.colors.midWood,letterSpacing:.7 }, title: { fontSize: 27,lineHeight:35, fontWeight: '900',letterSpacing:-.3,color:t.colors.ink }, passage: { fontSize: 17, lineHeight: 29,color:t.colors.ink }, zh: { fontSize: 18, lineHeight: 29,color:t.colors.ink },
-  answerArea:{gap:10},teacherAction:{gap:14},block: { gap: 10, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 54, padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: t.radius.medium, flexDirection:'row',alignItems:'center',gap:12,backgroundColor: t.colors.paper },selector:{width:36,height:36,borderRadius:18,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionLookup:{flex:1}, selected: { borderColor: t.colors.deepWood, backgroundColor: t.colors.woodWash },
+  kicker: { fontSize:11,fontWeight: '900', color: t.colors.midWood,letterSpacing:1.4 }, title: { fontSize: 27,lineHeight:35, fontWeight: '900',letterSpacing:-.3,color:t.colors.ink }, passage: { fontSize: 17, lineHeight: 29,color:t.colors.ink }, zh: { fontSize: 18, lineHeight: 29,color:t.colors.ink },
+  answerArea:{gap:10},teacherAction:{gap:16},block: { gap: 4, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 60, paddingVertical:10, borderBottomWidth: 1, borderColor: t.colors.line, flexDirection:'row',alignItems:'center',gap:12 },selector:{width:34,height:34,borderRadius:17,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionLookup:{flex:1}, selected: { borderColor: t.colors.deepWood, backgroundColor: t.colors.woodWash },teacherChoice:{minHeight:58,paddingVertical:12,borderBottomWidth:1,borderColor:t.colors.line,justifyContent:'center'},teacherChoiceText:{fontSize:16,lineHeight:24,color:t.colors.ink},
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, blank: { minWidth: 58,minHeight:44,justifyContent:'center', padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: 10 }, input: { minHeight: 56, borderWidth: 1, borderColor: t.colors.line, borderRadius: t.radius.medium, padding: 15, backgroundColor: t.colors.paper,color:t.colors.ink,fontSize:16,lineHeight:24, textAlignVertical: 'top' }, long: { minHeight: 190 },
-  button: { minHeight: 56, borderRadius: t.radius.medium, backgroundColor: t.colors.deepWood, alignItems: 'center', justifyContent: 'center' },buttonDisabled:{opacity:.4},pressed:{opacity:.88,transform:[{scale:.99}]}, buttonText: { color: t.colors.paper,fontSize:16, fontWeight: '900' },checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,fontWeight:'800',color:t.colors.midWood}, note: { padding: 13,borderRadius:12, backgroundColor: t.colors.successWash, color: t.colors.success,lineHeight:21 }, resume: { padding: 12, borderRadius: 11, backgroundColor: t.colors.woodWash, color: t.colors.deepWood, fontWeight: '800' }, teacherCard: { gap: 14, paddingVertical: 8 }, teacherEyebrow: { fontSize: 12, fontWeight: '900', color: t.colors.midWood }, teacherTitle: { fontSize: 22,lineHeight:30, fontWeight: '900', color: t.colors.ink }, secondary: { minHeight:44,textAlign: 'center',textAlignVertical:'center', fontWeight: '800', color: t.colors.midWood },
+  button: { minHeight: 58, borderRadius: 17, backgroundColor: t.colors.deepWood, alignItems: 'center', justifyContent: 'center' },buttonDisabled:{opacity:.4},pressed:{opacity:.88,transform:[{scale:.99}]}, buttonText: { color: t.colors.paper,fontSize:16, fontWeight: '900' },checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,fontWeight:'800',color:t.colors.midWood}, note: { padding: 13,borderRadius:12, backgroundColor: t.colors.successWash, color: t.colors.success,lineHeight:21 }, resume: { paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,color:t.colors.deepWood,fontWeight:'800' }, teacherCard: { gap: 14, paddingVertical: 18,borderTopWidth:2,borderTopColor:t.colors.deepWood }, teacherEyebrow: { fontSize: 11,letterSpacing:1.4,fontWeight: '900', color: t.colors.midWood }, teacherTitle: { fontSize: 25,lineHeight:33, fontWeight: '900', color: t.colors.ink }, secondary: { minHeight:44,textAlign: 'center',textAlignVertical:'center', fontWeight: '800', color: t.colors.midWood },completion:{paddingVertical:34,gap:16,alignItems:'stretch'},completionMark:{fontSize:30,fontWeight:'900',color:t.colors.success,textAlign:'center'},completionTitle:{fontSize:28,fontWeight:'900',color:t.colors.ink,textAlign:'center'},completionBody:{fontSize:14,lineHeight:22,color:t.colors.muted,textAlign:'center'},
   pulseCard: { gap: 12, padding: 16, borderRadius: 18, backgroundColor: woodTheme.colors.paper, borderWidth: 1, borderColor: woodTheme.colors.line }, pulseQuestion: { fontSize: 15, fontWeight: '800', color: woodTheme.colors.ink }, pulseChoice: { flex: 1, minWidth: 80, minHeight: 44, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ratingRow: { flexDirection: 'row', gap: 8 }, rating: { flex: 1, minHeight: 42, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }, ratingText: { fontWeight: '800' }, ratingLegend: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }, ratingLegendText: { fontSize: 11, color: woodTheme.colors.subtle }, pulseThanks: { fontSize: 12, color: woodTheme.colors.muted, textAlign: 'center' }, weekChoices: { gap: 8 },
 });

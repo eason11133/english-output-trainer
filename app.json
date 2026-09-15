@@ -2,7 +2,7 @@
   "expo": {
     "name": "English Output Trainer",
     "slug": "english-output-trainer",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "orientation": "portrait",
     "scheme": "englishoutputtrainer",
     "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
@@ -10,11 +10,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.easonsystems.englishoutputtrainer",
-      "buildNumber": "9"
+      "buildNumber": "10"
     },
     "android": {
       "package": "com.easonsystems.englishoutputtrainer",
-      "versionCode": 9,
+      "versionCode": 10,
       "softwareKeyboardLayoutMode": "resize",
       "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
       "adaptiveIcon": {
@@ -42,7 +42,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "releaseLabel": "build-8-first-run-lock-2026-09-14",
+      "releaseLabel": "build-10-learner-experience-2026-09-15",
       "router": {},
       "eas": {
         "projectId": "9f32a9ee-526a-4cb8-8c8c-4da9431b1150"
