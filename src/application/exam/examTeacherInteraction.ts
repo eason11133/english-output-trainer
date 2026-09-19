@@ -30,6 +30,33 @@ const familyDiagnosticAction=(source?:Readonly<Record<string,unknown>>):Pick<Exa
   const diagnosis=source?.familyDiagnosis as {family?:string;observationKind?:string;discriminatingActions?:readonly string[];learnerAuthorshipRequired?:boolean}|undefined;
   if(!diagnosis?.discriminatingActions?.length)return undefined;
   if(diagnosis.learnerAuthorshipRequired)return{mode:'REPAIR',title:diagnosis.family==='WRITING'?'只改最值得修的一小段':'先保留你的意思，再修一小段',prompt:'用你自己的英文完成修正；Teacher 提供的參考寫法不會算成你的作答證據。',placeholder:'寫下你修正後的英文'};
+  if(diagnosis.family==='VOCABULARY'){
+    const payload=source?.taskPayload as {questions?:{prompt?:string;options?:{id:string;text:string}[]}[]}|undefined;
+    const question=payload?.questions?.[0],choices=question?.options??[];
+    const configuration=source?.decisionConfiguration as Record<string,unknown>|undefined;
+    if(configuration?.repeatedFailure)return{
+      mode:'CHUNK_RECONSTRUCTION',
+      title:'把最小動作拼回來',
+      prompt:'先不要處理整句。哪一組能表示「先把書留起來，之後再用」？',
+      options:choices.slice(0,4).map(choice=>({id:choice.id,label:`${choice.text} + books`})),
+    };
+    if(source?.interactionKind==='IMPASSE')return{
+      mode:'COMPARE',
+      title:'把三個動作分開',
+      prompt:'不要再猜字形。先把每個字真正做的動作分清楚，再放回原句。',
+      options:choices.slice(0,4).map(choice=>({id:choice.id,label:choice.text})),
+    };
+    return{
+      mode:'EVIDENCE_SELECT',
+      title:'先抓句子裡的線索',
+      prompt:'哪一段最能幫你判斷：學生是在到圖書館以前，先把書留給自己？',
+      options:[
+        {id:'BOOKS_ONLINE',label:'books online'},
+        {id:'BEFORE_LIBRARY',label:'before going to the library'},
+        {id:'STUDENTS_CAN',label:'Students can'},
+      ],
+    };
+  }
   const labels:Record<string,string>={ASK_MEANING_RECOGNITION:'先確認看得懂的意思',CONTRAST_NEARBY_SENSES:'比較相近意思',CHECK_MEANING_TO_ENGLISH_RETRIEVAL:'不看選項，從意思叫出英文',CONTRAST_PROPORTION_AND_CAUSE:'比較「比例」與「原因」兩種意思',CLASSIFY_SEMANTIC_RELATION:'判斷句子正在說哪一種關係',CONTRAST_PHRASE_BOUNDARIES:'比較片語邊界從哪裡開始',RECONSTRUCT_CHUNK:'把完整片語重新組起來',GROUP_CHUNK_NOT_SINGLE_WORD:'把它當完整語塊，不拆成單字',SORT_CHUNK_FRAMES:'比較片語常出現的句型',FADE_RETRIEVAL_SUPPORT:'逐步拿掉提示再回想',CONTRAST_COLLOCATES:'比較哪些字會自然搭配',CHECK_CHUNK_RETRIEVAL:'不看選項回想完整語塊',CHECK_FRESH_PRODUCTION:'換一個新句子自己用一次',MARK_SYNTACTIC_SLOT:'標出句法位置需要什麼形式',REBUILD_WORD_FORM:'從字根重新組出正確詞形',CHECK_TYPED_PRODUCTION:'不看選項自己打出答案',ASK_LOCAL_MEANING:'先確認這一句需要的意思',MARK_GRAMMAR_SLOT:'標出空格需要的詞性或形式',COMPARE_COLLOCATION:'比較哪個搭配自然',CHECK_PREVIOUS_AND_NEXT_SENTENCE:'同時檢查前後文',MARK_SLOT_CONSTRAINT:'標出詞性與句型限制',COMPARE_LOCAL_MEANING:'比較候選字放回句中的意思',TRACE_PARAGRAPH_ROLE:'確認這一句在段落中的作用',RECHECK_REMAINING_POOL:'重查剩餘選項的連鎖影響',LINK_REFERENCES:'連回代名詞或指涉來源',LABEL_SENTENCE_FUNCTION:'判斷句子的篇章功能',MARK_BACKWARD_LINK:'標出向前連接',MARK_FORWARD_LINK:'標出向後連接',SELECT_EVIDENCE_LOCATION:'先選真正支持答案的原文位置',EXPLAIN_EVIDENCE_TO_OPTION_LINK:'說明證據如何連到選項',COMPARE_CLAIM_STRENGTH:'比較原文與選項語氣強度',CLASSIFY_NOT_STATED_OR_CONTRADICTED:'分清未提及與原文相反',IDENTIFY_SOURCE_EVIDENCE:'標出各來源提供的證據',CLASSIFY_COPYABLE_OR_TRANSFORMED:'判斷可直接取用或必須改寫',RETRIEVE_WITHOUT_OPTION:'拿掉選項後自己提取',RECONSTRUCT_SUMMARY:'用自己的話重組摘要',CLARIFY_CONTEXT:'補充剛才作答時的想法'};
   return{mode:diagnosis.family==='READING'?'EVIDENCE_SELECT':'SELECT',title:'先確認真正卡住的地方',prompt:'完成一個小判斷，EOT 老師才不會把不同問題當成同一種錯誤。',options:diagnosis.discriminatingActions.slice(0,4).map(id=>({id,label:labels[id]??'換一個角度再判斷'}))};
 };
@@ -54,7 +81,7 @@ export function buildExamTeacherInteractionV1(input:{decision:QualifiedInnerTuto
   if(['NONE','WAIT','STOP','EXIT'].includes(action))return undefined;
   const blockId=input.decision.blockDecision.selectedBlockId;
   const block=blockRegistryV4.get(blockId);if(!block)return undefined;
-  const c=copy(blockId,input.sourceTaskContext,block.role);
+  const c=copy(blockId,{...input.sourceTaskContext,decisionConfiguration:input.decision.blockDecision.configuration},block.role);
   return Object.freeze({schemaVersion:1,interactionId:`exam-interaction:${input.sessionId}:${input.decision.provenance.decisionPointId}:${blockId}`,decisionPointId:input.decision.provenance.decisionPointId,blockId,mechanismId:input.decision.experience.mechanismId??blockId,...c,support:input.decision.blockDecision.supportLevel,mustAct:true,answerLeakageForbidden:true});
 }
 
@@ -75,5 +102,16 @@ export async function continueExamTeacherAfterInteractionV1(input:{
   const targetPlan:LessonPlanV1={...input.lessonPlan,targetRef:input.previousDecision.provenance.targetRef,facet:input.previousDecision.provenance.facet};
   const history=input.previousDecision.lineage?.context.recentTreatmentResponses??[];
   const treatments=[...history,...(input.previousDecision.treatmentResponse?[input.previousDecision.treatmentResponse]:[])].filter((item,index,all)=>all.findIndex(other=>other.eventId===item.eventId)===index).slice(-6);
-  return decideInnerTutorV1({lessonPlan:targetPlan,productContext:input.productContext,learnerTruth:input.learnerTruth,event:{id:`exam-interaction-response:${input.sessionId}:${input.previousDecision.provenance.decisionPointId}`,kind:'LEARNER_MANIPULATION',occurredAt:now,outcome,support:input.previousDecision.blockDecision.supportLevel,observationIds:[],learnerIntent:input.completion.kind==='IMPASSE'?'IMPASSE_REPLAN':undefined},recentAttempts:[],recentTreatmentResponses:treatments,timeRemainingMinutes:targetPlan.timeBudgetMinutes,currentDecision:input.previousDecision.blockDecision,currentProvenance:input.previousDecision.provenance,sourceTaskContext:{...input.sourceTaskContext,learnerResponse:input.completion.response,interactionKind:input.completion.kind,interactionOutcome:outcome},provider:input.provider??(async()=>{throw new Error('exam_teacher_provider_unavailable')})});
+  const next=await decideInnerTutorV1({lessonPlan:targetPlan,productContext:input.productContext,learnerTruth:input.learnerTruth,event:{id:`exam-interaction-response:${input.sessionId}:${input.previousDecision.provenance.decisionPointId}`,kind:'LEARNER_MANIPULATION',occurredAt:now,outcome,support:input.previousDecision.blockDecision.supportLevel,observationIds:[],learnerIntent:input.completion.kind==='IMPASSE'?'IMPASSE_REPLAN':undefined},recentAttempts:[],recentTreatmentResponses:treatments,timeRemainingMinutes:targetPlan.timeBudgetMinutes,currentDecision:input.previousDecision.blockDecision,currentProvenance:input.previousDecision.provenance,sourceTaskContext:{...input.sourceTaskContext,learnerResponse:input.completion.response,interactionKind:input.completion.kind,interactionOutcome:outcome},provider:input.provider??(async()=>{throw new Error('exam_teacher_provider_unavailable')})});
+  const family=input.sourceTaskContext?.family??(input.sourceTaskContext?.familyDiagnosis as {family?:string}|undefined)?.family;
+  if(input.completion.kind==='IMPASSE'&&family==='VOCABULARY'){
+    const selectedBlockId=input.previousDecision.blockDecision.selectedBlockId==='form-contrast'?'meaning-representation':'form-contrast';
+    return Object.freeze({...next,action:'TEACH' as const,blockDecision:{...next.blockDecision,pedagogicalIntent:'TEACH' as const,selectedBlockId,supportLevel:'GUIDED' as const,configuration:{...next.blockDecision.configuration,replannedAfterImpasse:true},reasonForSelection:'Learner impasse requires a materially different contrast representation.'},experience:{...next.experience,mechanismId:selectedBlockId,narrator:{state:'CHANGE_APPROACH' as const,message:'同一個做法沒有幫上忙，改用字義對照。'}},provenance:{...next.provenance,selectedMechanismId:selectedBlockId,reasonCodes:Object.freeze([...next.provenance.reasonCodes,'IMPASSE_MATERIAL_REPRESENTATION_CHANGE'])}});
+  }
+  const previousInteractionKind=input.previousDecision.lineage?.context.sourceTaskContext?.interactionKind;
+  if((family==='VOCABULARY'||previousInteractionKind==='IMPASSE'||input.previousDecision.blockDecision.selectedBlockId==='form-contrast')&&input.completion.kind==='SUBMITTED'&&input.completion.response!=='D'){
+    const selectedBlockId='meaning-representation';
+    return Object.freeze({...next,action:'TEACH' as const,blockDecision:{...next.blockDecision,pedagogicalIntent:'TEACH' as const,selectedBlockId,supportLevel:'EXPLICIT' as const,configuration:{...next.blockDecision.configuration,replannedAfterImpasse:true,repeatedFailure:true},reasonForSelection:'Repeated failure requires reducing the sentence to a manipulable constituent.'},experience:{...next.experience,mechanismId:selectedBlockId,narrator:{state:'CHANGE_APPROACH' as const,message:'整句先放下，改成拼一個最小片語。'}},provenance:{...next.provenance,selectedMechanismId:selectedBlockId,reasonCodes:Object.freeze([...next.provenance.reasonCodes,'REPEATED_FAILURE_SMALLER_CONSTITUENT'])}});
+  }
+  return next;
 }

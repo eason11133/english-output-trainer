@@ -14,6 +14,15 @@ export const coreContextualLexiconV1:readonly ContextualSenseRecordV1[]=Object.f
  ,{recordId:'eot:rely',lemma:'rely',senseId:'sense:rely:depend',pos:'v',meaningZhTw:'依靠；依賴',contextTerms:['on','people','information'],localUnits:[{text:'rely on',meaningZhTw:'依靠；依賴',kind:'PHRASE'}],usageNote:'rely 後面通常接 on。',provenanceRefs:['EOT_GSAT_CURATED_V1']}
  ,{recordId:'eot:result',lemma:'result',senseId:'sense:result:outcome',pos:'n',meaningZhTw:'結果',contextTerms:['study','show','significant'],localUnits:[{text:'as a result',meaningZhTw:'因此；結果',kind:'CHUNK'}],provenanceRefs:['EOT_GSAT_CURATED_V1']}
  ,{recordId:'eot:consider',lemma:'consider',senseId:'sense:consider:think',pos:'v',meaningZhTw:'考慮；認為',contextTerms:['people','rules','option'],localUnits:[{text:'consider doing',meaningZhTw:'考慮做某事',kind:'COLLOCATION'}],usageNote:'consider 後常接 V-ing。',provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:student',lemma:'student',senseId:'sense:student:learner',pos:'n',meaningZhTw:'學生',contextTerms:['books','library'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:can:ability',lemma:'can',senseId:'sense:can:ability',pos:'modal',meaningZhTw:'可以；能夠',contextTerms:['students','books'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:book:publication',lemma:'book',senseId:'sense:book:publication',pos:'n',meaningZhTw:'書；書籍',contextTerms:['students','library'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:online',lemma:'online',senseId:'sense:online:internet',pos:'adv',meaningZhTw:'在線上；透過網路',contextTerms:['books','library'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:before:earlier',lemma:'before',senseId:'sense:before:earlier',pos:'prep',meaningZhTw:'在……之前',contextTerms:['going','library'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:go:move',lemma:'go',senseId:'sense:go:move',pos:'v',meaningZhTw:'去；前往',contextTerms:['before','library'],localUnits:[{text:'going to the library',meaningZhTw:'去圖書館',kind:'PHRASE'}],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:to:direction',lemma:'to',senseId:'sense:to:direction',pos:'prep',meaningZhTw:'向；到',contextTerms:['going','library'],localUnits:[{text:'to the library',meaningZhTw:'到圖書館',kind:'PHRASE'}],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:the:definite',lemma:'the',senseId:'sense:the:definite',pos:'det',meaningZhTw:'這個／該（指特定的人或事物）',contextTerms:['library'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
+ ,{recordId:'eot:library',lemma:'library',senseId:'sense:library:place',pos:'n',meaningZhTw:'圖書館',contextTerms:['books','students'],localUnits:[],provenanceRefs:['EOT_GSAT_CURATED_V1']}
 ]);
 const lexicalTokens=(x:string)=>normalize(x).split(' ').filter(Boolean).map(normalizeTappedLemmaV1).filter(x=>!['a','an','the'].includes(x));
 const localUnitPresent=(context:string,unit:string)=>{const hay=lexicalTokens(context),needle=lexicalTokens(unit);let at=0;for(const token of hay)if(token===needle[at])at++;return at===needle.length};

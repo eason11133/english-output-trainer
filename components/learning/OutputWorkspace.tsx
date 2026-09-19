@@ -57,7 +57,7 @@ function FocusedOutput({vm}:{vm:OutputWorkspaceVM}){
 
 function InlineIntervention({intervention,onPlace,onBlockEvent}:{intervention:NonNullable<OutputWorkspaceVM['intervention']>;onPlace?:()=>void;onBlockEvent?:Props['onBlockEvent']}){
   return <View style={s.intervention}>
-    <View style={s.teacherKicker}><View style={s.pencilDot}/><Text style={s.teacherKickerText}>Teacher</Text></View>
+    <View style={s.teacherKicker}><View style={s.pencilDot}/><Text style={s.teacherKickerText}>現在先做</Text></View>
     <Text style={s.teacherCopy}>{intervention.learnerCopy}</Text>
     {intervention.renderer==='ROLE_MAP'?<RoleMap payload={intervention.payload} onPlace={onPlace}/>:null}
     {intervention.renderer==='ROLE_CONTRAST'?<RoleContrast payload={intervention.payload}/>:null}

@@ -22,6 +22,7 @@ type ActiveExam=Awaited<ReturnType<typeof loadActiveExamOperationalCheckpointV1>
 
 const areaZh:Record<string,string>={LEXICAL:'詞彙產出',FORMULAIC:'語塊表達',GRAMMAR:'句型控制',MEANING_ENCODING:'意思轉英文',WRITING:'寫作產出',TRANSLATION:'翻譯產出',READING:'閱讀理解',DISCOURSE:'篇章組織'};
 const needZh:Record<string,string>={NEW_LEARNING:'建立新能力',REPAIR:'修回不穩能力',REACTIVATION:'把之前會的拉回來',INDEPENDENCE:'從提示帶到獨立',TRANSFER:'換情境確認',RETENTION:'延後確認',MAINTENANCE:'自然維持'};
+const examFamilyZh:Record<string,string>={VOCABULARY:'詞彙辨義',CLOZE:'文意選填',READING:'閱讀理解',TRANSLATION:'中譯英',WRITING:'英文作文',MIXED:'綜合測驗'};
 
 export default function Today(){
   const {learnerPreferences,profile,runtimeProductContext,recordTutorialAction}=useCanonicalProductData();
@@ -42,6 +43,7 @@ export default function Today(){
   const hasResume=runtimeProductContext.productMode==='EXAM'?Boolean(examResume):active.hasActiveLesson;
   const coldStart=hasEvidence===false?gsatColdStartDecisionV1(profile,false):undefined;
   const curriculumLabel=curriculum.state==='READY'&&curriculum.focusArea&&curriculum.focusNeed?`${needZh[curriculum.focusNeed]??'今天的學習重點'} · ${areaZh[curriculum.focusArea]??'英文產出'}`:profile.goals.primaryGoal;
+  const missionLabel=examResume?`${examFamilyZh[examResume.runtime.family]??'英文練習'} · 接回剛才那一步`:curriculumLabel;
   const todayExamResolution=runtimeProductContext.productMode==='EXAM'&&curriculum.state==='READY'&&curriculum.lessonPlan?resolveProductionExamContentForTargetV1({learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',targetRef:curriculum.lessonPlan.targetRef,facet:curriculum.lessonPlan.facet as CapabilityFacet,rotationKey:`today:${new Date().toISOString().slice(0,10)}`}):undefined;
   const todayExamTask=todayExamResolution?.status==='READY'?todayExamResolution.content.task:undefined;
   const todayTask=runtimeProductContext.productMode!=='EXAM'&&curriculum.state==='READY'?productTaskForTargetV1(curriculum.lessonPlan?.targetRef):undefined;
@@ -57,7 +59,7 @@ export default function Today(){
         <Text style={s.avatarText}>{(displayName[0]||'E').toUpperCase()}</Text>
       </Pressable>
     </View>
-    <View style={s.mission}><View style={s.focusTop}><Text style={s.focusLabel}>{hasResume?'進行中':'今日任務'}</Text><Text style={s.duration}>{coldStart?.kind==='CALIBRATION'?'6–8':curriculum.timeBudgetMinutes} 分鐘</Text></View><Text style={s.focusTitle}>{coldStart?.kind==='CALIBRATION'?'快速校準':coldStart?.kind==='MOCK_DIAGNOSTIC'?`${coldStart.label}短診斷`:curriculumLabel}</Text>{!hasResume&&!coldStart&&(todayTask||todayExamTask)?<UniversalLookupText text={todayTask?.title??String(todayExamTask?.payload.title??'考試練習')} style={s.focusBody}/>:null}</View>
+    <View style={s.mission}><View style={s.focusTop}><Text style={s.focusLabel}>{hasResume?'進行中':'今日任務'}</Text><Text style={s.duration}>{coldStart?.kind==='CALIBRATION'?'6–8':curriculum.timeBudgetMinutes} 分鐘</Text></View><Text style={s.focusTitle}>{coldStart?.kind==='CALIBRATION'?'快速校準':coldStart?.kind==='MOCK_DIAGNOSTIC'?`${coldStart.label}短診斷`:missionLabel}</Text>{!hasResume&&!coldStart&&(todayTask||todayExamTask)?<UniversalLookupText text={todayTask?.title??String(todayExamTask?.payload.title??'考試練習')} style={s.focusBody}/>:null}</View>
     <ContextualSpotlight active={profile.onboarding.status!=='COMPLETED'&&!profile.onboarding.firstDay?.milestones.TODAY_STARTED} copy="今天先把這個學會。" support={coldStart?.kind==='CALIBRATION'?'先用幾個小動作，EOT 才知道怎麼帶你開始。':undefined}><Pressable accessibilityRole="button" accessibilityHint={hasResume?'從保存的位置繼續':undefined} onPress={()=>void (async()=>{if(launchInFlight.current)return;launchInFlight.current=true;try{if(accessDecision!=='FULL'){router.push('/profile');return}if(!startHref.startsWith('/(tabs)')){await recordTutorialAction('TODAY_STARTED','today-mission-pressed','/(tabs)',startHref);await savePrivateBetaProductEventV1({learnerId:learnerPreferences.learnerId,sessionId:`today:${new Date().toISOString().slice(0,10)}`,taskId:'today',family:runtimeProductContext.productMode,type:'TODAY_STARTED',phase:'STARTED',eventKey:'today-action'})}router.push(startHref as Href)}finally{setTimeout(()=>{launchInFlight.current=false},800)}})()} style={({pressed})=>[s.primary,pressed&&s.pressed]}><Text style={s.primaryText}>{accessDecision==='FULL'?actionLabel:'查看產品設定'}</Text></Pressable></ContextualSpotlight>
   </ScrollView></SafeAreaView>;
 }

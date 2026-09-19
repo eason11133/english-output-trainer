@@ -76,7 +76,7 @@ export function ProfileSettingsScreen(){
     <SparseCard title="分享我的 Beta 回饋" body="10 秒回饋，不影響你的英文紀錄。報告不包含作答內容。">
       <LearnerAction label={betaExportBusy?'正在準備…':'分享回饋'} loading={betaExportBusy} disabled={betaExportBusy} onPress={()=>void shareBetaReport()}/>
     </SparseCard>
-    {Platform.OS!=='web'?<SparseCard title="這台裝置上的資料" body="清除目前學習者的作答、能力紀錄、Teacher 歷程、草稿與 Beta 回饋。匿名安裝識別碼會保留，避免把同一台裝置誤算成新安裝。"><LearnerAction label="清除這台裝置上的 EOT 學習資料" variant="secondary" onPress={confirmReset}/></SparseCard>:null}
+    {Platform.OS!=='web'?<SparseCard title="這台裝置上的資料" body="清除目前學習者的作答、能力紀錄、學習歷程、草稿與 Beta 回饋。匿名安裝識別碼會保留，避免把同一台裝置誤算成新安裝。"><LearnerAction label="清除這台裝置上的 EOT 學習資料" variant="secondary" onPress={confirmReset}/></SparseCard>:null}
 
     {saveMessage?<Text style={s.message}>{saveMessage}</Text>:null}
     <LearnerAction label="儲存設定" onPress={()=>void save()}/>

@@ -2,7 +2,7 @@ import { eotLearnerTokensV1 as woodTheme } from '../../src/ui/tokens';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Modal, Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
-import { coreReverseLookupLexiconV1, lookupDirectionForTextV1, resolveReverseContextV1, resolveTapPhraseFirstContextV1, type ContextualLookupResultV1, type LookupAssessmentModeV1 } from '../../src/lookup';
+import { coreReverseLookupLexiconV1, lookupDirectionForTextV1, normalizeTappedLemmaV1, resolveReverseContextV1, resolveTapPhraseFirstContextV1, type ContextualLookupResultV1, type LookupAssessmentModeV1 } from '../../src/lookup';
 import { nativeCorpusServiceV1 } from '../../src/persistence/nativeCorpus';
 import { eotLearnerTokensV1 as t } from '../../src/ui';
 import {ContextualSpotlight} from '../experience/ContextualSpotlight';
@@ -35,7 +35,7 @@ export function UniversalLookupText({text,paragraph,assessmentMode='NONE',active
     try{
       if(reverse){setFallbackMessage('本機辭典目前找不到這段中文的安全英文表達；你仍可繼續作答。');onLookupResult?.(next);await recordEncounter(next,token);return}const corpus=await nativeCorpusServiceV1.get();
       if(corpus.status==='READY'){
-        const found=await corpus.port.lookupLemma(token.toLocaleLowerCase('en'),'LEARNER_PRODUCTION'),sense=found.senses[0];
+        const found=await corpus.port.lookupLemma(normalizeTappedLemmaV1(token),'LEARNER_PRODUCTION'),sense=found.senses[0];
         if(sense){await publish({status:'RESOLVED',tappedToken:token,lemma:found.lemma,senseId:sense.senseId,partOfSpeech:sense.pos,meaningZhTw:sense.glosses[0]??'English definition available',usageNote:'本機辭典英文釋義',confidence:'MEDIUM',provenanceRefs:[sense.provenance.sourceRecordId],supportEffect:'LOOKUP_ASSISTED'},token);return}
       }
       setFallbackMessage('本機辭典目前找不到這個詞；你仍可繼續作答。');onLookupResult?.(next);await recordEncounter(next,token);

@@ -13,10 +13,11 @@ export interface MyEnglishVMV1 {
   state:'EMPTY'|'READY';
   recentLearnerEnglish:readonly string[];
   practiceAgain:readonly string[];
+  recentMemory:readonly string[];
   progressNarrative:string;
 }
 export async function loadMyEnglishVMV1(learnerId:string):Promise<MyEnglishVMV1>{
-  const events=await operationalHistoryReadPortV1.canonicalEvidence(learnerId);
+  const [events,encounters]=await Promise.all([operationalHistoryReadPortV1.canonicalEvidence(learnerId),canonicalLexicalEncounterStoreV1.listForLearner(learnerId)]);
   const projection=projectLearnerModelV3(learnerId,events);
   const items=projection.capabilitySlice;
   const recentLearnerEnglish=[...events]
@@ -38,6 +39,7 @@ export async function loadMyEnglishVMV1(learnerId:string):Promise<MyEnglishVMV1>
     state:items.length?'READY':'EMPTY',
     recentLearnerEnglish,
     practiceAgain,
+    recentMemory:[...encounters].filter(item=>item.lookupResultExposed).sort((a,b)=>b.occurredAt.localeCompare(a.occurredAt)).map(item=>`${item.selectedSpan}：查過，但還不算已經會了。`).filter((value,index,all)=>all.indexOf(value)===index).slice(0,2),
     progressNarrative:hasWeakening
       ?'有些英文之前已經能自己完成，最近提取比較不穩。歷史進展仍會保留，接下來會用短練習把它拉回來。'
       :hasBroaderUse

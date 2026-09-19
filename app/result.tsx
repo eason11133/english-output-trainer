@@ -22,9 +22,9 @@ export default function Result(){
   useLearnerBack(exitResult);
   return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}>
     {!vm?<ActivityIndicator/>:vm.state==='EMPTY'
-      ?<><Text style={s.mark}>✓</Text><Text style={s.title}>完成</Text><Text style={s.body}>這次練習已保存。</Text></>
+      ?<><Text style={s.mark}>✓</Text><Text style={s.title}>這次先留在這裡</Text><Text style={s.body}>剛才做到的位置已保存；查過的字和看過的提示都沒有被算成已經會了。</Text></>
       :<><Text style={s.mark}>✓</Text><Text style={s.title}>{vm.canDoMoreIndependently?'這次更能自己完成了':vm.worthAnotherTry?'找到下一個練習點':'這次先完成到這裡'}</Text><UniversalLookupText text={vm.nextStep} submitted style={s.body}/></>}
-    <Pressable accessibilityRole="button" onPress={()=>void (async()=>{if(tutorial)await recordTutorialAction('FIRST_RESULT_SEEN',`result-seen:${learnerPreferences.learnerId}`,'/result');exitResult()})} style={s.primary}><Text style={s.primaryText}>完成</Text></Pressable>
+    <Pressable accessibilityRole="button" onPress={()=>void (async()=>{if(tutorial)await recordTutorialAction('FIRST_RESULT_SEEN',`result-seen:${learnerPreferences.learnerId}`,'/result');exitResult()})} style={s.primary}><Text style={s.primaryText}>回到 Today</Text></Pressable>
     {tutorial?<Pressable accessibilityRole="button" onPress={()=>void (async()=>{await recordTutorialAction('FIRST_RESULT_SEEN',`result-seen:${learnerPreferences.learnerId}`,'/result');navigateOnce('/(tabs)/my-english')})} style={s.secondary}><Text style={s.secondaryText}>看看這次留下的英文</Text></Pressable>:null}
   </ScrollView></SafeAreaView>;
 }

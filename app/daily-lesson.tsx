@@ -87,7 +87,7 @@ export default function Lesson(){
     const pending=current.pendingTeacherContinuation;
     if(!pending||inFlightContinuations.current.has(pending.continuationId))return;
     const recorded=current.blockEvents.find(item=>item.id===pending.eventId);
-    if(!recorded){setError('已保存的學習回應缺少可恢復的 Teacher 事件；不會重送或猜測。');return}
+    if(!recorded){setError('剛才的學習進度無法完整接回。你的原作仍然保留，我們不會重送或猜測。');return}
     inFlightContinuations.current.add(pending.continuationId);
     try{
       const adapted=adaptLearnerEventToPedagogyV1({id:recorded.id,type:recorded.type,occurredAt:recorded.occurredAt,support:recorded.supportLevel,observationIds:[recorded.id],attemptId:recorded.instanceId,role:current.decision?.pedagogicalIntent==='RETURN'?'SYSTEM':current.decision?.pedagogicalIntent,evaluatedOutcome:typeof recorded.payload.pedagogicalOutcome==='string'?recorded.payload.pedagogicalOutcome as PedagogicalEventV1['outcome']:undefined,productionConditions:recorded.productionConditions});
