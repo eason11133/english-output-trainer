@@ -90,6 +90,7 @@ export interface OnboardingContextV2 {
   firstDay?: FirstDayTutorialState;
   setupStage?: 'DATE'|'TIME'|'SIGNAL'|'MOCK_SCORE'|'QUICK_DIAG'|'HANDOFF'|'MISSION_STARTED';
   examTargetDate?: string;
+  nextMockDate?: string;
   examTargetUnknown?: boolean;
   initialSignalSource?: 'MOCK'|'QUICK_DIAG';
   mockScoreDraft?: Readonly<Record<string,string>>;

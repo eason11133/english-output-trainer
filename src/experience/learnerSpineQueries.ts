@@ -7,7 +7,7 @@ import { lexicalTodayPrioritySignalV1, projectOperationSpecificLexicalMemoryV1, 
 import { advanceRetentionDueV1, deferRetentionNeedV1, todayRetentionProjectionV1 } from '../longitudinal';
 import { projectMyEnglishAbilityV1 } from './myEnglishAbility';
 
-export async function loadMyEnglishAbilityV1(learnerId:string){const events=await operationalHistoryReadPortV1.canonicalEvidence(learnerId),truth=projectLearnerModelV3(learnerId,events),areas=projectMyEnglishAbilityV1(truth.capabilitySlice);return{state:truth.capabilitySlice.length?'READY' as const:'EMPTY' as const,areas,recommendations:areas.filter(x=>x.status==='MOST_WORTH_PRACTICING').slice(0,3)}}
+export async function loadMyEnglishAbilityV1(learnerId:string){const events=await operationalHistoryReadPortV1.canonicalEvidence(learnerId),truth=projectLearnerModelV3(learnerId,events),areas=projectMyEnglishAbilityV1(truth.capabilitySlice);return{state:areas.length?'READY' as const:'EMPTY' as const,areas,recommendations:areas.filter(x=>x.status==='MOST_WORTH_PRACTICING').slice(0,3)}}
 
 export interface MyEnglishVMV1 {
   state:'EMPTY'|'READY';
@@ -16,6 +16,18 @@ export interface MyEnglishVMV1 {
   recentMemory:readonly string[];
   progressNarrative:string;
 }
+const learnerFacingEvidenceObservationV1=(event:{observation:string;performanceDimension?:string;productionMode:string;capabilityTargetRef?:string|null;targetRef?:string|null})=>{
+  const observation=event.observation.trim();
+  const internalReceipt=/^Exam\s|\bcandidates=|\bSUCCESS\s*\[|\bFAILURE\s*\[/i.test(observation);
+  if(!internalReceipt)return observation;
+  const target=String(event.capabilityTargetRef??event.targetRef??'');
+  if(event.performanceDimension==='RECOGNITION'||target.startsWith('reading.'))return event.productionMode==='INDEPENDENT'
+    ?'今天已在新的內容裡，沒有提示地完成一次閱讀判斷。'
+    :'今天已在提示下完成一次閱讀判斷；之後還要自己再試。';
+  return event.productionMode==='INDEPENDENT'
+    ?'今天已在沒有提示下完成一次英文動作；之後還會換情境確認。'
+    :'今天的練習已有進展；之後會減少提示再確認。';
+};
 export async function loadMyEnglishVMV1(learnerId:string):Promise<MyEnglishVMV1>{
   const [events,encounters]=await Promise.all([operationalHistoryReadPortV1.canonicalEvidence(learnerId),canonicalLexicalEncounterStoreV1.listForLearner(learnerId)]);
   const projection=projectLearnerModelV3(learnerId,events);
@@ -23,13 +35,13 @@ export async function loadMyEnglishVMV1(learnerId:string):Promise<MyEnglishVMV1>
   const recentLearnerEnglish=[...events]
     .filter(event=>event.evidencePolarity==='POSITIVE'&&event.semanticProvenance==='LEARNER_ORIGINATED'&&event.observation.trim().length>0)
     .sort((a,b)=>b.occurredAt.localeCompare(a.occurredAt))
-    .map(event=>event.observation.trim())
+    .map(learnerFacingEvidenceObservationV1)
     .filter((value,index,all)=>all.indexOf(value)===index)
     .slice(0,3);
   const practiceAgain=[...events]
     .filter(event=>event.evidencePolarity==='POSITIVE'&&['CUED','GUIDED','MODELED'].includes(event.productionMode)&&event.semanticProvenance==='LEARNER_ORIGINATED'&&event.observation.trim().length>0)
     .sort((a,b)=>b.occurredAt.localeCompare(a.occurredAt))
-    .map(event=>event.observation.trim())
+    .map(learnerFacingEvidenceObservationV1)
     .filter((value,index,all)=>all.indexOf(value)===index)
     .slice(0,3);
   const hasIndependent=items.some(item=>['INDEPENDENT_LOCAL_CONTROL','TRANSFER_PENDING','TRANSFER_SUPPORTED','RETENTION_PENDING','RETENTION_SUPPORTED'].includes(item.state));
@@ -74,6 +86,7 @@ export interface TodayCurriculumVMV1{
   focusNeed?:string;
   reasonCodes:readonly string[];
   lessonPlan?:LessonPlanV1;
+  learnerReason?:string;
   reconsideredAfterNoEffect?:boolean;
 }
 export async function loadTodayCurriculumVMV1(
@@ -99,6 +112,7 @@ export async function loadTodayCurriculumVMV1(
     focusNeed:plan.primaryFocus.needKind,
     reasonCodes:plan.reasonCodes,
     lessonPlan:canonicalCurriculumV1.lessonPlan(plan),
+    learnerReason:(()=>{const match=truth.capabilitySlice.find(item=>item.targetRef===plan.primaryFocus.targetRef&&item.facet===plan.primaryFocus.facet)??truth.capabilitySlice.find(item=>item.targetRef===plan.primaryFocus.targetRef);if(!match)return'根據你最近的作答，今天先把這一點處理清楚。';if(match.currentAvailability==='WEAKENING'||match.state==='OBSERVED_FRAGILE')return'這一點以前做得到，最近有點不穩，今天先把它拉回來。';if(match.state==='ASSISTED_CONTROL'||match.supportDependence==='HIGH'||match.supportDependence==='MEDIUM')return'上次還需要一些提示，今天會少扶一點再試。';if(['INDEPENDENT_LOCAL_CONTROL','TRANSFER_PENDING'].includes(match.state))return'上次已經能自己完成，今天換個內容再確認一次。';if(match.transferSupport||match.state==='RETENTION_PENDING'||match.state==='TRANSFER_SUPPORTED')return'換過情境已經成功一次，今天隔一段時間再確認。';return'根據你最近的作答，今天先練最值得補的這一點。'})(),
     reconsideredAfterNoEffect,
   };
 }

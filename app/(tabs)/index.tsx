@@ -11,9 +11,8 @@ import { productExperienceAccessDecisionV2 } from '../../src/product';
 import { eotLearnerTokensV1 as t } from '../../src/ui';
 import { loadActiveExamOperationalCheckpointV1 } from '../../src/persistence/examOperationalPersistence';
 import { gsatColdStartDecisionV1 } from '../../src/product-policy/exam';
-import{UniversalLookupText}from'../../components/learning/UniversalLookupText';
 import{savePrivateBetaProductEventV1}from'../../src/market-validation/privateBetaPulse';
-import{ContextualSpotlight}from'../../components/experience/ContextualSpotlight';
+import{UniversalLookupText}from'../../components/learning/UniversalLookupText';
 import type { CapabilityFacet } from '../../src/domain/english/EnglishDomain';
 
 type TodayRuntime=Awaited<ReturnType<typeof loadTodayRuntimeVMV1>>;
@@ -32,7 +31,6 @@ export default function Today(){
   const [hasEvidence,setHasEvidence]=useState<boolean|null>(null);
   const launchInFlight=useRef(false);
   const accessDecision=productExperienceAccessDecisionV2(profile,profile.access.activeExperience);
-  const displayName=learnerPreferences.displayName==='Learner'?'':learnerPreferences.displayName;
   useEffect(()=>{void loadTodayRuntimeVMV1(learnerPreferences.learnerId).then(setActive)},[learnerPreferences.learnerId]);
   useEffect(()=>{void loadTodayCurriculumVMV1(learnerPreferences.learnerId,runtimeProductContext).then(setCurriculum)},[learnerPreferences.learnerId,runtimeProductContext]);
   useEffect(()=>{void loadActiveExamOperationalCheckpointV1(learnerPreferences.learnerId).then(setActiveExam)},[learnerPreferences.learnerId]);
@@ -49,33 +47,24 @@ export default function Today(){
   const todayTask=runtimeProductContext.productMode!=='EXAM'&&curriculum.state==='READY'?productTaskForTargetV1(curriculum.lessonPlan?.targetRef):undefined;
   const examResumeHref=examResume?`/exam-practice?practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(examResume.runtime.family as Parameters<typeof examFamilyToPracticeFamilyV1>[0]))}`:undefined;
   const startHref=examResumeHref??(runtimeProductContext.productMode!=='EXAM'&&active.hasActiveLesson?'/daily-lesson':coldStart?.kind==='CALIBRATION'?'/quick-calibration':coldStart?.kind==='MOCK_DIAGNOSTIC'?`/exam-practice?practiceFamily=${encodeURIComponent(coldStart.practiceFamily)}`:todayExamTask?`/exam-practice?practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(todayExamTask.family))}&taskId=${encodeURIComponent(todayExamTask.task_id)}`:todayTask?`/daily-lesson?origin=TODAY&systemTask=${encodeURIComponent(todayTask.id)}`:'/(tabs)/practice');
-  const actionLabel=hasResume?'繼續進行中的練習':coldStart?.kind==='CALIBRATION'?'先做 6–8 分鐘快速校準':coldStart?.kind==='MOCK_DIAGNOSTIC'?`先確認${coldStart.label}`:'開始今天的練習';
+  const actionLabel=hasResume?'繼續':coldStart?.kind==='CALIBRATION'?'開始':coldStart?.kind==='MOCK_DIAGNOSTIC'?'開始':'開始';
+  const reason=hasResume?'你做到一半，進度還在。':curriculum.learnerReason??(hasEvidence?'上次的學習紀錄顯示，這是現在最值得確認的一段。':'先從你最近模考最容易追回的地方開始。');
   return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.content}>
-    <View style={s.header}><View style={s.heading}>
-        <Text style={s.kicker}>TODAY</Text>
-        <Text style={s.title}>{displayName?`${displayName}，今天練這個`:'今天練這個'}</Text>
-      </View>
-      <Pressable accessibilityLabel="個人設定" onPress={()=>router.push('/profile')} style={s.avatar}>
-        <Text style={s.avatarText}>{(displayName[0]||'E').toUpperCase()}</Text>
-      </Pressable>
-    </View>
-    <View style={s.mission}><View style={s.focusTop}><Text style={s.focusLabel}>{hasResume?'進行中':'今日任務'}</Text><Text style={s.duration}>{coldStart?.kind==='CALIBRATION'?'6–8':curriculum.timeBudgetMinutes} 分鐘</Text></View><Text style={s.focusTitle}>{coldStart?.kind==='CALIBRATION'?'快速校準':coldStart?.kind==='MOCK_DIAGNOSTIC'?`${coldStart.label}短診斷`:missionLabel}</Text>{!hasResume&&!coldStart&&(todayTask||todayExamTask)?<UniversalLookupText text={todayTask?.title??String(todayExamTask?.payload.title??'考試練習')} style={s.focusBody}/>:null}</View>
-    <ContextualSpotlight active={profile.onboarding.status!=='COMPLETED'&&!profile.onboarding.firstDay?.milestones.TODAY_STARTED} copy="今天先把這個學會。" support={coldStart?.kind==='CALIBRATION'?'先用幾個小動作，EOT 才知道怎麼帶你開始。':undefined}><Pressable accessibilityRole="button" accessibilityHint={hasResume?'從保存的位置繼續':undefined} onPress={()=>void (async()=>{if(launchInFlight.current)return;launchInFlight.current=true;try{if(accessDecision!=='FULL'){router.push('/profile');return}if(!startHref.startsWith('/(tabs)')){await recordTutorialAction('TODAY_STARTED','today-mission-pressed','/(tabs)',startHref);await savePrivateBetaProductEventV1({learnerId:learnerPreferences.learnerId,sessionId:`today:${new Date().toISOString().slice(0,10)}`,taskId:'today',family:runtimeProductContext.productMode,type:'TODAY_STARTED',phase:'STARTED',eventKey:'today-action'})}router.push(startHref as Href)}finally{setTimeout(()=>{launchInFlight.current=false},800)}})()} style={({pressed})=>[s.primary,pressed&&s.pressed]}><Text style={s.primaryText}>{accessDecision==='FULL'?actionLabel:'查看產品設定'}</Text></Pressable></ContextualSpotlight>
+    <View style={s.header}><Text style={s.title}>今天</Text><Pressable accessibilityRole="button" accessibilityLabel="個人設定" onPress={()=>router.push('/profile')} style={s.profile}><Text style={s.profileText}>設定</Text></Pressable></View>
+    <View style={s.mission}><Text style={[s.focusLabel,hasResume&&s.resumeLabel]}>{hasResume?'接著上次':coldStart?.kind==='CALIBRATION'?'先抓準起點':missionLabel.split(' · ')[1]??'今日任務'}</Text><UniversalLookupText text={coldStart?.kind==='CALIBRATION'?'先用幾個小動作，抓準你的英文起點。':coldStart?.kind==='MOCK_DIAGNOSTIC'?`先確認${coldStart.label}最容易追回的地方。`:todayTask?.title??String(todayExamTask?.payload.title??missionLabel)} style={s.focusTitle}/><Text numberOfLines={3} style={s.reason}>{reason}</Text><Text style={s.duration}>約 {coldStart?.kind==='CALIBRATION'?'8':curriculum.timeBudgetMinutes} 分鐘</Text></View>
+    <Pressable accessibilityRole="button" accessibilityHint={hasResume?'從保存的位置繼續':undefined} onPress={()=>void (async()=>{if(launchInFlight.current)return;launchInFlight.current=true;try{if(accessDecision!=='FULL'){router.push('/profile');return}if(!startHref.startsWith('/(tabs)')){await recordTutorialAction('TODAY_STARTED','today-mission-pressed','/(tabs)',startHref);await savePrivateBetaProductEventV1({learnerId:learnerPreferences.learnerId,sessionId:`today:${new Date().toISOString().slice(0,10)}`,taskId:'today',family:runtimeProductContext.productMode,type:'TODAY_STARTED',phase:'STARTED',eventKey:'today-action'})}router.push(startHref as Href)}finally{setTimeout(()=>{launchInFlight.current=false},800)}})()} style={({pressed})=>[s.primary,pressed&&s.pressed]}><Text style={s.primaryText}>{accessDecision==='FULL'?actionLabel:'查看產品設定'}</Text></Pressable>
   </ScrollView></SafeAreaView>;
 }
 
 const s=StyleSheet.create({
   safe:{flex:1,backgroundColor:t.colors.background},
   loading:{flex:1,alignItems:'center',justifyContent:'center',gap:12},
-  content:{width:'100%',maxWidth:t.layout.learnerShellMaxWidth,alignSelf:'center',paddingHorizontal:24,paddingTop:28,paddingBottom:90,gap:28},
-  header:{flexDirection:'row',justifyContent:'space-between',alignItems:'flex-start'},
-  heading:{flex:1,paddingRight:14},
-  kicker:{color:t.colors.midWood,fontSize:11,fontWeight:'900',letterSpacing:1.8},
-  title:{color:t.colors.ink,fontSize:32,lineHeight:40,fontWeight:'900',letterSpacing:-.7,marginTop:8},
+  content:{flexGrow:1,width:'100%',maxWidth:t.layout.learnerShellMaxWidth,alignSelf:'center',paddingHorizontal:20,paddingTop:28,paddingBottom:88},
+  header:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},
+  title:{color:t.colors.ink,fontSize:30,lineHeight:37,fontWeight:'600'},
   body:{color:t.colors.muted,fontSize:16,lineHeight:25},
-  mission:{marginTop:18,paddingVertical:24,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.line,gap:12},focusTop:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},focusLabel:{color:t.colors.midWood,fontSize:12,fontWeight:'900'},duration:{fontSize:13,fontWeight:'800',color:t.colors.subtle},focusTitle:{color:t.colors.ink,fontSize:25,lineHeight:33,fontWeight:'900'},focusBody:{color:t.colors.muted,fontSize:14,lineHeight:22},
-  avatar:{width:44,height:44,borderRadius:22,backgroundColor:t.colors.paper,borderWidth:1,borderColor:t.colors.line,alignItems:'center',justifyContent:'center'},
-  avatarText:{color:t.colors.ink,fontWeight:'900'},
-  primary:{minHeight:60,borderRadius:18,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},pressed:{opacity:.88,transform:[{scale:.99}]},
-  primaryText:{color:t.colors.paper,fontSize:17,fontWeight:'900'}
+  mission:{flex:1,justifyContent:'center',paddingVertical:48,gap:16},focusLabel:{color:t.colors.muted,fontSize:12,lineHeight:18,fontWeight:'500'},resumeLabel:{color:t.colors.focus},duration:{fontSize:14,lineHeight:21,color:t.colors.muted,marginTop:4},focusTitle:{color:t.colors.ink,fontSize:24,lineHeight:31,fontWeight:'600'},focusBody:{color:t.colors.muted,fontSize:14,lineHeight:21},
+  reason:{color:t.colors.muted,fontSize:16,lineHeight:24},profile:{minHeight:44,justifyContent:'center',paddingLeft:16},profileText:{fontSize:14,color:t.colors.muted},
+  primary:{minHeight:52,borderRadius:14,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},pressed:{opacity:.9,transform:[{scale:.98}]},
+  primaryText:{color:t.colors.paper,fontSize:16,fontWeight:'600'}
 });

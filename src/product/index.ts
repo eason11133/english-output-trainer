@@ -1,5 +1,6 @@
 export type { ProductContextV1 } from '../architecture/contracts';
 export * from './types';
+export * from './personalizedRoutes';
 export * from './model';
 export * from './access';
 export * from './projection';

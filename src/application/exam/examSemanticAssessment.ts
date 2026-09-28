@@ -53,7 +53,7 @@ const TRANSLATION_RUBRICS:Readonly<Record<string,TranslationMeaningRubricV1>>=Ob
 const words=(text:string)=>text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)??[];
 const sentences=(text:string)=>text.split(/[.!?]+/).map(value=>value.trim()).filter(Boolean);
 const paragraphs=(text:string)=>text.split(/\n\s*\n/).map(value=>value.trim()).filter(Boolean);
-const finiteVerb=/\b(?:am|is|are|was|were|be|been|being|have|has|had|do|does|did|can|could|may|might|must|shall|should|will|would|shows?|indicates?|suggests?|finds?|found|helps?|makes?|uses?|learns?|reduces?|allows?|improves?|works?|prepares?|reviews?|studies|gives?|keeps?|needs?|wants?|thinks?|believes?|[a-z]+ed)\b/i;
+const finiteVerb=/\b(?:am|is|are|was|were|be|been|being|have|has|had|do|does|did|can|could|may|might|must|shall|should|will|would|like|prefer|finish|start|choose|study|learn|use|work|feel|save|spend|remember|understand|focus|shows?|indicates?|suggests?|finds?|found|helps?|makes?|uses?|learns?|reduces?|allows?|improves?|works?|prepares?|reviews?|studies|gives?|keeps?|needs?|wants?|thinks?|believes?|[a-z]+ed)\b/i;
 /** Conservative local firewall. It qualifies realization; it does not decide semantic correctness. */
 export function openEnglishResponseIntegrityV1(response:string):{qualified:boolean;reasonCodes:readonly string[]}{
   const tokens=words(response),clauses=sentences(response);
@@ -152,9 +152,11 @@ function mixedShortResponseAssessment(task:ExamSemanticTaskV1,responseKey:string
 }
 function assessUnit(task:ExamSemanticTaskV1,unit:SemanticUnitV1,response:string):SemanticAssessmentDecisionV1{
   if(task.validation?.canonical!=='PASS')return abstain('exam-semantic-task-validity-v1','EXAM_TASK_NOT_CANONICALLY_VALIDATED');
-  const compiled=evaluateV35SemanticUnitV1(task,unit,response);if(compiled)return qualify(compiled);
+  if(task.family==='TRANSLATION'&&response.trim()&&words(response).length<3)return qualify(judgment('PARTIALLY_CORRECT','translation-minimum-meaning-coverage-v1',[{dimension:'meaning_unit_coverage',outcome:'PARTIALLY_CORRECT',reasonCodes:['LEARNER_OUTPUT_PRESENT_BUT_TOO_SHORT_TO_COVER_SOURCE_MEANING']}],['CLEAR_MEANING_UNIT_OMISSION','VALID_ALTERNATIVES_STILL_ALLOWED']));
+  const compiled=evaluateV35SemanticUnitV1(task,unit,response);
   let decision:SemanticAssessmentDecisionV1;
-  if(task.family==='TRANSLATION'){
+  if(compiled)decision=qualify(compiled);
+  else if(task.family==='TRANSLATION'){
     const sources=Array.isArray(task.payload.chineseSentences)?task.payload.chineseSentences.map(String):[];
     const index=Math.max(0,Number(unit.responseKey));decision=translationAssessment(sources[index]??'',response);
   }
@@ -166,6 +168,7 @@ function assessUnit(task:ExamSemanticTaskV1,unit:SemanticUnitV1,response:string)
   else return abstain('exam-semantic-unhandled-v1','NO_BOUNDED_SEMANTIC_RUBRIC_FOR_CANONICAL_UNIT');
   if(decision.outcome==='CORRECT'&&decision.candidateEvidenceAllowed){
     const integrity=openEnglishResponseIntegrityV1(response);
+    if(task.family==='WRITING'&&!integrity.qualified)return qualify(judgment('PARTIALLY_CORRECT',`writing-realization-firewall-v1:${task.task_id}`,[{dimension:'language_control',outcome:'PARTIALLY_CORRECT',reasonCodes:integrity.reasonCodes}],['LEARNER_DRAFT_REQUIRES_TARGETED_REPAIR',...integrity.reasonCodes]));
     if(!integrity.qualified)return Object.freeze({...decision,learnerEvidenceConfidence:'NONE',candidateEvidenceAllowed:false,negativeEvidenceAllowed:false,consumeEvidenceOpportunity:false,abstained:true,reasonCodes:Object.freeze([...decision.reasonCodes,...integrity.reasonCodes,'SEMANTIC_DIAGNOSIS_RETAINED_WITHOUT_POSITIVE_EVIDENCE'])});
   }
   return decision;

@@ -10,3 +10,4 @@ export const eotUIContractV1={
 
 export * from './capabilities';
 export * from './waveOStatus';
+export * from './puzzleStep';

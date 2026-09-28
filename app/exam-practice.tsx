@@ -42,13 +42,15 @@ import { savePrivateBetaProductEventV1 } from '../src/market-validation/privateB
 import { privateBetaLocalDateV1 } from '../src/market-validation/privateBetaAnalytics';
 import { eotLearnerTokensV1 as t } from '../src/ui';
 import { UniversalLookupText } from '../components/learning/UniversalLookupText';
-import {ContextualSpotlight} from '../components/experience/ContextualSpotlight';
 import {useLearnerBack} from '../components/experience/useLearnerBack';
 import { requestGsatSemanticAssessment, requestQualifiedBlockDecision } from '../lib/teacherApi';
 import { createExamTeacherProviderV1 } from '../src/application/exam/examTeacherProvider';
 import { assessGsatSemanticLiveV1 } from '../src/application/exam/gsatLiveSemanticAssessment';
 import { evaluateExamTeacherInteractionV1 } from '../src/application/exam/examInteractionEvaluator';
 import type { CapabilityFacet } from '../src/domain/english/EnglishDomain';
+import {projectExamTeachingPuzzleStepV1} from '../src/application/exam/examPuzzleProjection';
+import type {PuzzleLearnerEvent} from '../src/ui/puzzleStep';
+import {PuzzleStepRenderer} from '../components/learning/PuzzleRenderers';
 
 const examTeacherProvider=createExamTeacherProviderV1(requestQualifiedBlockDecision);
 const familyLabel:Record<string,string>={VOCABULARY:'詞彙',COMPREHENSIVE:'綜合測驗',CONTEXTUAL_FILL:'文意選填',DISCOURSE:'篇章結構',READING:'閱讀',MIXED:'混合題',TRANSLATION:'中譯英',WRITING:'英文作文'};
@@ -110,6 +112,8 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const [busy, setBusy] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [resumeMessage, setResumeMessage] = useState('');
+  const [writingPromptOpen,setWritingPromptOpen]=useState(true);
+  const [transportError,setTransportError]=useState(false);
   const[lookupExposure,setLookupExposure]=useState<string[]>([]);
   const runtimeRef = useRef<ExamOperationalRuntimeV1 | null>(null);
   const submitInFlightRef=useRef(false);
@@ -143,6 +147,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     lookupExposure,
     unitId:firstUnit?.unitId,
     responseKey:firstUnit?.responseKey,
+    expectedResponse:firstUnit?String((task.answer_or_rubric as {answers?:Record<string,unknown>}|undefined)?.answers?.[firstUnit.responseKey]??''):undefined,
     previousLearnerResponse:firstUnit?answers[firstUnit.responseKey]:undefined,
   } as const;
   function diagnosticProbe(decision:QualifiedInnerTutorDecisionV1){
@@ -270,14 +275,22 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   }
 
   async function submit() {
-    if(submitInFlightRef.current)return;submitInFlightRef.current=true;setBusy(true);
+    if(submitInFlightRef.current)return;submitInFlightRef.current=true;setTransportError(false);setBusy(true);
     try {
       const submitted=updateExamOperationalRuntimeV1(baseRuntime(),{responses:answers,submittedAt:new Date().toISOString()});runtimeRef.current=submitted;await saveExamOperationalCheckpointV1(lessonPlan,submitted);
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'RESPONSE_SUBMITTED', phase: 'ANSWERING', eventKey: `response:${runtimeRef.current?.decisionHistory.length ?? 0}` });
       const truth = await learnerTruth();
       const localSemantic = assessExamSemanticUnitsV1({ task, response: answers });
       const liveSemantic=['TRANSLATION','WRITING'].includes(task.family)?await assessGsatSemanticLiveV1({task,response:answers,lookupExposure,request:requestGsatSemanticAssessment}):undefined;
-      const semantic = liveSemantic?{...localSemantic,decisionsByUnitId:{...localSemantic.decisionsByUnitId,...liveSemantic}}:localSemantic;
+      const usableLive=liveSemantic?Object.fromEntries(Object.entries(liveSemantic).filter(([unitId,decision])=>{
+        if(decision.abstained||['AMBIGUOUS','ABSTAIN'].includes(decision.outcome))return false;
+        const local=localSemantic.decisionsByUnitId[unitId];
+        // A model may recognize a valid alternative, but it must not erase a
+        // deterministic writing constraint or the local realization firewall.
+        if(task.family==='WRITING'&&decision.outcome==='CORRECT'&&local&&(local.outcome==='PARTIALLY_CORRECT'||local.reasonCodes.some(code=>code.includes('NOT_MET')||code.includes('INSUFFICIENT')||code.includes('NOT_SAFELY_QUALIFIED'))))return false;
+        return true;
+      })):{};
+      const semantic = liveSemantic?{...localSemantic,decisionsByUnitId:{...localSemantic.decisionsByUnitId,...usableLive}}:localSemantic;
       const result: CanonicalExamSubmissionResultV1 = await submitExamToCanonicalTeacherV1({
         learnerId: learnerId,
         sessionId,
@@ -299,29 +312,33 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       await persistExamEvidenceAdmissionsV1({ learnerId: learnerId, sessionId, lessonPlan: examLessonPlanForDecisionV1(lessonPlan, result.teacherDecision), runtime, units: admissions });
       await recordExamTaskHistoryV1({learnerId,task,purpose:allocationPurpose,attemptId:runtime.attemptId});
       if(allocationPurpose==='FRESH_CHECK'&&result.assessment!=='NOT_EVALUATED')await recordTutorialAction('FIRST_FRESH_ATTEMPT_COMPLETED',`fresh:${runtime.attemptId}`,'/exam-practice');
+    } catch {
+      setTransportError(true);
     } finally {
       submitInFlightRef.current=false;
       setBusy(false);
     }
   }
 
-  async function completeInteraction(kind: 'SUBMITTED' | 'IMPASSE' | 'RETURNED') {
+  async function completeInteraction(kind: 'SUBMITTED' | 'IMPASSE' | 'RETURNED',responseOverride?:string) {
     if (!teacherDecision || submitInFlightRef.current) return;
     submitInFlightRef.current=true;
+    setTransportError(false);
     setBusy(true);
     try {
-      const before = teacherDecision;
+      const before = teacherDecision,responseText=responseOverride??interactionText;
+      if(responseOverride!==undefined)setInteractionText(responseOverride);
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'TEACHER_INTERACTION_COMPLETED', phase: 'TEACHER_INTERACTION', interactionMode: interaction?.mode, teacherAction: before.action, mechanismId: before.provenance.selectedMechanismId, eventKey: `interaction-completed:${before.provenance.decisionPointId}` });
-      const checkpoint = updateExamOperationalRuntimeV1(baseRuntime(), { interactionText, teacherDecision: before, activeInteraction: interaction ?? null, phase: 'TEACHER_INTERACTION' });
+      const checkpoint = updateExamOperationalRuntimeV1(baseRuntime(), { interactionText:responseText, teacherDecision: before, activeInteraction: interaction ?? null, phase: 'TEACHER_INTERACTION' });
       runtimeRef.current = checkpoint;
       await saveExamOperationalCheckpointV1(examLessonPlanForDecisionV1(lessonPlan, before), checkpoint);
-      if(task.family==='VOCABULARY'&&interaction?.mode==='CHUNK_RECONSTRUCTION'&&kind==='SUBMITTED'&&interactionText==='D'){
+      if(task.family==='VOCABULARY'&&interaction?.mode==='CHUNK_RECONSTRUCTION'&&kind==='SUBMITTED'&&responseText===sourceTaskContext.expectedResponse){
         await startFreshAttempt(true);
         return;
       }
       const unitId=String(before.lineage?.context.sourceTaskContext?.unitId??firstUnit?.unitId??'');
       const unit=task.canonicalBinding?.units.find(item=>item.unitId===unitId);
-      const evaluation=kind==='SUBMITTED'&&['PRACTICE','ASSESS'].includes(before.blockDecision.pedagogicalIntent)?evaluateExamTeacherInteractionV1({task,unitId,learnerResponse:interactionText,previousLearnerResponse:unit?answers[unit.responseKey]:undefined,support:before.blockDecision.supportLevel,lookupExposure,decision:before}):undefined;
+      const evaluation=kind==='SUBMITTED'&&['PRACTICE','ASSESS'].includes(before.blockDecision.pedagogicalIntent)?evaluateExamTeacherInteractionV1({task,unitId,learnerResponse:responseText,previousLearnerResponse:unit?answers[unit.responseKey]:undefined,support:before.blockDecision.supportLevel,lookupExposure,decision:before}):undefined;
       if(evaluation?.outcome==='NOT_EVALUATED'){
         const guarded=updateExamOperationalRuntimeV1(checkpoint,{interactionEvaluation:{...evaluation,evaluationId:`evaluation:${before.provenance.decisionPointId}`},teacherMessage:'這個答案目前還不能安全判斷，請再補完整一點。'});
         runtimeRef.current=guarded;setTeacherMessage('這個答案目前還不能安全判斷，請再補完整一點。');
@@ -336,7 +353,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
         productContext: runtimeProductContext,
         learnerTruth: truth,
         previousDecision: before,
-        completion: { kind, response: interactionText, evaluatedOutcome:evaluation?.outcome },
+        completion: { kind, response:responseText, evaluatedOutcome:evaluation?.outcome },
         sourceTaskContext:{...sourceTaskContext,...before.lineage?.context.sourceTaskContext,registeredDiagnosticProbe:diagnosticProbe(before)},
         provider: examTeacherProvider,
       });
@@ -345,6 +362,8 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       const supportRank:Record<string,number>={MODELED:5,EXPLICIT:4,GUIDED:3,CUED:2,LIGHT:1,NONE:0};
       if(evaluation?.outcome==='SUCCESS'&&(supportRank[next.blockDecision.supportLevel]??9)<(supportRank[before.blockDecision.supportLevel]??9))await recordTutorialAction('FIRST_SUPPORT_FADE_COMPLETED',`fade:${next.provenance.decisionPointId}`,'/exam-practice');
       if(kind!=='IMPASSE'&&!coachMarks.teacher)markCoach('teacher');
+    } catch {
+      setTransportError(true);
     } finally {
       submitInFlightRef.current=false;
       setBusy(false);
@@ -354,8 +373,14 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   async function startFreshAttempt(force=false){
     if(busy&&!force)return;setBusy(true);
     try{
-      const history=await loadExamTaskHistoryV1(learnerId,task.family),recent=[...history,{taskId:task.task_id,contentHash:examContentHashV1(task),contentLineage:task.content_lineage_id,freshnessGroupId:task.freshness_group_id}],resolution=resolveProductionExamContentV1({family:task.family,learnerId,role:'INDEPENDENT_ASSESS',rotationKey:`${sessionId}:fresh`,recent}),fresh=resolution.status==='READY'?resolution.content.task:undefined;
+      const targetRef=teacherDecision?.provenance.targetRef??firstUnit?.canonicalTargetRef,facet=(teacherDecision?.provenance.facet??firstUnit?.canonicalFacet)as CapabilityFacet|undefined;
+      const history=await loadExamTaskHistoryV1(learnerId,task.family),recent=[...history,{taskId:task.task_id,contentHash:examContentHashV1(task),contentLineage:task.content_lineage_id,freshnessGroupId:task.freshness_group_id}],resolution=resolveProductionExamContentV1({family:task.family,learnerId,role:'INDEPENDENT_ASSESS',targetRef,facet,rotationKey:`${sessionId}:fresh`,recent}),fresh=resolution.status==='READY'?resolution.content.task:undefined;
       if(!fresh){setTeacherMessage('目前沒有另一題符合相同範圍且通過驗證的獨立題；這次進展會保留，稍後再確認。');return}
+      // Moving from a supported repair into a clean task is the observable
+      // support-fade event. Persist both receipts before the fresh task can
+      // complete, otherwise first-use completion can outrun its prerequisites.
+      await recordTutorialAction('FIRST_TEACHER_REPAIR_COMPLETED',`repair-to-fresh:${runtimeRef.current?.attemptId??sessionId}`,'/exam-practice');
+      await recordTutorialAction('FIRST_SUPPORT_FADE_COMPLETED',`fade-to-fresh:${fresh.task_id}`,'/exam-practice');
       // The teaching session is closed by an explicit fresh-check handoff. The
       // new task owns the remaining episode, so Today must not revive this one.
       await persistLatest('COMPLETED');
@@ -369,31 +394,38 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const lookupMode=formal?'FORMAL_ASSESSMENT' as const:'NONE' as const;
   const recordLookup=(result:{senseId?:string;lemma?:string})=>{setLookupExposure(current=>[...new Set([...current,result.senseId??result.lemma??'lookup'])]);if(!coachMarks.lookup)markCoach('lookup')};
   const recordLookupResult=(result:{status:string})=>void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:result.status==='LOCKED'?'LOOKUP_LOCKED':result.status==='RESOLVED'?'LOOKUP_OPENED':'LOOKUP_UNRESOLVED',eventKey:`lookup:${result.status}:${runtimeRef.current?.attemptId??'pending'}`});
+  const puzzleStep=interaction&&teacherDecision?projectExamTeachingPuzzleStepV1({decision:teacherDecision,interaction,task,learnerResponse:firstUnit?answers[firstUnit.responseKey]:undefined}):undefined;
+  const commitPuzzleEvent=(event:PuzzleLearnerEvent)=>{
+    const response=typeof event.value==='string'?event.value:JSON.stringify(event.value);
+    void completeInteraction('SUBMITTED',response);
+  };
   // Choice rows are one unambiguous action: tapping commits the answer. Their
   // text is lookup-protected because lookup can leak the answer and must never
   // collide with the parent answer target.
-  const option = (id: string, item: Option) => (<Pressable key={item.id} accessibilityRole="radio" accessibilityLabel={`選擇 ${item.id}，${item.text}`} accessibilityState={{selected:answers[id]===item.id}} onPress={()=>{tapCommitPendingRef.current=true;setAnswer(id,item.id)}} style={[styles.option,answers[id]===item.id&&styles.selected]}><View style={styles.selector}><Text style={styles.selectorText}>{item.id}</Text></View><Text style={styles.optionText}>{item.text}</Text></Pressable>);
+  const commitChoice=(id:string,value:string)=>{if(answers[id]!==undefined)return;tapCommitPendingRef.current=true;setAnswer(id,value)};
+  const option = (id: string, item: Option) => {const committed=answers[id]!==undefined;return <Pressable key={item.id} accessibilityRole="radio" accessibilityLabel={`選擇 ${item.id}，${item.text}`} accessibilityState={{selected:answers[id]===item.id,disabled:committed}} disabled={committed} onPress={()=>commitChoice(id,item.id)} style={[styles.option,answers[id]===item.id&&styles.selected,committed&&answers[id]!==item.id&&styles.optionCommittedOut]}><View style={styles.selector}><Text style={styles.selectorText}>{item.id}</Text></View><Text style={styles.optionText}>{item.text}</Text></Pressable>};
   const blanks = (payload.blanks as (Blank | string)[] | undefined) ?? [];
   const questions = (payload.questions as Question[] | undefined) ?? [];
   const parts = (payload.parts as Question[] | undefined) ?? [];
   const shared = ((payload.options ?? payload.sentenceOptions) as Option[] | undefined) ?? [];
   const hasResponse=Object.values(answers).some(value=>value.trim().length>0);
-  const tapCommitsSingleChoice=task.family==='VOCABULARY'&&questions.length===1&&Boolean(questions[0]?.options?.length)&&!blanks.length&&!parts.length;
+  const choiceIds=task.family==='COMPREHENSIVE'?blanks.filter(value=>typeof value!=='string'&&Boolean(value.options?.length)).map(value=>(value as Blank).id):shared.length?blanks.map(value=>typeof value==='string'?value:value.id):questions.length&&questions.every(item=>Boolean(item.options?.length))?questions.map(item=>item.id):parts.length&&parts.every(item=>Boolean(item.options?.length))?parts.map(item=>item.id):[];
+  const tapCommitsChoiceSet=choiceIds.length>0&&!['TRANSLATION','WRITING'].includes(task.family),hasAllChoiceResponses=tapCommitsChoiceSet&&choiceIds.every(id=>Boolean(answers[id]?.trim()));
   const sourceText=String(payload.passage||payload.source||'');
   const sourceRepeatsPrompt=Boolean(sourceText&&questions.some(question=>question.prompt.trim()===sourceText.trim()));
-  useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(tapCommitsSingleChoice&&hydrated&&hasResponse&&!teacherDecision&&!done&&!busy)void submit()},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
+  const submitLabel=task.family==='WRITING'?'完成這一版':task.family==='TRANSLATION'?'完成':'送出答案';
+  useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(hasAllChoiceResponses&&hydrated&&!teacherDecision&&!done&&!busy)setTimeout(()=>void submit(),0)},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <Shell onBack={exitExam}>
-    <View style={styles.progressRow}><Text style={styles.kicker}>{familyLabel[task.family]??'英文'}</Text><Text style={styles.progressText}>{allocationPurpose==='FRESH_CHECK'?'獨立再試':'練習中'}</Text></View>
-    <Text style={styles.title}>{String(payload.title ?? payload.sourceTitle ?? '英文練習')}</Text>
+    <View style={styles.lessonMeta}><Text style={styles.kicker}>{familyLabel[task.family]??'英文'}</Text>{allocationPurpose==='FRESH_CHECK'?<Text style={styles.independent}>這次自己來</Text>:null}</View>
     {allocationPurpose==='REVIEW_ONLY'?<Text style={styles.lockNotice}>這題是複習題，不會當成一題全新的獨立能力確認。</Text>:null}
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
-    {task.family === 'MIXED' ? <Button label={sourceOpen ? '收起素材' : '重新開啟素材'} onPress={() => setSourceOpen(value => !value)} /> : null}
+    {task.family === 'MIXED' ? <Pressable accessibilityRole="button" accessibilityState={{expanded:sourceOpen}} onPress={() => setSourceOpen(value => !value)} style={styles.sourceToggle}><Text style={styles.sourceToggleText}>{sourceOpen ? '題目素材　收起' : '題目素材　展開'}</Text></Pressable> : null}
     {formal&&!done?<Text style={styles.lockNotice}>模考中先不提供查字。交卷後可以查。</Text>:null}
     {sourceText&&sourceOpen&&!sourceRepeatsPrompt ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
 
     {!teacherDecision && !done ? <>
-      <ContextualSpotlight active={!coachMarks.mcq&&task.family!=='TRANSLATION'&&task.family!=='WRITING'} copy={tapCommitsSingleChoice?'點一下答案就會送出；想查英文可直接點文字。':'點一下答案；想查英文可直接點文字。'}><View style={styles.answerArea}>
+      <View style={styles.answerArea}>
       {task.family === 'COMPREHENSIVE' ? blanks.map(value => {
         const blank = value as Blank;
         return <View key={blank.id} style={styles.block}><Text style={styles.label}>第 {blank.id} 空</Text>{blank.options?.map(item => option(blank.id, item))}</View>;
@@ -408,43 +440,40 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       </> : null}
       {questions.map(question => <View key={question.id} style={styles.block}><UniversalLookupText text={question.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{question.options?.map(item => option(question.id, item))}</View>)}
       {parts.map(part => <View key={part.id} style={styles.block}><UniversalLookupText text={part.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{part.options ? part.options.map(item => option(part.id, item)) : <TextInput value={answers[part.id] ?? ''} onChangeText={value => setAnswer(part.id, value)} style={styles.input} />}</View>)}
-      {task.family === 'TRANSLATION' ? (payload.chineseSentences as string[]).map((sentence, index) => <View key={sentence} style={styles.block}><Text style={styles.zh}>{sentence}</Text><TextInput multiline value={answers[String(index)] ?? ''} onChangeText={value => setAnswer(String(index), value)} style={styles.input} /></View>) : null}
-      {task.family === 'WRITING' ? <><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction/>)}<TextInput multiline value={answers.writing ?? ''} onChangeText={value => setAnswer('writing', value)} style={[styles.input, styles.long]} />{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</> : null}
-      </View></ContextualSpotlight>
-      {tapCommitsSingleChoice?busy?<Text style={styles.checking}>正在看你的選擇…</Text>:null:<Button label={busy ? '正在確認…' : '送出答案'} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />}
+      {task.family === 'TRANSLATION' ? (payload.chineseSentences as string[]).map((sentence, index) => <View key={sentence} style={styles.authoredBlock}><Text style={styles.authoredLabel}>中文</Text><Text style={styles.zh}>{sentence}</Text><Text style={styles.authoredLabel}>你的翻譯</Text><TextInput accessibilityLabel="你的翻譯" multiline value={answers[String(index)] ?? ''} onChangeText={value => setAnswer(String(index), value)} placeholder="從這裡開始寫" placeholderTextColor={t.colors.subtle} style={styles.authoredInput}/><Text style={styles.wordCount}>{(answers[String(index)]??'').trim().split(/\s+/).filter(Boolean).length} words</Text></View>) : null}
+      {task.family === 'WRITING' ? <View style={styles.writingWorkspace}><Pressable accessibilityRole="button" accessibilityState={{expanded:writingPromptOpen}} onPress={()=>setWritingPromptOpen(value=>!value)} style={styles.promptToggle}><Text style={styles.authoredLabel}>題目</Text><Text style={styles.promptChevron}>{writingPromptOpen?'收起':'展開'}</Text></Pressable>{writingPromptOpen?<><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/><View style={styles.requirements}>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction style={styles.requirement}/>)}</View></>:null}<Text style={styles.authoredLabel}>你的文章</Text><TextInput accessibilityLabel="你的文章" multiline value={answers.writing ?? ''} onChangeText={value => {setAnswer('writing', value);if(!answers.writing?.trim()&&value.trim())setWritingPromptOpen(false)}} placeholder="寫下你的第一版" placeholderTextColor={t.colors.subtle} style={[styles.authoredInput, styles.long]} /><Text style={styles.wordCount}>{(answers.writing??'').trim().split(/\s+/).filter(Boolean).length} words</Text>{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</View> : null}
+      </View>
+      {tapCommitsChoiceSet?busy?<Text style={styles.checking}>正在看你的選擇…</Text>:<Text style={styles.checking}>{Object.keys(answers).filter(id=>choiceIds.includes(id)).length}／{choiceIds.length}</Text>:<Button label={busy ? '正在確認…' : submitLabel} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />}
     </> : null}
 
-    {interaction ? <View style={styles.repairRegion}>
-      <View style={styles.contextThread}><Text style={styles.contextLabel}>剛才這題</Text>{sourceText?<UniversalLookupText text={sourceText} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:questions[0]?.prompt?<UniversalLookupText text={questions[0].prompt} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:<Text style={styles.contextText}>{String(payload.title??'')}</Text>}</View>
-      <View style={styles.repairHeading}><View style={styles.repairRule}/><Text style={styles.repairLabel}>先看這個差別</Text></View>
-      <Text style={styles.teacherTitle}>{learnerFacingRepairCopy(interaction.title)}</Text>
-      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<View style={styles.teacherAction}><Text style={styles.passage}>剛才的提示先收起來。換一份內容，看看你能不能自己分清楚。</Text><Button label={busy?'正在準備…':'換一題，自己試'} disabled={busy} onPress={()=>void startFreshAttempt()}/></View>:<ContextualSpotlight active={!coachMarks.teacher} copy="先做眼前這個動作；完成後，題目會接著走。"><View style={styles.teacherAction}><UniversalLookupText text={learnerFacingRepairCopy(interaction.prompt)} showHint={!coachMarks.lookup} assessmentMode="NONE" style={styles.passage} onLookupUsed={recordLookup}/>
-      {['FREE_PRODUCTION','REPAIR'].includes(interaction.mode) ? <TextInput multiline value={interactionText} onChangeText={setInteractionText} placeholder={interaction.placeholder} style={[styles.input, styles.long]} /> : null}
-      {!['FREE_PRODUCTION','REPAIR','RETURN'].includes(interaction.mode) ? interaction.mode==='EVIDENCE_SELECT'||interaction.mode==='MARK'?<View style={styles.evidenceTray}>{interaction.options?.map(item=><Pressable accessibilityRole="button" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.evidencePiece,interactionText===item.id&&styles.evidencePieceOn]}><Text style={[styles.evidenceText,interactionText===item.id&&styles.evidenceTextOn]}>{learnerFacingRepairCopy(item.label)}</Text></Pressable>)}</View>:interaction.mode==='COMPARE'?<View style={styles.contrastBoard}>{interaction.options?.map(item=><Pressable accessibilityRole="button" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.contrastRow,interactionText===item.id&&styles.contrastRowOn]}><Text style={styles.contrastWord}>{learnerFacingRepairCopy(item.label)}</Text><Text style={styles.contrastCue}>{item.label==='reserve'?'先留起來，之後使用':item.label==='remove'?'拿走、移除':item.label==='restore'?'恢復原狀':item.label==='resolve'?'解決問題':'放回原句比較'}</Text></Pressable>)}</View>:interaction.mode==='CHUNK_RECONSTRUCTION'?<View style={styles.chunkBoard}>{interaction.options?.map(item=><Pressable accessibilityRole="button" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.chunkPiece,interactionText===item.id&&styles.chunkPieceOn]}><Text style={[styles.chunkText,interactionText===item.id&&styles.chunkTextOn]}>{learnerFacingRepairCopy(item.label)}</Text></Pressable>)}</View>:<View style={styles.block}>{interaction.options?.map(item=><Pressable accessibilityRole="radio" accessibilityState={{selected:interactionText===item.id}} key={item.id} onPress={()=>setInteractionText(item.id)} style={[styles.teacherChoice,interactionText===item.id&&styles.selected]}><Text style={styles.teacherChoiceText}>{learnerFacingRepairCopy(item.label)}</Text></Pressable>)}</View> : null}
-      {interaction.mode==='RETURN'||interactionText.trim()?<Button label={busy ? '正在看…' : interaction.mode === 'RETURN' ? '放回原本的題目' : ['FREE_PRODUCTION','REPAIR'].includes(interaction.mode) ? '用我的答案繼續' : '選好了'} disabled={busy} onPress={() => { if (!busy)void completeInteraction(interaction.mode === 'RETURN' ? 'RETURNED' : 'SUBMITTED'); }} />:null}</View></ContextualSpotlight>}
+    {interaction&&puzzleStep ? <View style={styles.repairRegion}>
+      <View style={styles.contextThread}>{sourceText?<UniversalLookupText text={sourceText} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:questions[0]?.prompt?<UniversalLookupText text={questions[0].prompt} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:<Text style={styles.contextText}>{String(payload.title??'')}</Text>}</View>
+      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<View style={styles.freshHandoff}><Text style={styles.freshTitle}>換個情境。</Text><Text style={styles.passage}>這次自己來。</Text><Button label={busy?'正在準備…':'開始'} disabled={busy} onPress={()=>void startFreshAttempt()}/></View>:<View style={styles.teacherAction}><PuzzleStepRenderer step={{...puzzleStep,instruction:learnerFacingRepairCopy(interaction.title)}} onEvent={commitPuzzleEvent}/></View>}
       {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind!=='FRESH_ATTEMPT'&&interaction.mode !== 'RETURN' ? <Pressable accessibilityRole="button" disabled={busy} onPress={() => void completeInteraction('IMPASSE')} style={styles.stuckAction}><Text style={styles.stuckText}>這個做法沒讓我看懂</Text><Text style={styles.stuckHint}>縮小問題或換一種方式</Text></Pressable> : null}
     </View> : null}
+
+    {transportError?<View accessibilityRole="alert" style={styles.transportError}><Text style={styles.transportCopy}>剛才沒有送出去。你的內容還在。</Text><Pressable accessibilityRole="button" onPress={()=>void (teacherDecision?completeInteraction('SUBMITTED'):submit())} style={styles.retryAction}><Text style={styles.retryText}>再試一次</Text></Pressable></View>:null}
 
     {done ? <View style={styles.completion}><Text style={styles.completionMark}>✓</Text><Text style={styles.completionTitle}>這次先到這裡</Text>{teacherMessage?<Text style={styles.completionBody}>{teacherMessage}</Text>:null}<Button label="看看這次改變了什麼" onPress={()=>router.replace(`/result?origin=TODAY&practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(task.family))}&sessionId=${encodeURIComponent(sessionId)}` as Href)}/><Pressable accessibilityRole="button" onPress={reportContent}><Text style={styles.secondary}>回報內容問題</Text></Pressable></View> : null}
   </Shell>;
 }
 
 function Shell({ children,onBack }: { children: React.ReactNode;onBack?:()=>void }) {
-  return <SafeAreaView style={styles.safe}><KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={90}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹ 返回</Text></Pressable>:null}{children}</KeyboardAwareScrollView></SafeAreaView>;
+  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>←</Text></Pressable>:<View/>}<Text style={styles.topCount}>4 / 8</Text></View><View style={styles.progressTrack}><View style={styles.progressValue}/></View><KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
 }
 function Button({ label, onPress, disabled=false }: { label: string; onPress: () => void; disabled?:boolean }) {
   return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,disabled&&styles.buttonDisabled,pressed&&!disabled&&styles.pressed]}><Text style={styles.buttonText}>{label}</Text></Pressable>;
 }
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: t.colors.background },
-  content: { width: '100%', maxWidth: t.layout.learnerShellMaxWidth, alignSelf: 'center', paddingHorizontal:24,paddingTop:18, paddingBottom: 100, gap: 18 },
-  back:{minHeight:44,alignSelf:'flex-start',justifyContent:'center',paddingRight:18},backText:{color:t.colors.deepWood,fontWeight:'800'},
-  progressRow:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},progressText:{fontSize:12,fontWeight:'800',color:t.colors.subtle},
+  fixedTop:{height:48,paddingHorizontal:20,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},topCount:{fontSize:12,lineHeight:18,color:t.colors.muted},progressTrack:{height:2,backgroundColor:t.colors.divider},progressValue:{width:'50%',height:2,backgroundColor:t.colors.amberSoft},content: { width: '100%', maxWidth:390, alignSelf: 'center', paddingHorizontal:20,paddingTop:24, paddingBottom: 110, gap: 20 },
+  back:{width:44,height:44,justifyContent:'center'},backText:{color:t.colors.deepWood,fontSize:20},
+  sourceToggle:{minHeight:44,alignSelf:'flex-start',justifyContent:'center'},sourceToggleText:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.deepWood},lessonMeta:{minHeight:24,flexDirection:'row',justifyContent:'space-between',alignItems:'center'},independent:{fontSize:12,lineHeight:18,color:t.colors.success,fontWeight:'600'},
   lockNotice:{padding:12,borderRadius:12,backgroundColor:t.colors.focusWash,color:t.colors.focus,fontSize:13,lineHeight:20,fontWeight:'700'},
   coach:{padding:12,borderRadius:12,backgroundColor:t.colors.woodWash,borderWidth:2,borderColor:t.colors.deepWood},
-  kicker: { fontSize:11,fontWeight: '900', color: t.colors.midWood,letterSpacing:1.4 }, title: { fontSize: 27,lineHeight:35, fontWeight: '900',letterSpacing:-.3,color:t.colors.ink }, passage: { fontSize: 17, lineHeight: 29,color:t.colors.ink }, zh: { fontSize: 18, lineHeight: 29,color:t.colors.ink },
-  answerArea:{gap:10},teacherAction:{gap:16},block: { gap: 4, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 60, paddingVertical:10, borderBottomWidth: 1, borderColor: t.colors.line, flexDirection:'row',alignItems:'center',gap:12 },selector:{width:34,height:34,borderRadius:17,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionText:{flex:1,fontSize:16,lineHeight:24,color:t.colors.ink}, selected: { borderColor: t.colors.deepWood, backgroundColor:t.colors.woodWash },teacherChoice:{minHeight:58,paddingVertical:12,borderBottomWidth:1,borderColor:t.colors.line,justifyContent:'center'},teacherChoiceText:{fontSize:16,lineHeight:24,color:t.colors.ink},evidenceTray:{flexDirection:'row',flexWrap:'wrap',gap:9,paddingVertical:8},evidencePiece:{minHeight:48,paddingHorizontal:13,paddingVertical:10,borderRadius:12,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper,justifyContent:'center'},evidencePieceOn:{backgroundColor:t.colors.focusWash,borderColor:t.colors.focus},evidenceText:{fontSize:14,lineHeight:20,fontWeight:'700',color:t.colors.ink},evidenceTextOn:{color:t.colors.deepWood},contrastBoard:{borderTopWidth:1,borderTopColor:t.colors.line},contrastRow:{minHeight:62,paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,flexDirection:'row',alignItems:'center',gap:14},contrastRowOn:{backgroundColor:t.colors.focusWash},contrastWord:{width:82,fontSize:17,fontWeight:'900',color:t.colors.deepWood},contrastCue:{flex:1,fontSize:14,lineHeight:21,color:t.colors.muted},chunkBoard:{flexDirection:'row',flexWrap:'wrap',gap:10,paddingVertical:8},chunkPiece:{minHeight:52,paddingHorizontal:14,paddingVertical:11,borderRadius:10,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper},chunkPieceOn:{borderColor:t.colors.focus,backgroundColor:t.colors.focusWash,transform:[{translateY:-2}]},chunkText:{fontSize:15,fontWeight:'800',color:t.colors.ink},chunkTextOn:{color:t.colors.deepWood},
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, blank: { minWidth: 58,minHeight:44,justifyContent:'center', padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: 10 }, input: { minHeight: 56, borderWidth: 1, borderColor: t.colors.line, borderRadius: t.radius.medium, padding: 15, backgroundColor: t.colors.paper,color:t.colors.ink,fontSize:16,lineHeight:24, textAlignVertical: 'top' }, long: { minHeight: 190 },
-  button: { minHeight: 58, borderRadius: 17, backgroundColor: t.colors.deepWood, alignItems: 'center', justifyContent: 'center' },buttonDisabled:{opacity:.4},pressed:{opacity:.88,transform:[{scale:.99}]}, buttonText: { color: t.colors.paper,fontSize:16, fontWeight: '900' },checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,fontWeight:'800',color:t.colors.midWood}, note: { padding: 13,borderRadius:12, backgroundColor: t.colors.successWash, color: t.colors.success,lineHeight:21 }, resume: { paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,color:t.colors.deepWood,fontWeight:'800' },repairRegion:{gap:14,paddingVertical:18,borderTopWidth:1,borderTopColor:t.colors.line},contextThread:{gap:7,paddingLeft:14,borderLeftWidth:3,borderLeftColor:t.colors.lightWood,opacity:.72},contextLabel:{fontSize:11,fontWeight:'900',letterSpacing:.8,color:t.colors.subtle},contextText:{fontSize:15,lineHeight:24,color:t.colors.muted},repairHeading:{flexDirection:'row',alignItems:'center',gap:10,marginTop:6},repairRule:{width:30,height:3,borderRadius:2,backgroundColor:t.colors.focus},repairLabel:{fontSize:12,fontWeight:'900',letterSpacing:.8,color:t.colors.midWood},teacherTitle: { fontSize: 25,lineHeight:33, fontWeight: '900', color: t.colors.ink },stuckAction:{minHeight:52,alignItems:'center',justifyContent:'center',gap:2},stuckText:{fontSize:14,fontWeight:'800',color:t.colors.midWood},stuckHint:{fontSize:11,color:t.colors.subtle}, secondary: { minHeight:44,textAlign: 'center',textAlignVertical:'center', fontWeight: '800', color:t.colors.midWood },completion:{paddingVertical:34,gap:16,alignItems:'stretch'},completionMark:{fontSize:30,fontWeight:'900',color:t.colors.success,textAlign:'center'},completionTitle:{fontSize:28,fontWeight:'900',color:t.colors.ink,textAlign:'center'},completionBody:{fontSize:14,lineHeight:22,color:t.colors.muted,textAlign:'center'},
-  pulseCard: { gap: 12, padding: 16, borderRadius: 18, backgroundColor: woodTheme.colors.paper, borderWidth: 1, borderColor: woodTheme.colors.line }, pulseQuestion: { fontSize: 15, fontWeight: '800', color: woodTheme.colors.ink }, pulseChoice: { flex: 1, minWidth: 80, minHeight: 44, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ratingRow: { flexDirection: 'row', gap: 8 }, rating: { flex: 1, minHeight: 42, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }, ratingText: { fontWeight: '800' }, ratingLegend: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }, ratingLegendText: { fontSize: 11, color: woodTheme.colors.subtle }, pulseThanks: { fontSize: 12, color: woodTheme.colors.muted, textAlign: 'center' }, weekChoices: { gap: 8 },
+  kicker: { fontSize:12,lineHeight:18,fontWeight:'500', color:t.colors.muted }, title: { fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink }, passage: { fontSize:17,lineHeight:27,color:t.colors.ink }, zh: { fontSize:18,lineHeight:29,color:t.colors.ink },
+  answerArea:{gap:10},teacherAction:{gap:16},block: { gap: 4, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 60, paddingVertical:10, borderBottomWidth: 1, borderColor: t.colors.line, flexDirection:'row',alignItems:'center',gap:12 },optionCommittedOut:{opacity:.42},selector:{width:34,height:34,borderRadius:17,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionText:{flex:1,fontSize:16,lineHeight:24,color:t.colors.ink}, selected: { borderColor: t.colors.deepWood, backgroundColor:t.colors.woodWash },teacherChoice:{minHeight:58,paddingVertical:12,borderBottomWidth:1,borderColor:t.colors.line,justifyContent:'center'},teacherChoiceText:{fontSize:16,lineHeight:24,color:t.colors.ink},evidenceTray:{flexDirection:'row',flexWrap:'wrap',gap:9,paddingVertical:8},evidencePiece:{minHeight:48,paddingHorizontal:13,paddingVertical:10,borderRadius:12,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper,justifyContent:'center'},evidencePieceOn:{backgroundColor:t.colors.focusWash,borderColor:t.colors.focus},evidenceText:{fontSize:14,lineHeight:20,fontWeight:'700',color:t.colors.ink},evidenceTextOn:{color:t.colors.deepWood},contrastBoard:{borderTopWidth:1,borderTopColor:t.colors.line},contrastRow:{minHeight:62,paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,flexDirection:'row',alignItems:'center',gap:14},contrastRowOn:{backgroundColor:t.colors.focusWash},contrastWord:{width:82,fontSize:17,fontWeight:'900',color:t.colors.deepWood},contrastCue:{flex:1,fontSize:14,lineHeight:21,color:t.colors.muted},chunkBoard:{flexDirection:'row',flexWrap:'wrap',gap:10,paddingVertical:8},chunkPiece:{minHeight:52,paddingHorizontal:14,paddingVertical:11,borderRadius:10,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper},chunkPieceOn:{borderColor:t.colors.focus,backgroundColor:t.colors.focusWash,transform:[{translateY:-2}]},chunkText:{fontSize:15,fontWeight:'800',color:t.colors.ink},chunkTextOn:{color:t.colors.deepWood},
+  row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, blank: { minWidth: 58,minHeight:44,justifyContent:'center', padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: 10 }, input: { minHeight: 56, borderBottomWidth: 1, borderColor: t.colors.dividerStrong, paddingVertical: 15,color:t.colors.ink,fontSize:16,lineHeight:24, textAlignVertical: 'top' }, authoredBlock:{gap:12,paddingVertical:8},writingWorkspace:{gap:14},promptToggle:{minHeight:44,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},promptChevron:{fontSize:12,lineHeight:18,color:t.colors.muted},authoredLabel:{fontSize:12,lineHeight:18,fontWeight:'500',color:t.colors.muted},authoredInput:{minHeight:128,paddingVertical:16,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.dividerStrong,color:t.colors.ink,fontSize:17,lineHeight:27,textAlignVertical:'top'},requirements:{gap:4,paddingBottom:8},requirement:{fontSize:14,lineHeight:21,color:t.colors.muted},wordCount:{fontSize:12,lineHeight:18,color:t.colors.subtle,textAlign:'right'},long: { minHeight:280 },
+  transportError:{paddingVertical:12,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.danger,gap:8},transportCopy:{fontSize:14,lineHeight:21,color:t.colors.ink},retryAction:{minHeight:44,alignSelf:'flex-start',justifyContent:'center'},retryText:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.danger},button:{minHeight:52,borderRadius:14,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},buttonDisabled:{opacity:.4},pressed:{opacity:.9,transform:[{scale:.98}]},buttonText:{color:t.colors.paper,fontSize:16,fontWeight:'600'},checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,color:t.colors.muted},note:{padding:12,backgroundColor:t.colors.successWash,color:t.colors.success,lineHeight:21},resume:{paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,color:t.colors.deepWood,fontWeight:'600'},repairRegion:{gap:24,paddingVertical:8},contextThread:{gap:7,opacity:.58,paddingBottom:18,borderBottomWidth:1,borderBottomColor:t.colors.divider},contextText:{fontSize:15,lineHeight:24,color:t.colors.muted},teacherRail:{flexDirection:'row',gap:14},repairRule:{width:3,borderRadius:2,backgroundColor:t.colors.focus},teacherRailBody:{flex:1,gap:16},teacherTitle:{fontSize:16,lineHeight:24,fontWeight:'600',color:t.colors.ink},stuckAction:{minHeight:52,alignItems:'center',justifyContent:'center',gap:2},stuckText:{fontSize:14,fontWeight:'600',color:t.colors.midWood},stuckHint:{fontSize:11,color:t.colors.subtle},secondary:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontWeight:'600',color:t.colors.midWood},completion:{paddingVertical:34,gap:16,alignItems:'stretch'},completionMark:{display:'none'},completionTitle:{fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink},completionBody:{fontSize:16,lineHeight:24,color:t.colors.muted},
+  freshHandoff:{minHeight:460,justifyContent:'center',gap:16},freshTitle:{fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink},pulseCard: { gap: 12, padding: 16, borderRadius: 18, backgroundColor: woodTheme.colors.paper, borderWidth: 1, borderColor: woodTheme.colors.line }, pulseQuestion: { fontSize: 15, fontWeight: '800', color: woodTheme.colors.ink }, pulseChoice: { flex: 1, minWidth: 80, minHeight: 44, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ratingRow: { flexDirection: 'row', gap: 8 }, rating: { flex: 1, minHeight: 42, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }, ratingText: { fontWeight: '800' }, ratingLegend: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }, ratingLegendText: { fontSize: 11, color: woodTheme.colors.subtle }, pulseThanks: { fontSize: 12, color: woodTheme.colors.muted, textAlign: 'center' }, weekChoices: { gap: 8 },
 });

@@ -1,16 +1,11 @@
-/** Build 2 canonical wood/paper family. Reading remains on light paper. */
+/** Compatibility palette. New learner UI consumes tokens.ts directly. */
 export const EOTWood = {
   color: {
-    canvas: '#F7F3ED', canvasRaised: '#F7F3ED', card: '#FFFDFC', cardMuted: '#F1EAE2',
-    ink: '#2D2723', inkSoft: '#746A63', inkMuted: '#8A7B70',
-    walnut900: '#3A251B', walnut800: '#5A3B2C', walnut700: '#5A3B2C',
-    walnut600: '#5A3B2C', walnut500: '#8A6147', caramel600: '#A87446',
-    caramel500: '#BC814A', amber400: '#D9A568', amber300: '#E8C08A',
-    sand300: '#D8C8B5', sand200: '#E7DCCE', sand100: '#F2EADF',
-    success: '#627A59', warning: '#A06B33', danger: '#A8584F',
-    overlay: 'rgba(45,36,31,0.68)', spotlight: '#D9A568',
-    border: 'rgba(91,60,44,0.14)', borderStrong: 'rgba(91,60,44,0.24)',
+    canvas:'#F7F3EA',canvasRaised:'#F7F3EA',card:'#FFFDF8',cardMuted:'#F1EADF',
+    ink:'#30251F',inkSoft:'#71645A',inkMuted:'#96887D',walnut900:'#30251F',walnut800:'#49372D',walnut700:'#49372D',
+    walnut600:'#49372D',walnut500:'#71645A',caramel600:'#C78A45',caramel500:'#C78A45',amber400:'#C78A45',amber300:'#F1E0C7',
+    sand300:'#CBBEAF',sand200:'#DDD4C8',sand100:'#F8EEE0',success:'#65765D',warning:'#C78A45',danger:'#A45C50',
+    overlay:'rgba(48,37,31,.62)',spotlight:'#C78A45',border:'#DDD4C8',borderStrong:'#CBBEAF',
   },
-  radius: { sm: 10, md: 16, lg: 22, xl: 28 },
-  motion: { quick: 160, normal: 240, emphasis: 360 },
+  radius:{sm:8,md:10,lg:16,xl:20},motion:{quick:150,normal:240,emphasis:250},
 } as const;

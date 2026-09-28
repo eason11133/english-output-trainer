@@ -1,0 +1,62 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+
+const build=path.resolve(process.env.EOT_DOMAIN_TEST_BUILD||'.domain-test-build-production-frontend');
+const{examBetaTaskForLearner}=require(path.join(build,'content/examBetaBank.js'));
+const{submitExamToCanonicalTeacherV1}=require(path.join(build,'application/exam/examSubmissionAdapter.js'));
+const{buildExamTeacherInteractionV1,continueExamTeacherAfterInteractionV1}=require(path.join(build,'application/exam/examTeacherInteraction.js'));
+const{projectExamTeachingPuzzleStepV1}=require(path.join(build,'application/exam/examPuzzleProjection.js'));
+const{createExamOperationalRuntimeV1,updateExamOperationalRuntimeV1,resumableExamOperationalRuntimeV1}=require(path.join(build,'application/exam/examOperationalRuntime.js'));
+
+const families=['VOCABULARY','COMPREHENSIVE','CONTEXTUAL_FILL','DISCOURSE','READING','MIXED','TRANSLATION','WRITING'];
+const learnerId='frontend-acceptance';
+const truth={learnerId,generatedFromEvidenceIds:[],capabilitySlice:[],interactionSlice:[],exposureSlice:[],goalContext:{}};
+const product={learnerId,goals:['exam'],learningPurpose:'EXAM',useContexts:['EXAM_TASKS'],studyMinutes:20,productMode:'EXAM',entitlement:{status:'DEVELOPMENT',source:'acceptance',planId:'acceptance'}};
+
+const responseFor=(task)=>Object.fromEntries(task.canonicalBinding.units.map(unit=>[unit.responseKey,'__EOT_COMMITTED_WRONG__']));
+const semanticFailureFor=(task)=>Object.fromEntries(task.canonicalBinding.units.filter(unit=>unit.evaluatorKind==='SEMANTIC_RUBRIC').map(unit=>[unit.unitId,{schemaVersion:1,outcome:'INCORRECT',authority:'BOUNDED_RUBRIC',rubricId:`acceptance:${task.task_id}:${unit.unitId}`,dimensions:[{dimension:'family_specific_response',outcome:'INCORRECT',reasonCodes:['COMMITTED_WRONG_RESPONSE']}],reasonCodes:['BOUNDED_WRONG_RESPONSE'],candidateEvidenceAllowed:false,negativeEvidenceAllowed:true}]));
+
+test('all eight production families execute a real wrong-answer Teacher path and survive exact-state resume',async()=>{
+ const receipts=[];
+ for(const family of families){
+  const task=examBetaTaskForLearner(family,learnerId,'suggested',`acceptance:${family}`,{purpose:'PRACTICE_NEW',recent:[]});
+  assert.ok(task,`${family}: promoted task unavailable`);
+  assert.equal(task.family,family);
+  assert.equal(task.validation.canonical,'PASS');
+  assert.ok(task.canonicalBinding.units.length,`${family}: canonical units missing`);
+  const response=responseFor(task),semanticAssessmentsByUnitId=semanticFailureFor(task),focus=task.canonicalBinding.units[0];
+  const plan={id:`plan:${family}`,learnerId,targetRef:focus.canonicalTargetRef,facet:focus.canonicalFacet,needKind:'REPAIR',objective:`${family} bounded repair`,reason:'frontend production acceptance',reasonCodes:['ACCEPTANCE'],timeBudgetMinutes:20,productMode:'EXAM'};
+  const submission=await submitExamToCanonicalTeacherV1({learnerId,sessionId:`session:${family}`,task,lessonPlan:plan,productContext:product,learnerTruth:truth,response,semanticAssessmentsByUnitId,lookupExposure:[],support:'NONE',freshnessIdentity:`PRACTICE_NEW:${task.task_id}`});
+  assert.ok(['FAILURE','PARTIAL'].includes(submission.assessment),`${family}: wrong response was not evaluated`);
+  assert.ok(submission.unitResults.some(unit=>unit.outcome==='FAILURE'),`${family}: evaluator emitted no failure`);
+  assert.equal(submission.unitResults.find(unit=>unit.outcome==='FAILURE').familyDiagnosis.family,family);
+  assert.ok(submission.teacherDecision,`${family}: Teacher decision missing`);
+  const sourceTaskContext=submission.teacherDecision.lineage.context.sourceTaskContext;
+  const interaction=buildExamTeacherInteractionV1({decision:submission.teacherDecision,sessionId:`session:${family}`,sourceTaskContext});
+  assert.ok(interaction,`${family}: interaction renderer contract missing`);
+  assert.equal(interaction.mustAct,true);
+  const puzzle=projectExamTeachingPuzzleStepV1({decision:submission.teacherDecision,interaction,task,learnerResponse:response[focus.responseKey]});
+  assert.equal(puzzle.evaluation.taskId,task.task_id);
+  assert.equal(puzzle.evaluation.decisionPointId,submission.teacherDecision.provenance.decisionPointId);
+  assert.ok(puzzle.representation,`${family}: production representation missing`);
+  assert.ok(puzzle.interaction,`${family}: production interaction missing`);
+  const next=await continueExamTeacherAfterInteractionV1({learnerId,sessionId:`session:${family}`,lessonPlan:plan,productContext:product,learnerTruth:truth,previousDecision:submission.teacherDecision,completion:{kind:'SUBMITTED',response:'__EOT_TEACHING_ACTION__'},sourceTaskContext});
+  assert.ok(next.treatmentResponse,`${family}: Treatment Response missing`);
+  assert.ok(next.blockDecision.selectedBlockId,`${family}: next step missing`);
+  const runtime=createExamOperationalRuntimeV1({sessionId:`session:${family}`,learnerId,taskId:task.task_id,family,subtype:task.subtype,freshnessIdentity:`PRACTICE_NEW:${task.task_id}`});
+  const saved=updateExamOperationalRuntimeV1(runtime,{responses:response,teacherDecision:next,activeInteraction:interaction,interactionText:'__EOT_TEACHING_ACTION__',phase:'TEACHER_INTERACTION'});
+  const resumed=resumableExamOperationalRuntimeV1(JSON.parse(JSON.stringify(saved)),learnerId,`session:${family}`);
+  assert.deepEqual(resumed.responses,response,`${family}: responses changed on resume`);
+  assert.equal(resumed.teacherDecision.provenance.decisionPointId,next.provenance.decisionPointId,`${family}: Teacher state changed on resume`);
+  receipts.push({family,taskId:task.task_id,subtype:task.subtype,diagnosis:submission.unitResults.find(unit=>unit.outcome==='FAILURE').familyDiagnosis.observationKind,interactionMode:interaction.mode,puzzleInteraction:puzzle.interaction,puzzleRepresentation:puzzle.representation,rendererBlock:interaction.blockId,evaluatorOutcome:'FAILURE',treatmentResponseEvent:next.treatmentResponse.eventId,nextAction:next.action,nextBlock:next.blockDecision.selectedBlockId,resumeExact:true});
+ }
+ assert.equal(new Set(receipts.map(item=>item.taskId)).size,8);
+ assert.ok(new Set(receipts.map(item=>item.interactionMode)).size>=4,'family interactions collapsed into one generic grammar');
+ const examRoute=fs.readFileSync('app/exam-practice.tsx','utf8');
+ assert.match(examRoute,/projectExamTeachingPuzzleStepV1/);
+ assert.match(examRoute,/<PuzzleStepRenderer step=\{(?:puzzleStep|\{\.\.\.puzzleStep,)/);
+ assert.doesNotMatch(examRoute,/interaction\.mode==='EVIDENCE_SELECT'/);
+ const out=path.resolve('artifacts/eot-production-frontend-acceptance');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'eight-family-paths.json'),JSON.stringify({generatedAt:new Date().toISOString(),count:receipts.length,receipts},null,2));
+});
