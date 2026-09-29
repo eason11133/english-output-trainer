@@ -9,6 +9,7 @@ const{submitExamToCanonicalTeacherV1}=require(path.join(build,'application/exam/
 const{buildExamTeacherInteractionV1,continueExamTeacherAfterInteractionV1}=require(path.join(build,'application/exam/examTeacherInteraction.js'));
 const{projectExamLearnerActionV1}=require(path.join(build,'application/exam/examPuzzleProjection.js'));
 const{createExamOperationalRuntimeV1,updateExamOperationalRuntimeV1,resumableExamOperationalRuntimeV1}=require(path.join(build,'application/exam/examOperationalRuntime.js'));
+const{createLearningSessionV1,currentLearningActivityV1,advanceLearningSessionV1}=require(path.join(build,'application/session/learningSessionState.js'));
 
 const families=['VOCABULARY','COMPREHENSIVE','CONTEXTUAL_FILL','DISCOURSE','READING','MIXED','TRANSLATION','WRITING'];
 const learnerId='frontend-acceptance';
@@ -70,10 +71,33 @@ test('all eight production families execute a real wrong-answer direct-learning 
  const projection=fs.readFileSync('src/application/exam/examTeacherInteraction.ts','utf8');
  assert.match(examRoute,/projectExamLearnerActionV1/);
  assert.match(examRoute,/<LearnerActionRenderer surface=\{learnerSurface\}/);
+ assert.match(examRoute,/onEvent=\{commitLearnerAction\}/);
  assert.doesNotMatch(examRoute,/interaction\.mode==='EVIDENCE_SELECT'/);
  assert.doesNotMatch(`${examRoute}\n${renderers}\n${asyncState}`,/TeacherRail|learnerFacingRepairCopy/);
  assert.doesNotMatch(`${examRoute}\n${renderers}\n${projection}`,/先確認真正卡住的地方|先做一個小判斷|完成一個小判斷|完成這一步|先完成這個可檢查的小步驟|Teacher 不會替你選答案/);
  assert.doesNotMatch(projection,/discriminatingActions\s*\.\s*map\s*\(/);
  assert.doesNotMatch(renderers,/step\.phase\s*\}|step\.support\s*\}/);
  const out=path.resolve('artifacts/eot-production-frontend-acceptance');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'eight-family-paths.json'),JSON.stringify({generatedAt:new Date().toISOString(),count:receipts.length,receipts},null,2));
+});
+
+test('Batch 2 production route uses a persisted multi-activity session and spatial direct manipulation',()=>{
+ const examRoute=fs.readFileSync('app/exam-practice.tsx','utf8');
+ const renderers=fs.readFileSync('components/learning/PuzzleRenderers.tsx','utf8');
+ const session=fs.readFileSync('src/application/session/learningSessionState.ts','utf8');
+ assert.match(session,/kind:'CORE'/);assert.match(session,/kind:'UNRELATED'/);assert.match(session,/kind:'REENCOUNTER'/);
+ assert.match(examRoute,/advanceLearningSessionV1/);
+ assert.doesNotMatch(examRoute,/router\.replace\(`\/exam-practice\?/);
+ assert.doesNotMatch(examRoute,/看看這次改變了什麼/);
+ assert.match(renderers,/measureInWindow/);assert.match(renderers,/g\.moveX/);assert.match(renderers,/g\.moveY/);
+ assert.match(renderers,/accessibilityLabel="可直接修改的原作"/);
+ assert.doesNotMatch(renderers,/authored!==undefined\?<Text/);
+ assert.match(renderers,/lookupGesture="LONG_PRESS"/);
+});
+
+test('session re-encounter is scheduled only after unrelated work and closes once',()=>{
+ let session=createLearningSessionV1({id:'s',learnerId:'l',occurredAt:'2026-09-29T00:00:00.000Z',primary:{taskId:'read-a',family:'READING'},unrelated:{taskId:'vocab-b',family:'VOCABULARY'},reencounter:{taskId:'read-c',family:'READING'}});
+ assert.equal(currentLearningActivityV1(session).kind,'CORE');
+ session=advanceLearningSessionV1(session,'2026-09-29T00:01:00.000Z');assert.equal(currentLearningActivityV1(session).kind,'UNRELATED');
+ session=advanceLearningSessionV1(session,'2026-09-29T00:02:00.000Z');assert.equal(currentLearningActivityV1(session).kind,'REENCOUNTER');
+ session=advanceLearningSessionV1(session,'2026-09-29T00:03:00.000Z');assert.equal(session.status,'COMPLETED');assert.equal(currentLearningActivityV1(session),undefined);assert.equal(session.completedActivityIds.length,3);
 });

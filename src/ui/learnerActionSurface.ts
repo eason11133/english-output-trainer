@@ -19,6 +19,8 @@ export type SpanRepairSurface=Base&{kind:'SPAN_REPAIR';authoredText:string;targe
 export type TranslationEditorSurface=Base&{kind:'TRANSLATION_EDITOR';sourceZh:string;authoredText:string;targetSpan?:string};
 export type WritingEditorSurface=Base&{kind:'WRITING_EDITOR';prompt:string;authoredText:string;targetSpan?:string};
 export type WritingDevelopmentSurface=Base&{kind:'WRITING_DEVELOPMENT';authoredText:string;targetSpan:string;missing:'REASON'|'EXAMPLE'|'SPECIFIC_DETAIL'};
+export type ReadingEvidenceSurface=Base&{kind:'READING_EVIDENCE';passage:string;spans:readonly LearnerSpan[];selectedOption:string};
+export type ReadingCompareSurface=Base&{kind:'READING_COMPARE';sourceSpan:string;selectedOption:string;aligned:readonly {id:string;source:string;option:string}[]};
 
-export type LearnerActionSurface=ChoiceSurface|EvidenceSurface|MeaningContrastSurface|SlotSurface|ChunkBuildSurface|CollocationSurface|WordBuildSurface|ReferenceTraceSurface|InsertionSurface|OrderSurface|SourceTraceSurface|SourceTransformSurface|RecallSurface|SpanRepairSurface|TranslationEditorSurface|WritingEditorSurface|WritingDevelopmentSurface;
+export type LearnerActionSurface=ChoiceSurface|EvidenceSurface|MeaningContrastSurface|SlotSurface|ChunkBuildSurface|CollocationSurface|WordBuildSurface|ReferenceTraceSurface|InsertionSurface|OrderSurface|SourceTraceSurface|SourceTransformSurface|RecallSurface|SpanRepairSurface|TranslationEditorSurface|WritingEditorSurface|WritingDevelopmentSurface|ReadingEvidenceSurface|ReadingCompareSurface;
 export type LearnerActionEvent={surfaceId:string;kind:'CHOICE'|'EVIDENCE'|'PLACEMENT'|'BUILD'|'MATCH'|'REFERENCE'|'ORDER'|'TRANSFORM'|'RECALL'|'REPAIR'|'DEVELOP';value:unknown};

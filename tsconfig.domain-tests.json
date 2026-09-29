@@ -26,6 +26,7 @@
     "src/application/exam/**/*.ts",
     "src/application/learner/**/*.ts",
     "src/application/learning/**/*.ts",
+    "src/application/session/**/*.ts",
     "src/application/teacher/**/*.ts",
     "src/application/v4/**/*.ts",
     "src/application/stage2/**/*.ts",

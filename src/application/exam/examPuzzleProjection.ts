@@ -9,7 +9,8 @@ const sentenceSpans=(text:string):LearnerSpan[]=>text.split(/(?<=[.!?])\s+|(?<=,
 const source=(task:ExamBetaTask)=>String(task.payload.passage??task.payload.source??task.payload.prompt??'');
 const firstQuestion=(task:ExamBetaTask)=>((task.payload.questions as {id:string;prompt:string;options?:unknown}[]|undefined)?.[0]);
 const base=(input:Input)=>({id:input.interaction.interactionId,taskId:input.task.task_id,instruction:input.interaction.prompt});
-function contrastItems(input:Input){const choices=options(firstQuestion(input.task)?.options??input.interaction.options).slice(0,4);return choices.map(item=>({id:item.id,word:item.label,meaning:item.label==='reserve'?'事先保留':item.label==='restore'?'恢復原本狀態':'放回句中比較意思',example:item.label==='reserve'?'reserve a seat':item.label==='restore'?'restore a file':`${item.label} …`}))}
+function contrastItems(input:Input){const question=firstQuestion(input.task),choices=options(question?.options??input.interaction.options).slice(0,4);return choices.map(item=>({id:item.id,word:item.label,meaning:'和這一題的實際語境比較',example:question?.prompt??source(input.task)}))}
+function readingAlignment(passage:string,option:string){const spans=sentenceSpans(passage),optionWords=option.toLowerCase().match(/[a-z]+/g)??[],score=(s:string)=>optionWords.filter(word=>word.length>3&&s.toLowerCase().includes(word)).length,sourceSpan=[...spans].sort((a,b)=>score(b.text)-score(a.text))[0]?.text??passage.split(/\n/)[0]??'',sourceWords=sourceSpan.match(/[A-Za-z]+|[^A-Za-z\s]+/g)??[],choiceWords=option.match(/[A-Za-z]+|[^A-Za-z\s]+/g)??[],length=Math.max(sourceWords.length,choiceWords.length),aligned=Array.from({length},(_,i)=>({id:`align-${i}`,source:sourceWords[i]??'—',option:choiceWords[i]??'—'})).filter(x=>x.source.toLowerCase()!==x.option.toLowerCase());return{sourceSpan,aligned}}
 
 export function projectExamLearnerActionV1(input:Input):LearnerActionSurface{
   const b=base(input),payload=input.task.payload,text=source(input.task),question=firstQuestion(input.task),target=String(input.decision.blockDecision.configuration.targetSpan??''),selected=input.learnerResponse;
@@ -32,10 +33,11 @@ export function projectExamLearnerActionV1(input:Input):LearnerActionSurface{
   }
   if(input.task.family==='READING'){
     if(input.interaction.mode==='COMPARE'||input.decision.treatmentResponse){
-      const choices=options(question?.options),wrong=choices.find(x=>x.id===selected)??choices[0],other=choices.find(x=>x.id!==wrong?.id)??choices[1];
-      return{...b,kind:'MEANING_CONTRAST',sentence:text,contrasts:[wrong,other].filter(Boolean).map(x=>({id:x!.id,word:x!.label,meaning:'和原文逐字對照',example:x!.label})),selectedAnswer:selected};
+      const choices=options(question?.options),wrong=choices.find(x=>x.id===selected)??choices[0],comparison=readingAlignment(text,wrong?.label??'');
+      return{...b,kind:'READING_COMPARE',sourceSpan:comparison.sourceSpan,selectedOption:wrong?.label??String(selected??''),aligned:comparison.aligned};
     }
-    return{...b,kind:'EVIDENCE',passage:text,spans:sentenceSpans(text),single:true,selectedAnswer:selected};
+    const choices=options(question?.options),wrong=choices.find(x=>x.id===selected)?.label??String(selected??'');
+    return{...b,kind:'READING_EVIDENCE',passage:text,spans:sentenceSpans(text),selectedOption:wrong};
   }
   if(input.task.family==='MIXED'){
     if(input.interaction.mode==='MARK')return{...b,kind:'SOURCE_TRACE',source:text,regions:text.split(/\n+/).filter(Boolean).map((part,index)=>({id:`source-${index}`,text:part}))};

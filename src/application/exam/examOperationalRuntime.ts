@@ -16,14 +16,14 @@ export function createExamOperationalRuntimeV1(input:{
 }
 
 export function updateExamOperationalRuntimeV1(runtime:ExamOperationalRuntimeV1,input:{
-  responses?:Readonly<Record<string,string>>;activeBlankId?:string;sourceOpen?:boolean;interactionText?:string;teacherMessage?:string;
+  responses?:Readonly<Record<string,string>>;activeBlankId?:string;sourceOpen?:boolean;interactionText?:string;learnerActionState?:Readonly<Record<string,unknown>>;teacherMessage?:string;
   teacherDecision?:QualifiedInnerTutorDecisionV1|null;activeInteraction?:ExamTeacherInteractionV1|null;interactionEvaluation?:Readonly<Record<string,unknown>>;phase?:ExamOperationalRuntimeV1['phase'];status?:ExamOperationalRuntimeV1['status'];submittedAt?:string;occurredAt?:string;
 }):ExamOperationalRuntimeV1{
   const now=input.occurredAt??new Date().toISOString(),decision=input.teacherDecision===null?undefined:input.teacherDecision??runtime.teacherDecision,interaction=input.activeInteraction===null?undefined:input.activeInteraction??runtime.activeInteraction;
   const history=decision&&!runtime.decisionHistory.some(item=>item.decisionPointId===decision.provenance.decisionPointId)?[...runtime.decisionHistory,{decisionPointId:decision.provenance.decisionPointId,mechanismId:decision.provenance.selectedMechanismId,support:decision.blockDecision.supportLevel,decidedAt:now}]:runtime.decisionHistory;
   const status=input.status??runtime.status,phase=input.phase??runtime.phase;
   const evaluations=input.interactionEvaluation?[...(runtime.interactionEvaluations??[]).filter(item=>item.evaluationId!==input.interactionEvaluation?.evaluationId),input.interactionEvaluation]:runtime.interactionEvaluations??[];
-  return Object.freeze({...runtime,responses:input.responses??runtime.responses,activeBlankId:input.activeBlankId??runtime.activeBlankId,sourceOpen:input.sourceOpen??runtime.sourceOpen,interactionText:input.interactionText??runtime.interactionText,teacherMessage:input.teacherMessage??runtime.teacherMessage,teacherDecision:decision,activeInteraction:interaction,decisionHistory:Object.freeze(history),interactionEvaluations:Object.freeze(evaluations),phase,status,submittedAt:input.submittedAt??runtime.submittedAt,updatedAt:now,endedAt:status==='COMPLETED'?runtime.endedAt??now:undefined});
+  return Object.freeze({...runtime,responses:input.responses??runtime.responses,activeBlankId:input.activeBlankId??runtime.activeBlankId,sourceOpen:input.sourceOpen??runtime.sourceOpen,interactionText:input.interactionText??runtime.interactionText,learnerActionState:input.learnerActionState??runtime.learnerActionState,teacherMessage:input.teacherMessage??runtime.teacherMessage,teacherDecision:decision,activeInteraction:interaction,decisionHistory:Object.freeze(history),interactionEvaluations:Object.freeze(evaluations),phase,status,submittedAt:input.submittedAt??runtime.submittedAt,updatedAt:now,endedAt:status==='COMPLETED'?runtime.endedAt??now:undefined});
 }
 
 export function resumableExamOperationalRuntimeV1(value:unknown,learnerId:string,sessionId:string):ExamOperationalRuntimeV1|undefined{

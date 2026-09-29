@@ -19,7 +19,7 @@ import {
   continueExamTeacherAfterInteractionV1,
   type ExamTeacherInteractionV1,
 } from '../src/application/exam/examTeacherInteraction';
-import { examBetaTaskById, examFamilyToPracticeFamilyV1, practiceFamilyToExamFamily, type ExamAllocationPurposeV1, type ExamBetaTask } from '../src/content/examBetaBank';
+import { examBetaTaskById, practiceFamilyToExamFamily, type ExamAllocationPurposeV1, type ExamBetaTask } from '../src/content/examBetaBank';
 import { resolveProductionExamContentV1 } from '../src/content/productionContentSupply';
 import { examContentHashV1 } from '../src/content/examValidationReceipts';
 import { loadExamTaskHistoryV1, recordExamTaskHistoryV1 } from '../src/persistence/examTaskHistory';
@@ -51,6 +51,7 @@ import type { CapabilityFacet } from '../src/domain/english/EnglishDomain';
 import {projectExamLearnerActionV1} from '../src/application/exam/examPuzzleProjection';
 import type {LearnerActionEvent} from '../src/ui/learnerActionSurface';
 import {LearnerActionRenderer} from '../components/learning/PuzzleRenderers';
+import {advanceLearningSessionV1,createLearningSessionV1,currentLearningActivityV1,loadActiveLearningSessionV1,saveLearningSessionV1,type LearningSessionV1} from '../src/application/session/learningSession';
 
 const examTeacherProvider=createExamTeacherProviderV1(requestQualifiedBlockDecision);
 const familyLabel:Record<string,string>={VOCABULARY:'詞彙',COMPREHENSIVE:'綜合測驗',CONTEXTUAL_FILL:'文意選填',DISCOURSE:'篇章結構',READING:'閱讀',MIXED:'混合題',TRANSLATION:'中譯英',WRITING:'英文作文'};
@@ -65,32 +66,44 @@ export default function ExamPractice() {
   const family = practiceFamilyToExamFamily(params.practiceFamily ?? '');
   const launchKey = useId();
   const exitToPractice=()=>router.replace('/(tabs)/practice');
-  const [selection, setSelection] = useState<{ taskId: string; sessionId: string; purpose:ExamAllocationPurposeV1 } | null>();
+  const [selection, setSelection] = useState<{ taskId: string; family:NonNullable<ReturnType<typeof practiceFamilyToExamFamily>>; sessionId: string; purpose:ExamAllocationPurposeV1 } | null>();
+  const [learningSession,setLearningSession]=useState<LearningSessionV1>();
   useEffect(() => {
     let live = true;
     void (async () => {
       if (!family) { if (live) setSelection(null); return; }
+      const activeSession=await loadActiveLearningSessionV1(learnerPreferences.learnerId),activeActivity=activeSession?currentLearningActivityV1(activeSession):undefined;
+      if(activeSession&&activeActivity){if(live){setLearningSession(activeSession);setSelection({taskId:activeActivity.taskId,family:activeActivity.family,sessionId:activeActivity.id,purpose:activeActivity.kind==='REENCOUNTER'?'FRESH_CHECK':'PRACTICE_NEW'})}return}
       const explicit=params.taskId?examBetaTaskById(family,params.taskId):undefined;
-      if(explicit){if(live)setSelection({taskId:explicit.task_id,sessionId:`exam:${explicit.task_id}:${learnerPreferences.learnerId}:${launchKey}`,purpose:params.purpose??'PRACTICE_NEW'});return}
+      let primary=explicit;
       const active = await loadActiveExamOperationalCheckpointV1(learnerPreferences.learnerId, family);
       const resumedTask = active ? examBetaTaskById(family, active.runtime.taskId) : undefined;
-      if (resumedTask&&active?.runtime.contentHash===examContentHashV1(resumedTask)) { if (live) setSelection({ taskId: resumedTask.task_id, sessionId: active!.runtime.id, purpose:'PRACTICE_NEW' }); return; }
+      if(!primary&&resumedTask&&active?.runtime.contentHash===examContentHashV1(resumedTask))primary=resumedTask;
       const history=await loadExamTaskHistoryV1(learnerPreferences.learnerId,family);
       const freshResolution=resolveProductionExamContentV1({family,learnerId:learnerPreferences.learnerId,role:'INDEPENDENT_ASSESS',variant:params.amount,rotationKey:launchKey,recent:history});
       const reviewResolution=freshResolution.status==='READY'?undefined:resolveProductionExamContentV1({family,learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',variant:params.amount,rotationKey:launchKey,recent:history});
-      const fresh=freshResolution.status==='READY'?freshResolution.content.task:undefined,task=fresh??(reviewResolution?.status==='READY'?reviewResolution.content.task:undefined);
-      if (live) setSelection(task ? { taskId: task.task_id, sessionId: `exam:${task.task_id}:${learnerPreferences.learnerId}:${launchKey}`, purpose:fresh?'PRACTICE_NEW':'REVIEW_ONLY' } : null);
+      const fresh=freshResolution.status==='READY'?freshResolution.content.task:undefined;primary=primary??fresh??(reviewResolution?.status==='READY'?reviewResolution.content.task:undefined);
+      if(!primary){if(live)setSelection(null);return}
+      const unrelatedFamily=(family==='READING'?'VOCABULARY':'READING') as typeof family;
+      const unrelatedResolution=resolveProductionExamContentV1({family:unrelatedFamily,learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',rotationKey:`${launchKey}:unrelated`});
+      const unrelated=unrelatedResolution.status==='READY'?unrelatedResolution.content.task:undefined;
+      const reResolution=resolveProductionExamContentV1({family,learnerId:learnerPreferences.learnerId,role:'INDEPENDENT_ASSESS',rotationKey:`${launchKey}:reencounter`,recent:[...history,{taskId:primary.task_id,contentHash:examContentHashV1(primary),contentLineage:primary.content_lineage_id,freshnessGroupId:primary.freshness_group_id}]});
+      const reencounter=reResolution.status==='READY'?reResolution.content.task:undefined;
+      const session=createLearningSessionV1({id:`learning:${learnerPreferences.learnerId}:${Date.now()}`,learnerId:learnerPreferences.learnerId,primary:{taskId:primary.task_id,family:primary.family},unrelated:unrelated?{taskId:unrelated.task_id,family:unrelated.family}:undefined,reencounter:reencounter?{taskId:reencounter.task_id,family:reencounter.family}:undefined});
+      await saveLearningSessionV1(session);const activity=currentLearningActivityV1(session);
+      if(live){setLearningSession(session);setSelection({taskId:activity.taskId,family:activity.family,sessionId:activity.id,purpose:fresh?'PRACTICE_NEW':'REVIEW_ONLY'})}
     })();
     return () => { live = false; };
   }, [family, launchKey, learnerPreferences.learnerId, params.amount,params.purpose,params.taskId]);
-  const task = family && selection ? examBetaTaskById(family, selection.taskId) : undefined;
+  const task = selection ? examBetaTaskById(selection.family, selection.taskId) : undefined;
+  const advance=async()=>{if(!learningSession)return;const next=advanceLearningSessionV1(learningSession);await saveLearningSessionV1(next);setLearningSession(next);const activity=currentLearningActivityV1(next);if(activity){setSelection({taskId:activity.taskId,family:activity.family,sessionId:activity.id,purpose:activity.kind==='REENCOUNTER'?'FRESH_CHECK':'PRACTICE_NEW'})}else router.replace(`/result?origin=TODAY&sessionId=${encodeURIComponent(next.id)}` as Href)};
   useLearnerBack(exitToPractice,undefined,!task);
   if (selection === undefined) return <Shell onBack={exitToPractice}><Text style={styles.title}>正在接回練習…</Text></Shell>;
   if (!task || !selection) return <Shell onBack={exitToPractice}><Text style={styles.title}>目前沒有可用的題目</Text><Button label="返回練習" onPress={exitToPractice} /></Shell>;
-  return <ExamPracticeSession task={task} sessionId={selection.sessionId} allocationPurpose={selection.purpose} learnerId={learnerPreferences.learnerId} runtimeProductContext={runtimeProductContext} coachMarks={profile.gsatBeta.coachMarks} markCoach={name=>void updateProductContext({gsatBeta:{coachMarks:{[name]:true}}})} recordTutorialAction={async(...args)=>{if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED)await recordTutorialAction(...args)}} formal={params.formal==='1'} />;
+  return <ExamPracticeSession key={selection.sessionId} task={task} sessionId={selection.sessionId} allocationPurpose={selection.purpose} learnerId={learnerPreferences.learnerId} runtimeProductContext={runtimeProductContext} coachMarks={profile.gsatBeta.coachMarks} markCoach={name=>void updateProductContext({gsatBeta:{coachMarks:{[name]:true}}})} recordTutorialAction={async(...args)=>{if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED)await recordTutorialAction(...args)}} formal={params.formal==='1'} onActivityComplete={advance}/>;
 }
 
-function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, runtimeProductContext,coachMarks,markCoach,recordTutorialAction,formal=false }: { task: ExamBetaTask; sessionId: string; allocationPurpose:ExamAllocationPurposeV1; learnerId: string; runtimeProductContext: ProductContextV1;coachMarks:{teacher:boolean;mcq?:boolean;lookup?:boolean};markCoach:(name:'teacher'|'mcq'|'lookup')=>void;recordTutorialAction:ReturnType<typeof useCanonicalProductData>['recordTutorialAction'];formal?:boolean }) {
+function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, runtimeProductContext,coachMarks,markCoach,recordTutorialAction,formal=false,onActivityComplete }: { task: ExamBetaTask; sessionId: string; allocationPurpose:ExamAllocationPurposeV1; learnerId: string; runtimeProductContext: ProductContextV1;coachMarks:{teacher:boolean;mcq?:boolean;lookup?:boolean};markCoach:(name:'teacher'|'mcq'|'lookup')=>void;recordTutorialAction:ReturnType<typeof useCanonicalProductData>['recordTutorialAction'];formal?:boolean;onActivityComplete:()=>Promise<void> }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [localWrong,setLocalWrong]=useState<Record<string,boolean>>({});
   const [activeBlank, setActiveBlank] = useState('1');
@@ -106,6 +119,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const [writingPromptOpen,setWritingPromptOpen]=useState(true);
   const [transportError,setTransportError]=useState(false);
   const[lookupExposure,setLookupExposure]=useState<string[]>([]);
+  const[learnerActionState,setLearnerActionState]=useState<Readonly<Record<string,unknown>>>({});
   const runtimeRef = useRef<ExamOperationalRuntimeV1 | null>(null);
   const submitInFlightRef=useRef(false);
   const exitInFlightRef=useRef(false);
@@ -176,6 +190,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       activeBlankId: current.activeBlank,
       sourceOpen: current.sourceOpen,
       interactionText: current.interactionText,
+      learnerActionState,
       teacherMessage: current.teacherMessage,
       teacherDecision: current.teacherDecision ?? null,
       activeInteraction: current.interaction ?? null,
@@ -204,6 +219,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
         setTeacherDecision(resumed.teacherDecision);
         setInteraction(resumed.activeInteraction as ExamTeacherInteractionV1 | undefined);
         setInteractionText(resumed.interactionText);
+        setLearnerActionState(resumed.learnerActionState??{});
         setTeacherMessage(resumed.teacherMessage);
         setDone(false);
         setResumeMessage('已接回你剛才做到的地方。');
@@ -229,7 +245,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     if (!hydrated || done) return;
     const timer = setTimeout(() => { void persistLatest(); }, 700);
     return () => clearTimeout(timer);
-  }, [answers, activeBlank, sourceOpen, interactionText, hydrated, done]);
+  }, [answers, activeBlank, sourceOpen, interactionText, learnerActionState, hydrated, done]);
 
   async function applyDecision(decision: QualifiedInnerTutorDecisionV1 | undefined, fallback: string, previous?: QualifiedInnerTutorDecisionV1) {
     const nextInteraction = decision ? buildExamTeacherInteractionV1({ decision, sessionId, sourceTaskContext:{...sourceTaskContext,...decision.lineage?.context.sourceTaskContext,registeredDiagnosticProbe:diagnosticProbe(decision)} }) : undefined;
@@ -261,6 +277,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       if (previous && previous.provenance.selectedMechanismId !== decision.provenance.selectedMechanismId) await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'TEACHER_RECOMPOSED', phase: 'TEACHER_INTERACTION', interactionMode: nextInteraction.mode, teacherAction: decision.action, mechanismId: decision.provenance.selectedMechanismId, eventKey: `recomposed:${decision.provenance.decisionPointId}` });
     } else if (nextDone) {
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'SESSION_COMPLETED', phase: 'COMPLETED', teacherAction: decision?.action, mechanismId: decision?.provenance.selectedMechanismId, eventKey: 'completed' });
+      await onActivityComplete();
     }
     return nextRuntime;
   }
@@ -364,30 +381,26 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   async function startFreshAttempt(force=false){
     if(busy&&!force)return;setBusy(true);
     try{
-      const targetRef=teacherDecision?.provenance.targetRef??firstUnit?.canonicalTargetRef,facet=(teacherDecision?.provenance.facet??firstUnit?.canonicalFacet)as CapabilityFacet|undefined;
-      const history=await loadExamTaskHistoryV1(learnerId,task.family),recent=[...history,{taskId:task.task_id,contentHash:examContentHashV1(task),contentLineage:task.content_lineage_id,freshnessGroupId:task.freshness_group_id}],resolution=resolveProductionExamContentV1({family:task.family,learnerId,role:'INDEPENDENT_ASSESS',targetRef,facet,rotationKey:`${sessionId}:fresh`,recent}),fresh=resolution.status==='READY'?resolution.content.task:undefined;
-      if(!fresh){setTeacherMessage('目前沒有另一題符合相同範圍且通過驗證的獨立題；這次進展會保留，稍後再確認。');return}
-      // Moving from a supported repair into a clean task is the observable
-      // support-fade event. Persist both receipts before the fresh task can
-      // complete, otherwise first-use completion can outrun its prerequisites.
+      // The session scheduler owns the clean re-encounter and deliberately
+      // places unrelated work before it. This activity only closes itself.
       await recordTutorialAction('FIRST_TEACHER_REPAIR_COMPLETED',`repair-to-fresh:${runtimeRef.current?.attemptId??sessionId}`,'/exam-practice');
-      await recordTutorialAction('FIRST_SUPPORT_FADE_COMPLETED',`fade-to-fresh:${fresh.task_id}`,'/exam-practice');
-      // The teaching session is closed by an explicit fresh-check handoff. The
-      // new task owns the remaining episode, so Today must not revive this one.
       await persistLatest('COMPLETED');
-      router.replace(`/exam-practice?practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(task.family))}&taskId=${encodeURIComponent(fresh.task_id)}&purpose=FRESH_CHECK&sourceSession=${encodeURIComponent(sessionId)}` as Href);
+      await onActivityComplete();
     }finally{setBusy(false)}
   }
 
-  function reportContent(){void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:'CONTENT_REPORTED',phase:'COMPLETED',eventKey:`content-report:${runtimeRef.current?.attemptId??'attempt'}`})}
-
   const setAnswer = (id: string, value: string) => {setAnswers(current => ({ ...current, [id]: value }));const expected=String((task.answer_or_rubric as {answers?:Record<string,unknown>}|undefined)?.answers?.[id]??'');if(expected)setLocalWrong(current=>({...current,[id]:value!==expected}));if(!coachMarks.mcq)markCoach('mcq')};
+  const placeSpatial=(id:string,value:string)=>{setAnswers(current=>({...Object.fromEntries(Object.entries(current).filter(([key,placed])=>key===id||placed!==value)),[id]:value}));const expected=String((task.answer_or_rubric as {answers?:Record<string,unknown>}|undefined)?.answers?.[id]??'');if(expected)setLocalWrong(current=>({...current,[id]:value!==expected}));if(!coachMarks.mcq)markCoach('mcq')};
   const lookupMode=formal?'FORMAL_ASSESSMENT' as const:'NONE' as const;
   const recordLookup=(result:{senseId?:string;lemma?:string})=>{setLookupExposure(current=>[...new Set([...current,result.senseId??result.lemma??'lookup'])]);if(!coachMarks.lookup)markCoach('lookup')};
   const recordLookupResult=(result:{status:string})=>void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:result.status==='LOCKED'?'LOOKUP_LOCKED':result.status==='RESOLVED'?'LOOKUP_OPENED':'LOOKUP_UNRESOLVED',eventKey:`lookup:${result.status}:${runtimeRef.current?.attemptId??'pending'}`});
   const learnerSurface=interaction&&teacherDecision?projectExamLearnerActionV1({decision:teacherDecision,interaction,task,learnerResponse:firstUnit?answers[firstUnit.responseKey]:undefined}):undefined;
   const commitLearnerAction=(event:LearnerActionEvent)=>{
     const response=typeof event.value==='string'?event.value:JSON.stringify(event.value);
+    if(typeof event.value==='string'&&firstUnit&&['REPAIR','DEVELOP','TRANSFORM'].includes(event.kind)){
+      const nextAnswers={...answers,[firstUnit.responseKey]:event.value};setAnswers(nextAnswers);
+      runtimeRef.current=updateExamOperationalRuntimeV1(baseRuntime(),{responses:nextAnswers,interactionText:event.value,learnerActionState});
+    }
     void completeInteraction('SUBMITTED',response);
   };
   // Choice rows are one unambiguous action: tapping commits the answer. Their
@@ -420,12 +433,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
         return <View key={blank.id} style={styles.block}><Text style={styles.label}>第 {blank.id} 空</Text>{blank.options?.map(item => option(blank.id, item))}</View>;
       }) : null}
       {shared.length ? <>
-        <View style={styles.row}>{blanks.map(value => {
-          const id = typeof value === 'string' ? value : value.id;
-          return <Pressable key={id} onPress={() => setActiveBlank(id)} style={[styles.blank, activeBlank === id && styles.selected]}><Text>{id}: {answers[id] ?? '＿'}</Text></Pressable>;
-        })}</View>
-        <Text style={styles.label}>目前作答：第 {activeBlank} 空（可重新選）</Text>
-        {shared.filter(item=>!Object.entries(answers).some(([id,value])=>id!==activeBlank&&value===item.id)).map(item => ['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family)?<DraggableOption key={item.id} item={item} onDrop={()=>setAnswer(activeBlank,item.id)}/>:option(activeBlank, item))}
+        {['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family)?<SpatialPlacementBoard blanks={blanks.map(value=>typeof value==='string'?value:value.id)} options={shared} answers={answers} onPlace={placeSpatial} onRemove={id=>setAnswers(current=>{const next={...current};delete next[id];return next})}/>:<><View style={styles.row}>{blanks.map(value => {const id = typeof value === 'string' ? value : value.id;return <Pressable key={id} onPress={() => setActiveBlank(id)} style={[styles.blank, activeBlank === id && styles.selected]}><Text>{id}: {answers[id] ?? '＿'}</Text></Pressable>})}</View><Text style={styles.label}>目前作答：第 {activeBlank} 空（可重新選）</Text>{shared.filter(item=>!Object.entries(answers).some(([id,value])=>id!==activeBlank&&value===item.id)).map(item=>option(activeBlank,item))}</>}
       </> : null}
       {questions.map(question => <View key={question.id} style={styles.block}><UniversalLookupText text={question.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{question.options?.map(item => option(question.id, item))}</View>)}
       {parts.map(part => <View key={part.id} style={styles.block}><UniversalLookupText text={part.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{part.options ? part.options.map(item => option(part.id, item)) : <TextInput value={answers[part.id] ?? ''} onChangeText={value => setAnswer(part.id, value)} style={styles.input} />}</View>)}
@@ -436,12 +444,12 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
     </> : null}
 
     {interaction&&learnerSurface ? <View style={styles.repairRegion}>
-      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<Button label={busy?'正在準備…':'換一題'} disabled={busy} onPress={()=>void startFreshAttempt()}/>:<LearnerActionRenderer surface={learnerSurface} onEvent={commitLearnerAction}/>}
+      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<Button label={busy?'正在準備…':'繼續這一輪'} disabled={busy} onPress={()=>void startFreshAttempt()}/>:<LearnerActionRenderer surface={learnerSurface} initialState={learnerActionState} onStateChange={state=>setLearnerActionState(state)} onEvent={commitLearnerAction}/>}
     </View> : null}
 
     {transportError?<View accessibilityRole="alert" style={styles.transportError}><Text style={styles.transportCopy}>剛才沒有送出去。你的內容還在。</Text><Pressable accessibilityRole="button" onPress={()=>void (teacherDecision?completeInteraction('SUBMITTED'):submit())} style={styles.retryAction}><Text style={styles.retryText}>再試一次</Text></Pressable></View>:null}
 
-    {done ? <View style={styles.completion}><Text style={styles.completionMark}>✓</Text><Text style={styles.completionTitle}>這次先到這裡</Text>{teacherMessage?<Text style={styles.completionBody}>{teacherMessage}</Text>:null}<Button label="看看這次改變了什麼" onPress={()=>router.replace(`/result?origin=TODAY&practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(task.family))}&sessionId=${encodeURIComponent(sessionId)}` as Href)}/><Pressable accessibilityRole="button" onPress={reportContent}><Text style={styles.secondary}>回報內容問題</Text></Pressable></View> : null}
+    {done ? <View style={styles.completion}><Text style={styles.completionTitle}>正在前往下一個活動…</Text>{teacherMessage?<Text style={styles.completionBody}>{teacherMessage}</Text>:null}</View> : null}
   </Shell>;
 }
 
@@ -452,7 +460,12 @@ function Shell({ children,onBack,family }: { children: React.ReactNode;onBack?:(
 function Button({ label, onPress, disabled=false }: { label: string; onPress: () => void; disabled?:boolean }) {
   return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,disabled&&styles.buttonDisabled,pressed&&!disabled&&styles.pressed]}><Text style={styles.buttonText}>{label}</Text></Pressable>;
 }
-function DraggableOption({item,onDrop}:{item:Option;onDrop:()=>void}){const[position]=useState(()=>new Animated.ValueXY()),responder=useMemo(()=>PanResponder.create({onStartShouldSetPanResponder:()=>true,onMoveShouldSetPanResponder:()=>true,onPanResponderMove:Animated.event([null,{dx:position.x,dy:position.y}],{useNativeDriver:false}),onPanResponderRelease:()=>{onDrop();Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()},onPanResponderTerminate:()=>Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()}),[onDrop,position]);return <Animated.View accessibilityRole="button" accessibilityLabel={`拖曳 ${item.text} 到目前空格`} accessibilityHint="拖到空格，或點一下直接放入" onAccessibilityTap={onDrop} {...responder.panHandlers} style={[styles.dragToken,{transform:position.getTranslateTransform()}]}><Text style={styles.optionText}>{item.text}</Text></Animated.View>}
+type DropBox={x:number;y:number;width:number;height:number};
+type DropTargetRef=View|null;
+function SpatialPlacementBoard({blanks,options,answers,onPlace,onRemove}:{blanks:string[];options:Option[];answers:Record<string,string>;onPlace:(id:string,value:string)=>void;onRemove:(id:string)=>void}){const targets=useRef(new Map<string,DropTargetRef>()),placed=new Set(Object.values(answers));return <View style={styles.spatialBoard}><Text style={styles.label}>把選項拖到實際空格；可再拖到別格，拖到空白處可取回。</Text>{blanks.map(id=><SpatialBlank key={id} id={id} item={options.find(x=>x.id===answers[id])} register={node=>targets.current.set(id,node)}><SpatialDrag item={options.find(x=>x.id===answers[id])} origin={id} targets={targets} onPlace={onPlace} onRemove={onRemove}/></SpatialBlank>)}<View style={styles.spatialPool}>{options.filter(item=>!placed.has(item.id)).map(item=><SpatialDrag key={item.id} item={item} targets={targets} onPlace={onPlace} onRemove={onRemove}/>)}</View></View>}
+function SpatialBlank({id,item,register,children}:{id:string;item?:Option;register:(node:DropTargetRef)=>void;children:React.ReactNode}){return <View ref={register} accessibilityLabel={`第 ${id} 空放置區`} style={[styles.spatialBlank,item&&styles.selected]}><Text style={styles.blankNumber}>{id}</Text>{item?children:<Text style={styles.dropHint}>拖到這裡</Text>}</View>}
+function locateDrop(targets:Map<string,DropTargetRef>,x:number,y:number,done:(id?:string)=>void){const entries=[...targets],boxes=new Map<string,DropBox>();if(!entries.length){done();return}let remaining=entries.length;for(const[id,node]of entries){if(!node){if(!--remaining)done();continue}node.measureInWindow((left,top,width,height)=>{boxes.set(id,{x:left,y:top,width,height});if(!--remaining)done([...boxes].find(([,b])=>x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height)?.[0])})}}
+function SpatialDrag({item,origin,targets,onPlace,onRemove}:{item?:Option;origin?:string;targets:React.MutableRefObject<Map<string,DropTargetRef>>;onPlace:(id:string,value:string)=>void;onRemove:(id:string)=>void}){const[position]=useState(()=>new Animated.ValueXY()),responder=useMemo(()=>PanResponder.create({onStartShouldSetPanResponder:()=>Boolean(item),onMoveShouldSetPanResponder:()=>Boolean(item),onPanResponderMove:Animated.event([null,{dx:position.x,dy:position.y}],{useNativeDriver:false}),onPanResponderRelease:(_,g)=>{locateDrop(targets.current,g.moveX,g.moveY,hit=>{if(hit&&item){if(origin&&origin!==hit)onRemove(origin);onPlace(hit,item.id)}else if(origin)onRemove(origin);Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()})},onPanResponderTerminate:()=>Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()}),[item,origin,onPlace,onRemove,position,targets]);if(!item)return null;return <Animated.View accessibilityRole="button" accessibilityLabel={`拖曳 ${item.text}`} {...responder.panHandlers} style={[styles.dragToken,{transform:position.getTranslateTransform()}]}><Text style={styles.optionText}>{item.text}</Text></Animated.View>}
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: t.colors.background },
   fixedTop:{height:48,paddingHorizontal:20,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderBottomWidth:1,borderBottomColor:t.colors.divider},headerFamily:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.ink},more:{fontSize:16,color:t.colors.muted,textAlign:'right'},menu:{position:'absolute',zIndex:5,top:50,right:20,backgroundColor:t.colors.surface,borderWidth:1,borderColor:t.colors.divider,borderRadius:10,padding:6},menuAction:{minHeight:44,paddingHorizontal:14,justifyContent:'center'},menuText:{fontSize:14,color:t.colors.ink},content: { width: '100%', maxWidth:390, alignSelf: 'center', paddingHorizontal:20,paddingTop:14, paddingBottom: 110, gap: 20 },
@@ -463,7 +476,7 @@ const styles = StyleSheet.create({
   kicker: { fontSize:12,lineHeight:18,fontWeight:'500', color:t.colors.muted }, title: { fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink }, passage: { fontSize:17,lineHeight:27,color:t.colors.ink }, zh: { fontSize:18,lineHeight:29,color:t.colors.ink },
   answerArea:{gap:10},teacherAction:{gap:16},block: { gap: 4, paddingVertical: 9 }, label: { fontSize:15,lineHeight:23,fontWeight: '900',color:t.colors.ink }, option: { minHeight: 60, paddingVertical:10, borderBottomWidth: 1, borderColor: t.colors.line, flexDirection:'row',alignItems:'center',gap:12 },wrongOption:{backgroundColor:t.colors.dangerWash,borderColor:t.colors.danger},optionCommittedOut:{opacity:.42},selector:{width:34,height:34,borderRadius:17,borderWidth:1,borderColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},selectorText:{fontWeight:'900',color:t.colors.deepWood},optionText:{flex:1,fontSize:16,lineHeight:24,color:t.colors.ink}, selected: { borderColor: t.colors.deepWood, backgroundColor:t.colors.woodWash },teacherChoice:{minHeight:58,paddingVertical:12,borderBottomWidth:1,borderColor:t.colors.line,justifyContent:'center'},teacherChoiceText:{fontSize:16,lineHeight:24,color:t.colors.ink},evidenceTray:{flexDirection:'row',flexWrap:'wrap',gap:9,paddingVertical:8},evidencePiece:{minHeight:48,paddingHorizontal:13,paddingVertical:10,borderRadius:12,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper,justifyContent:'center'},evidencePieceOn:{backgroundColor:t.colors.focusWash,borderColor:t.colors.focus},evidenceText:{fontSize:14,lineHeight:20,fontWeight:'700',color:t.colors.ink},evidenceTextOn:{color:t.colors.deepWood},contrastBoard:{borderTopWidth:1,borderTopColor:t.colors.line},contrastRow:{minHeight:62,paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,flexDirection:'row',alignItems:'center',gap:14},contrastRowOn:{backgroundColor:t.colors.focusWash},contrastWord:{width:82,fontSize:17,fontWeight:'900',color:t.colors.deepWood},contrastCue:{flex:1,fontSize:14,lineHeight:21,color:t.colors.muted},chunkBoard:{flexDirection:'row',flexWrap:'wrap',gap:10,paddingVertical:8},chunkPiece:{minHeight:52,paddingHorizontal:14,paddingVertical:11,borderRadius:10,borderWidth:1,borderColor:t.colors.lightWood,backgroundColor:t.colors.paper},chunkPieceOn:{borderColor:t.colors.focus,backgroundColor:t.colors.focusWash,transform:[{translateY:-2}]},chunkText:{fontSize:15,fontWeight:'800',color:t.colors.ink},chunkTextOn:{color:t.colors.deepWood},
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, blank: { minWidth: 58,minHeight:44,justifyContent:'center', padding: 10, borderWidth: 1, borderColor: t.colors.line, borderRadius: 10 }, input: { minHeight: 56, borderBottomWidth: 1, borderColor: t.colors.dividerStrong, paddingVertical: 15,color:t.colors.ink,fontSize:16,lineHeight:24, textAlignVertical: 'top' }, authoredBlock:{gap:12,paddingVertical:8},writingWorkspace:{gap:14},promptToggle:{minHeight:44,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},promptChevron:{fontSize:12,lineHeight:18,color:t.colors.muted},authoredLabel:{fontSize:12,lineHeight:18,fontWeight:'500',color:t.colors.muted},authoredInput:{minHeight:128,paddingVertical:16,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.dividerStrong,color:t.colors.ink,fontSize:17,lineHeight:27,textAlignVertical:'top'},requirements:{gap:4,paddingBottom:8},requirement:{fontSize:14,lineHeight:21,color:t.colors.muted},wordCount:{fontSize:12,lineHeight:18,color:t.colors.subtle,textAlign:'right'},long: { minHeight:280 },
-  dragToken:{minHeight:52,paddingHorizontal:14,justifyContent:'center',borderBottomWidth:1,borderBottomColor:t.colors.divider,backgroundColor:t.colors.surface,zIndex:2},
+  spatialBoard:{gap:10},spatialPool:{gap:6,marginTop:10},spatialBlank:{minHeight:60,borderWidth:1,borderStyle:'dashed',borderColor:t.colors.dividerStrong,borderRadius:12,padding:8,flexDirection:'row',alignItems:'center',gap:10},blankNumber:{width:24,fontWeight:'700',color:t.colors.muted},dropHint:{color:t.colors.subtle},dragToken:{minHeight:46,flex:1,paddingHorizontal:12,justifyContent:'center',borderWidth:1,borderColor:t.colors.divider,borderRadius:10,backgroundColor:t.colors.surface,zIndex:4},
   transportError:{paddingVertical:12,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.danger,gap:8},transportCopy:{fontSize:14,lineHeight:21,color:t.colors.ink},retryAction:{minHeight:44,alignSelf:'flex-start',justifyContent:'center'},retryText:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.danger},button:{minHeight:52,borderRadius:14,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},buttonDisabled:{opacity:.4},pressed:{opacity:.9,transform:[{scale:.98}]},buttonText:{color:t.colors.paper,fontSize:16,fontWeight:'600'},checking:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontSize:14,color:t.colors.muted},note:{padding:12,backgroundColor:t.colors.successWash,color:t.colors.success,lineHeight:21},resume:{paddingVertical:10,borderBottomWidth:1,borderBottomColor:t.colors.line,color:t.colors.deepWood,fontWeight:'600'},repairRegion:{gap:24,paddingVertical:8},contextThread:{gap:7,opacity:.58,paddingBottom:18,borderBottomWidth:1,borderBottomColor:t.colors.divider},contextText:{fontSize:15,lineHeight:24,color:t.colors.muted},teacherRail:{flexDirection:'row',gap:14},repairRule:{width:3,borderRadius:2,backgroundColor:t.colors.focus},teacherRailBody:{flex:1,gap:16},teacherTitle:{fontSize:16,lineHeight:24,fontWeight:'600',color:t.colors.ink},stuckAction:{minHeight:52,alignItems:'center',justifyContent:'center',gap:2},stuckText:{fontSize:14,fontWeight:'600',color:t.colors.midWood},stuckHint:{fontSize:11,color:t.colors.subtle},secondary:{minHeight:44,textAlign:'center',textAlignVertical:'center',fontWeight:'600',color:t.colors.midWood},completion:{paddingVertical:34,gap:16,alignItems:'stretch'},completionMark:{display:'none'},completionTitle:{fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink},completionBody:{fontSize:16,lineHeight:24,color:t.colors.muted},
   freshHandoff:{minHeight:460,justifyContent:'center',gap:16},freshTitle:{fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink},pulseCard: { gap: 12, padding: 16, borderRadius: 18, backgroundColor: woodTheme.colors.paper, borderWidth: 1, borderColor: woodTheme.colors.line }, pulseQuestion: { fontSize: 15, fontWeight: '800', color: woodTheme.colors.ink }, pulseChoice: { flex: 1, minWidth: 80, minHeight: 44, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 11, alignItems: 'center', justifyContent: 'center' }, ratingRow: { flexDirection: 'row', gap: 8 }, rating: { flex: 1, minHeight: 42, borderWidth: 1, borderColor: woodTheme.colors.line, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }, ratingText: { fontWeight: '800' }, ratingLegend: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }, ratingLegendText: { fontSize: 11, color: woodTheme.colors.subtle }, pulseThanks: { fontSize: 12, color: woodTheme.colors.muted, textAlign: 'center' }, weekChoices: { gap: 8 },
 });

@@ -38,6 +38,7 @@ export interface ExamOperationalRuntimeV1 {
   activeBlankId:string;
   sourceOpen:boolean;
   interactionText:string;
+  learnerActionState?:Readonly<Record<string,unknown>>;
   teacherMessage:string;
   teacherDecision?:QualifiedInnerTutorDecisionV1;
   activeInteraction?:{schemaVersion:1;interactionId:string;decisionPointId:string;blockId:string;mechanismId:string;mode:string;title:string;prompt:string;placeholder?:string;options?:readonly {id:string;label:string}[];support:string;mustAct:true;answerLeakageForbidden:true};
