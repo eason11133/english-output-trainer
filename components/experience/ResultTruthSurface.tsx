@@ -7,8 +7,9 @@ export type ResultOutcomeV1='INDEPENDENT_FRESH_SUCCESS'|'SUPPORTED_PROGRESS'|'FR
 const labels:Record<ResultOutcomeV1,string>={INDEPENDENT_FRESH_SUCCESS:'這次能自己完成',SUPPORTED_PROGRESS:'提示有幫上忙',FRESH_FAILURE:'換了情境，還需要再練一次',QUICK_FIX:'這一點已經修好',UNRESOLVED:'這次先保留到這裡',AUTHORED_REPAIR:'你的內容已經往前一步'};
 export function ResultTruthSurface({primary,next,secondary,outcome='UNRESOLVED'}:{primary:string;next:string;secondary?:string;outcome?:ResultOutcomeV1;evidenceCount?:number}){
   return <View style={s.root}>
-    <Text style={s.eyebrow}>這次學到哪裡</Text><Text style={s.title}>{labels[outcome]}</Text>
-    <UniversalLookupText text={primary} submitted style={s.truth}/>{secondary?<Text style={s.secondary}>{secondary}</Text>:null}
+    <Text style={s.eyebrow}>今天你自己做到</Text><Text style={s.title}>{labels[outcome]}</Text>
+    <UniversalLookupText text={primary} submitted style={s.truth}/>
+    <View style={s.divider}/><Text style={s.nextLabel}>還需要練</Text><Text style={s.next}>{secondary??(outcome==='INDEPENDENT_FRESH_SUCCESS'?'換到更多新內容後，再確認一次。':'目前這一點還需要一些支援。')}</Text>
     <View style={s.divider}/><Text style={s.nextLabel}>接下來</Text><UniversalLookupText text={next.replace(/^下一步：/,'')} submitted style={s.next}/>
   </View>;
 }

@@ -59,16 +59,6 @@ type Option = { id: string; text: string };
 type Blank = { id: string; options?: Option[] };
 type Question = { id: string; prompt: string; options?: Option[] };
 
-function learnerFacingRepairCopy(text:string){
-  return text
-    .replaceAll('先確認真正卡住的地方','先做一個小判斷')
-    .replaceAll('標出句法位置需要什麼形式','看空格前後需要哪一種形式')
-    .replaceAll('從字根重新組出正確詞形','把單字拆開，再重新組一次')
-    .replaceAll('不看選項自己打出答案','先收起選項，自己想出答案')
-    .replaceAll('完成一個小判斷，EOT 老師才不會把不同問題當成同一種錯誤。','先做一個小判斷，接著會依你的答案調整。')
-    .replaceAll('EOT 老師','EOT');
-}
-
 export default function ExamPractice() {
   const params = useLocalSearchParams<{ practiceFamily?: string; amount?: string; formal?:string; calibration?:string;taskId?:string;purpose?:ExamAllocationPurposeV1;sourceSession?:string }>();
   const { learnerPreferences, runtimeProductContext,profile,updateProductContext,recordTutorialAction } = useCanonicalProductData();
@@ -96,7 +86,7 @@ export default function ExamPractice() {
   const task = family && selection ? examBetaTaskById(family, selection.taskId) : undefined;
   useLearnerBack(exitToPractice,undefined,!task);
   if (selection === undefined) return <Shell onBack={exitToPractice}><Text style={styles.title}>正在接回練習…</Text></Shell>;
-  if (!task || !selection) return <Shell onBack={exitToPractice}><Text style={styles.title}>目前沒有通過驗證的題目</Text><Button label="返回練習" onPress={exitToPractice} /></Shell>;
+  if (!task || !selection) return <Shell onBack={exitToPractice}><Text style={styles.title}>目前沒有可用的題目</Text><Button label="返回練習" onPress={exitToPractice} /></Shell>;
   return <ExamPracticeSession task={task} sessionId={selection.sessionId} allocationPurpose={selection.purpose} learnerId={learnerPreferences.learnerId} runtimeProductContext={runtimeProductContext} coachMarks={profile.gsatBeta.coachMarks} markCoach={name=>void updateProductContext({gsatBeta:{coachMarks:{[name]:true}}})} recordTutorialAction={async(...args)=>{if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED)await recordTutorialAction(...args)}} formal={params.formal==='1'} />;
 }
 
@@ -413,12 +403,10 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const tapCommitsChoiceSet=choiceIds.length>0&&!['TRANSLATION','WRITING'].includes(task.family),hasAllChoiceResponses=tapCommitsChoiceSet&&choiceIds.every(id=>Boolean(answers[id]?.trim()));
   const sourceText=String(payload.passage||payload.source||'');
   const sourceRepeatsPrompt=Boolean(sourceText&&questions.some(question=>question.prompt.trim()===sourceText.trim()));
-  const submitLabel=task.family==='WRITING'?'完成這一版':task.family==='TRANSLATION'?'完成':'送出答案';
+  const submitLabel=task.family==='WRITING'?'完成修改':task.family==='TRANSLATION'?'完成翻譯':'送出答案';
   useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(hasAllChoiceResponses&&hydrated&&!teacherDecision&&!done&&!busy)setTimeout(()=>void submit(),0)},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <Shell onBack={exitExam}>
-    <View style={styles.lessonMeta}><Text style={styles.kicker}>{familyLabel[task.family]??'英文'}</Text>{allocationPurpose==='FRESH_CHECK'?<Text style={styles.independent}>這次自己來</Text>:null}</View>
-    {allocationPurpose==='REVIEW_ONLY'?<Text style={styles.lockNotice}>這題是複習題，不會當成一題全新的獨立能力確認。</Text>:null}
+  return <Shell onBack={exitExam} family={familyLabel[task.family]??'英文'}>
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
     {task.family === 'MIXED' ? <Pressable accessibilityRole="button" accessibilityState={{expanded:sourceOpen}} onPress={() => setSourceOpen(value => !value)} style={styles.sourceToggle}><Text style={styles.sourceToggleText}>{sourceOpen ? '題目素材　收起' : '題目素材　展開'}</Text></Pressable> : null}
     {formal&&!done?<Text style={styles.lockNotice}>模考中先不提供查字。交卷後可以查。</Text>:null}
@@ -441,15 +429,14 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       {questions.map(question => <View key={question.id} style={styles.block}><UniversalLookupText text={question.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{question.options?.map(item => option(question.id, item))}</View>)}
       {parts.map(part => <View key={part.id} style={styles.block}><UniversalLookupText text={part.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{part.options ? part.options.map(item => option(part.id, item)) : <TextInput value={answers[part.id] ?? ''} onChangeText={value => setAnswer(part.id, value)} style={styles.input} />}</View>)}
       {task.family === 'TRANSLATION' ? (payload.chineseSentences as string[]).map((sentence, index) => <View key={sentence} style={styles.authoredBlock}><Text style={styles.authoredLabel}>中文</Text><Text style={styles.zh}>{sentence}</Text><Text style={styles.authoredLabel}>你的翻譯</Text><TextInput accessibilityLabel="你的翻譯" multiline value={answers[String(index)] ?? ''} onChangeText={value => setAnswer(String(index), value)} placeholder="從這裡開始寫" placeholderTextColor={t.colors.subtle} style={styles.authoredInput}/><Text style={styles.wordCount}>{(answers[String(index)]??'').trim().split(/\s+/).filter(Boolean).length} words</Text></View>) : null}
-      {task.family === 'WRITING' ? <View style={styles.writingWorkspace}><Pressable accessibilityRole="button" accessibilityState={{expanded:writingPromptOpen}} onPress={()=>setWritingPromptOpen(value=>!value)} style={styles.promptToggle}><Text style={styles.authoredLabel}>題目</Text><Text style={styles.promptChevron}>{writingPromptOpen?'收起':'展開'}</Text></Pressable>{writingPromptOpen?<><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/><View style={styles.requirements}>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction style={styles.requirement}/>)}</View></>:null}<Text style={styles.authoredLabel}>你的文章</Text><TextInput accessibilityLabel="你的文章" multiline value={answers.writing ?? ''} onChangeText={value => {setAnswer('writing', value);if(!answers.writing?.trim()&&value.trim())setWritingPromptOpen(false)}} placeholder="寫下你的第一版" placeholderTextColor={t.colors.subtle} style={[styles.authoredInput, styles.long]} /><Text style={styles.wordCount}>{(answers.writing??'').trim().split(/\s+/).filter(Boolean).length} words</Text>{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</View> : null}
+      {task.family === 'WRITING' ? <View style={styles.writingWorkspace}><Pressable accessibilityRole="button" accessibilityState={{expanded:writingPromptOpen}} onPress={()=>setWritingPromptOpen(value=>!value)} style={styles.promptToggle}><Text style={styles.authoredLabel}>{writingPromptOpen?'題目':'查看題目'}</Text><Text style={styles.promptChevron}>{writingPromptOpen?'收起':''}</Text></Pressable>{writingPromptOpen?<><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/><View style={styles.requirements}>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction style={styles.requirement}/>)}</View></>:null}<Text style={styles.authoredLabel}>你的文章</Text><TextInput accessibilityLabel="你的文章" multiline value={answers.writing ?? ''} onChangeText={value => {setAnswer('writing', value);if(!answers.writing?.trim()&&value.trim())setWritingPromptOpen(false)}} placeholder="寫下你的第一版" placeholderTextColor={t.colors.subtle} style={[styles.authoredInput, styles.long]} />{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</View> : null}
       </View>
       {tapCommitsChoiceSet?busy?<Text style={styles.checking}>正在看你的選擇…</Text>:<Text style={styles.checking}>{Object.keys(answers).filter(id=>choiceIds.includes(id)).length}／{choiceIds.length}</Text>:<Button label={busy ? '正在確認…' : submitLabel} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />}
     </> : null}
 
     {interaction&&puzzleStep ? <View style={styles.repairRegion}>
       <View style={styles.contextThread}>{sourceText?<UniversalLookupText text={sourceText} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:questions[0]?.prompt?<UniversalLookupText text={questions[0].prompt} assessmentMode="NONE" style={styles.contextText} onLookupUsed={recordLookup}/>:<Text style={styles.contextText}>{String(payload.title??'')}</Text>}</View>
-      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<View style={styles.freshHandoff}><Text style={styles.freshTitle}>換個情境。</Text><Text style={styles.passage}>這次自己來。</Text><Button label={busy?'正在準備…':'開始'} disabled={busy} onPress={()=>void startFreshAttempt()}/></View>:<View style={styles.teacherAction}><PuzzleStepRenderer step={{...puzzleStep,instruction:learnerFacingRepairCopy(interaction.title)}} onEvent={commitPuzzleEvent}/></View>}
-      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind!=='FRESH_ATTEMPT'&&interaction.mode !== 'RETURN' ? <Pressable accessibilityRole="button" disabled={busy} onPress={() => void completeInteraction('IMPASSE')} style={styles.stuckAction}><Text style={styles.stuckText}>這個做法沒讓我看懂</Text><Text style={styles.stuckHint}>縮小問題或換一種方式</Text></Pressable> : null}
+      {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<View style={styles.freshHandoff}><Text style={styles.freshTitle}>換個情境。</Text><Text style={styles.passage}>這次自己來。</Text><Button label={busy?'正在準備…':'開始'} disabled={busy} onPress={()=>void startFreshAttempt()}/></View>:<View style={styles.teacherAction}><PuzzleStepRenderer step={puzzleStep} onEvent={commitPuzzleEvent}/></View>}
     </View> : null}
 
     {transportError?<View accessibilityRole="alert" style={styles.transportError}><Text style={styles.transportCopy}>剛才沒有送出去。你的內容還在。</Text><Pressable accessibilityRole="button" onPress={()=>void (teacherDecision?completeInteraction('SUBMITTED'):submit())} style={styles.retryAction}><Text style={styles.retryText}>再試一次</Text></Pressable></View>:null}
@@ -458,15 +445,15 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   </Shell>;
 }
 
-function Shell({ children,onBack }: { children: React.ReactNode;onBack?:()=>void }) {
-  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>←</Text></Pressable>:<View/>}<Text style={styles.topCount}>4 / 8</Text></View><View style={styles.progressTrack}><View style={styles.progressValue}/></View><KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
+function Shell({ children,onBack,family }: { children: React.ReactNode;onBack?:()=>void;family?:string }) {
+  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>:<View style={styles.back}/>}<Text style={styles.headerFamily}>{family??''}</Text><Text style={styles.topCount}>4 / 8</Text></View><View style={styles.progressTrack}><View style={styles.progressValue}/></View><KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
 }
 function Button({ label, onPress, disabled=false }: { label: string; onPress: () => void; disabled?:boolean }) {
   return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,disabled&&styles.buttonDisabled,pressed&&!disabled&&styles.pressed]}><Text style={styles.buttonText}>{label}</Text></Pressable>;
 }
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: t.colors.background },
-  fixedTop:{height:48,paddingHorizontal:20,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},topCount:{fontSize:12,lineHeight:18,color:t.colors.muted},progressTrack:{height:2,backgroundColor:t.colors.divider},progressValue:{width:'50%',height:2,backgroundColor:t.colors.amberSoft},content: { width: '100%', maxWidth:390, alignSelf: 'center', paddingHorizontal:20,paddingTop:24, paddingBottom: 110, gap: 20 },
+  fixedTop:{height:48,paddingHorizontal:20,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},headerFamily:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.ink},topCount:{width:44,textAlign:'right',fontSize:12,lineHeight:18,color:t.colors.muted},progressTrack:{height:2,backgroundColor:t.colors.divider},progressValue:{width:'50%',height:2,backgroundColor:t.colors.amberSoft},content: { width: '100%', maxWidth:390, alignSelf: 'center', paddingHorizontal:20,paddingTop:14, paddingBottom: 110, gap: 20 },
   back:{width:44,height:44,justifyContent:'center'},backText:{color:t.colors.deepWood,fontSize:20},
   sourceToggle:{minHeight:44,alignSelf:'flex-start',justifyContent:'center'},sourceToggleText:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.deepWood},lessonMeta:{minHeight:24,flexDirection:'row',justifyContent:'space-between',alignItems:'center'},independent:{fontSize:12,lineHeight:18,color:t.colors.success,fontWeight:'600'},
   lockNotice:{padding:12,borderRadius:12,backgroundColor:t.colors.focusWash,color:t.colors.focus,fontSize:13,lineHeight:20,fontWeight:'700'},

@@ -2,7 +2,7 @@
   "expo": {
     "name": "English Output Trainer",
     "slug": "english-output-trainer",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "orientation": "portrait",
     "scheme": "englishoutputtrainer",
     "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
@@ -10,11 +10,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.easonsystems.englishoutputtrainer",
-      "buildNumber": "10"
+      "buildNumber": "11"
     },
     "android": {
       "package": "com.easonsystems.englishoutputtrainer",
-      "versionCode": 10,
+      "versionCode": 11,
       "softwareKeyboardLayoutMode": "resize",
       "icon": "./assets/images/EOT_founder_approved_app_icon_v1.png",
       "adaptiveIcon": {
@@ -42,12 +42,26 @@
       "typedRoutes": true
     },
     "extra": {
-      "releaseLabel": "build-10-learner-experience-2026-09-15",
+      "releaseLabel": "build-11-production-frontend-ota-2026-09-29",
       "router": {},
       "eas": {
         "projectId": "9f32a9ee-526a-4cb8-8c8c-4da9431b1150"
       }
     },
-    "owner": "eason-systems"
+    "owner": "eason-systems",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9f32a9ee-526a-4cb8-8c8c-4da9431b1150",
+      "assetPatternsToBeBundled": [
+        "app/**/*",
+        "components/**/*",
+        "src/**/*",
+        "assets/images/**/*",
+        "assets/expo.icon/**/*",
+        "node_modules/**/*"
+      ]
+    }
   }
 }

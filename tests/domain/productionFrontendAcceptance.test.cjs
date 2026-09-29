@@ -18,7 +18,7 @@ const product={learnerId,goals:['exam'],learningPurpose:'EXAM',useContexts:['EXA
 const responseFor=(task)=>Object.fromEntries(task.canonicalBinding.units.map(unit=>[unit.responseKey,'__EOT_COMMITTED_WRONG__']));
 const semanticFailureFor=(task)=>Object.fromEntries(task.canonicalBinding.units.filter(unit=>unit.evaluatorKind==='SEMANTIC_RUBRIC').map(unit=>[unit.unitId,{schemaVersion:1,outcome:'INCORRECT',authority:'BOUNDED_RUBRIC',rubricId:`acceptance:${task.task_id}:${unit.unitId}`,dimensions:[{dimension:'family_specific_response',outcome:'INCORRECT',reasonCodes:['COMMITTED_WRONG_RESPONSE']}],reasonCodes:['BOUNDED_WRONG_RESPONSE'],candidateEvidenceAllowed:false,negativeEvidenceAllowed:true}]));
 
-test('all eight production families execute a real wrong-answer Teacher path and survive exact-state resume',async()=>{
+test('all eight production families execute a real wrong-answer direct-learning path and survive exact-state resume',async()=>{
  const receipts=[];
  for(const family of families){
   const task=examBetaTaskForLearner(family,learnerId,'suggested',`acceptance:${family}`,{purpose:'PRACTICE_NEW',recent:[]});
@@ -55,8 +55,15 @@ test('all eight production families execute a real wrong-answer Teacher path and
  assert.equal(new Set(receipts.map(item=>item.taskId)).size,8);
  assert.ok(new Set(receipts.map(item=>item.interactionMode)).size>=4,'family interactions collapsed into one generic grammar');
  const examRoute=fs.readFileSync('app/exam-practice.tsx','utf8');
+ const renderers=fs.readFileSync('components/learning/PuzzleRenderers.tsx','utf8');
+ const asyncState=fs.readFileSync('components/learning/LessonAsyncState.tsx','utf8');
+ const projection=fs.readFileSync('src/application/exam/examTeacherInteraction.ts','utf8');
  assert.match(examRoute,/projectExamTeachingPuzzleStepV1/);
  assert.match(examRoute,/<PuzzleStepRenderer step=\{(?:puzzleStep|\{\.\.\.puzzleStep,)/);
  assert.doesNotMatch(examRoute,/interaction\.mode==='EVIDENCE_SELECT'/);
+ assert.doesNotMatch(`${examRoute}\n${renderers}\n${asyncState}`,/TeacherRail|learnerFacingRepairCopy/);
+ assert.doesNotMatch(`${examRoute}\n${renderers}\n${projection}`,/先確認真正卡住的地方|先做一個小判斷|完成一個小判斷|完成這一步|先完成這個可檢查的小步驟|Teacher 不會替你選答案/);
+ assert.doesNotMatch(projection,/discriminatingActions\s*\.\s*map\s*\(/);
+ assert.doesNotMatch(renderers,/step\.phase\s*\}|step\.support\s*\}/);
  const out=path.resolve('artifacts/eot-production-frontend-acceptance');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'eight-family-paths.json'),JSON.stringify({generatedAt:new Date().toISOString(),count:receipts.length,receipts},null,2));
 });

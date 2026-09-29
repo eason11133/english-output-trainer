@@ -11,13 +11,15 @@
       },
       "android": {
         "buildType": "apk"
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_COACH_API_URL": "https://eot-teacher-production.up.railway.app"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {

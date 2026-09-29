@@ -16,8 +16,8 @@ export default function MyEnglish(){
   const [captureOpen,setCaptureOpen]=useState(false);
   useEffect(()=>{void Promise.all([loadMyEnglishVMV1(learnerPreferences.learnerId),loadMyEnglishAbilityV1(learnerPreferences.learnerId)]).then(([nextVM,nextAbility])=>{setVM(nextVM);setAbility(nextAbility)})},[learnerPreferences.learnerId]);
 
-  const memoryGroups:MemoryTruthGroup[]=ability?.state==='EMPTY'?[]:[{title:'最近有變化',items:(vm?.recentMemory??[]).map((truth,index)=>({when:index?'最近':'今天',target:ability?.areas[index]?.label??'這次練過的英文',truth}))},{title:'還在形成',items:(ability?.areas??[]).filter(x=>!x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))},{title:'已經能自己用',items:(ability?.areas??[]).filter(x=>x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))}].filter(x=>x.items.length);
-  return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}><Text style={s.title}>我的英文</Text><Text style={s.subtitle}>這裡只留下你真的做過的英文。</Text>
+  const memoryGroups:MemoryTruthGroup[]=ability?.state==='EMPTY'?[]:[{title:'已經能自己做到',items:(ability?.areas??[]).filter(x=>x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))},{title:'還常需要一點支援',items:(ability?.areas??[]).filter(x=>!x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))},{title:'最近出現',items:(vm?.recentMemory??[]).map((truth,index)=>({when:index?'最近':'今天',target:ability?.areas[index]?.label??'這次練過的英文',truth}))}];
+  return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}><Text style={s.title}>My English</Text><Text style={s.subtitle}>EOT 最近記得這些</Text>
     {!vm||!ability?<ActivityIndicator/>:ability.state==='EMPTY'
       ?<View style={s.empty}><Text style={s.emptyTitle}>先做一次練習</Text><Text style={s.note}>這裡只會記下你真的用過的英文；現在空白，不代表你不會。</Text><Pressable accessibilityRole="button"onPress={()=>router.push('/(tabs)/practice' as Href)}style={s.action}><Text style={s.actionTitle}>開始練習</Text></Pressable></View>
       :<>
