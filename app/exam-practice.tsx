@@ -1,7 +1,7 @@
 import { eotLearnerTokensV1 as woodTheme } from '../src/ui/tokens';
 import { Href, router, useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { Animated, PanResponder, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import { Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCanonicalProductData } from '../context/AppDataContext';
@@ -51,7 +51,9 @@ import type { CapabilityFacet } from '../src/domain/english/EnglishDomain';
 import {projectExamLearnerActionV1} from '../src/application/exam/examPuzzleProjection';
 import type {LearnerActionEvent} from '../src/ui/learnerActionSurface';
 import {LearnerActionRenderer} from '../components/learning/PuzzleRenderers';
-import {advanceLearningSessionV1,createLearningSessionV1,currentLearningActivityV1,loadActiveLearningSessionV1,saveLearningSessionV1,type LearningSessionV1} from '../src/application/session/learningSession';
+import {appendLearningActivityV1,advanceLearningSessionV1,closeLearningSessionV1,createLearningSessionV1,currentLearningActivityV1,loadActiveLearningSessionV1,saveLearningSessionV1,type LearningSessionV1} from '../src/application/session/learningSession';
+import {SpatialLanguageWorkspace} from '../components/learning/SpatialLanguageWorkspace';
+import {AuthoredResponseWorkspace} from '../components/learning/AuthoredResponseWorkspace';
 
 const examTeacherProvider=createExamTeacherProviderV1(requestQualifiedBlockDecision);
 const familyLabel:Record<string,string>={VOCABULARY:'詞彙',COMPREHENSIVE:'綜合測驗',CONTEXTUAL_FILL:'文意選填',DISCOURSE:'篇章結構',READING:'閱讀',MIXED:'混合題',TRANSLATION:'中譯英',WRITING:'英文作文'};
@@ -61,7 +63,7 @@ type Blank = { id: string; options?: Option[] };
 type Question = { id: string; prompt: string; options?: Option[] };
 
 export default function ExamPractice() {
-  const params = useLocalSearchParams<{ practiceFamily?: string; amount?: string; formal?:string; calibration?:string;taskId?:string;purpose?:ExamAllocationPurposeV1;sourceSession?:string }>();
+  const params = useLocalSearchParams<{ practiceFamily?: string; amount?: string; formal?:string; calibration?:string;taskId?:string;purpose?:ExamAllocationPurposeV1;sourceSession?:string;origin?:'TODAY'|'PRACTICE'|'MY_ENGLISH';resume?:string }>();
   const { learnerPreferences, runtimeProductContext,profile,updateProductContext,recordTutorialAction } = useCanonicalProductData();
   const family = practiceFamilyToExamFamily(params.practiceFamily ?? '');
   const launchKey = useId();
@@ -72,7 +74,8 @@ export default function ExamPractice() {
     let live = true;
     void (async () => {
       if (!family) { if (live) setSelection(null); return; }
-      const activeSession=await loadActiveLearningSessionV1(learnerPreferences.learnerId),activeActivity=activeSession?currentLearningActivityV1(activeSession):undefined;
+      const mayResume=params.resume==='1'||params.origin==='TODAY';
+      const activeSession=mayResume?await loadActiveLearningSessionV1(learnerPreferences.learnerId):null,activeActivity=activeSession?currentLearningActivityV1(activeSession):undefined;
       if(activeSession&&activeActivity){if(live){setLearningSession(activeSession);setSelection({taskId:activeActivity.taskId,family:activeActivity.family,sessionId:activeActivity.id,purpose:activeActivity.kind==='REENCOUNTER'?'FRESH_CHECK':'PRACTICE_NEW'})}return}
       const explicit=params.taskId?examBetaTaskById(family,params.taskId):undefined;
       let primary=explicit;
@@ -84,26 +87,23 @@ export default function ExamPractice() {
       const reviewResolution=freshResolution.status==='READY'?undefined:resolveProductionExamContentV1({family,learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',variant:params.amount,rotationKey:launchKey,recent:history});
       const fresh=freshResolution.status==='READY'?freshResolution.content.task:undefined;primary=primary??fresh??(reviewResolution?.status==='READY'?reviewResolution.content.task:undefined);
       if(!primary){if(live)setSelection(null);return}
-      const unrelatedFamily=(family==='READING'?'VOCABULARY':'READING') as typeof family;
-      const unrelatedResolution=resolveProductionExamContentV1({family:unrelatedFamily,learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',rotationKey:`${launchKey}:unrelated`});
-      const unrelated=unrelatedResolution.status==='READY'?unrelatedResolution.content.task:undefined;
-      const reResolution=resolveProductionExamContentV1({family,learnerId:learnerPreferences.learnerId,role:'INDEPENDENT_ASSESS',rotationKey:`${launchKey}:reencounter`,recent:[...history,{taskId:primary.task_id,contentHash:examContentHashV1(primary),contentLineage:primary.content_lineage_id,freshnessGroupId:primary.freshness_group_id}]});
-      const reencounter=reResolution.status==='READY'?reResolution.content.task:undefined;
-      const session=createLearningSessionV1({id:`learning:${learnerPreferences.learnerId}:${Date.now()}`,learnerId:learnerPreferences.learnerId,primary:{taskId:primary.task_id,family:primary.family},unrelated:unrelated?{taskId:unrelated.task_id,family:unrelated.family}:undefined,reencounter:reencounter?{taskId:reencounter.task_id,family:reencounter.family}:undefined});
+      const session=createLearningSessionV1({id:`learning:${learnerPreferences.learnerId}:${Date.now()}`,learnerId:learnerPreferences.learnerId,origin:params.origin??'PRACTICE',intendedMinutes:runtimeProductContext.studyMinutes,primary:{taskId:primary.task_id,family:primary.family}});
       await saveLearningSessionV1(session);const activity=currentLearningActivityV1(session);
       if(live){setLearningSession(session);setSelection({taskId:activity.taskId,family:activity.family,sessionId:activity.id,purpose:fresh?'PRACTICE_NEW':'REVIEW_ONLY'})}
     })();
     return () => { live = false; };
-  }, [family, launchKey, learnerPreferences.learnerId, params.amount,params.purpose,params.taskId]);
+  }, [family, launchKey, learnerPreferences.learnerId, params.amount,params.origin,params.purpose,params.resume,params.taskId,runtimeProductContext.studyMinutes]);
   const task = selection ? examBetaTaskById(selection.family, selection.taskId) : undefined;
-  const advance=async()=>{if(!learningSession)return;const next=advanceLearningSessionV1(learningSession);await saveLearningSessionV1(next);setLearningSession(next);const activity=currentLearningActivityV1(next);if(activity){setSelection({taskId:activity.taskId,family:activity.family,sessionId:activity.id,purpose:activity.kind==='REENCOUNTER'?'FRESH_CHECK':'PRACTICE_NEW'})}else router.replace(`/result?origin=TODAY&sessionId=${encodeURIComponent(next.id)}` as Href)};
+  const advance=async(decision?:QualifiedInnerTutorDecisionV1)=>{if(!learningSession)return;const current=currentLearningActivityV1(learningSession);let next=advanceLearningSessionV1(learningSession);const elapsed=(Date.now()-new Date(learningSession.startedAt).getTime())/60000,withinBudget=elapsed<learningSession.intendedMinutes,canContinue=withinBudget&&next.completedActivityIds.length<3;if(canContinue&&current){const nextFamily=(current.kind==='CORE'&&decision?(current.family==='READING'?'VOCABULARY':'READING'):learningSession.activities[0]?.family) as typeof current.family;const role=current.kind==='UNRELATED'?'INDEPENDENT_ASSESS':'GUIDED_PRACTICE';const resolution=resolveProductionExamContentV1({family:nextFamily,learnerId:learnerPreferences.learnerId,role,targetRef:current.kind==='UNRELATED'?decision?.provenance.targetRef:undefined,facet:current.kind==='UNRELATED'?decision?.provenance.facet as CapabilityFacet:undefined,rotationKey:`${learningSession.id}:${next.completedActivityIds.length}`,recent:[]});if(resolution.status==='READY'){next={...appendLearningActivityV1({...next,status:'ACTIVE'}, {taskId:resolution.content.task.task_id,family:resolution.content.task.family,kind:current.kind==='CORE'&&decision?'UNRELATED':current.kind==='UNRELATED'?'REENCOUNTER':'NEW_WORK',sourceActivityId:current.id}),status:'ACTIVE'};}}
+    await saveLearningSessionV1(next);setLearningSession(next);const activity=currentLearningActivityV1(next);if(activity){setSelection({taskId:activity.taskId,family:activity.family,sessionId:activity.id,purpose:activity.kind==='REENCOUNTER'?'FRESH_CHECK':'PRACTICE_NEW'})}else router.replace(`/result?origin=${learningSession.origin}&sessionId=${encodeURIComponent(next.id)}` as Href)};
   useLearnerBack(exitToPractice,undefined,!task);
   if (selection === undefined) return <Shell onBack={exitToPractice}><Text style={styles.title}>正在接回練習…</Text></Shell>;
   if (!task || !selection) return <Shell onBack={exitToPractice}><Text style={styles.title}>目前沒有可用的題目</Text><Button label="返回練習" onPress={exitToPractice} /></Shell>;
-  return <ExamPracticeSession key={selection.sessionId} task={task} sessionId={selection.sessionId} allocationPurpose={selection.purpose} learnerId={learnerPreferences.learnerId} runtimeProductContext={runtimeProductContext} coachMarks={profile.gsatBeta.coachMarks} markCoach={name=>void updateProductContext({gsatBeta:{coachMarks:{[name]:true}}})} recordTutorialAction={async(...args)=>{if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED)await recordTutorialAction(...args)}} formal={params.formal==='1'} onActivityComplete={advance}/>;
+  const endSession=async()=>{if(!learningSession)return;const closed=closeLearningSessionV1(learningSession);await saveLearningSessionV1(closed);router.replace(`/result?origin=${learningSession.origin}&sessionId=${encodeURIComponent(closed.id)}` as Href)};
+  return <ExamPracticeSession key={selection.sessionId} task={task} sessionId={selection.sessionId} allocationPurpose={selection.purpose} learnerId={learnerPreferences.learnerId} runtimeProductContext={runtimeProductContext} coachMarks={profile.gsatBeta.coachMarks} markCoach={name=>void updateProductContext({gsatBeta:{coachMarks:{[name]:true}}})} recordTutorialAction={async(...args)=>{if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED)await recordTutorialAction(...args)}} formal={params.formal==='1'} onActivityComplete={advance} onEndSession={endSession}/>;
 }
 
-function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, runtimeProductContext,coachMarks,markCoach,recordTutorialAction,formal=false,onActivityComplete }: { task: ExamBetaTask; sessionId: string; allocationPurpose:ExamAllocationPurposeV1; learnerId: string; runtimeProductContext: ProductContextV1;coachMarks:{teacher:boolean;mcq?:boolean;lookup?:boolean};markCoach:(name:'teacher'|'mcq'|'lookup')=>void;recordTutorialAction:ReturnType<typeof useCanonicalProductData>['recordTutorialAction'];formal?:boolean;onActivityComplete:()=>Promise<void> }) {
+function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, runtimeProductContext,coachMarks,markCoach,recordTutorialAction,formal=false,onActivityComplete,onEndSession }: { task: ExamBetaTask; sessionId: string; allocationPurpose:ExamAllocationPurposeV1; learnerId: string; runtimeProductContext: ProductContextV1;coachMarks:{teacher:boolean;mcq?:boolean;lookup?:boolean};markCoach:(name:'teacher'|'mcq'|'lookup')=>void;recordTutorialAction:ReturnType<typeof useCanonicalProductData>['recordTutorialAction'];formal?:boolean;onActivityComplete:(decision?:QualifiedInnerTutorDecisionV1)=>Promise<void>;onEndSession:()=>Promise<void> }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [localWrong,setLocalWrong]=useState<Record<string,boolean>>({});
   const [activeBlank, setActiveBlank] = useState('1');
@@ -116,7 +116,6 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const [busy, setBusy] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [resumeMessage, setResumeMessage] = useState('');
-  const [writingPromptOpen,setWritingPromptOpen]=useState(true);
   const [transportError,setTransportError]=useState(false);
   const[lookupExposure,setLookupExposure]=useState<string[]>([]);
   const[learnerActionState,setLearnerActionState]=useState<Readonly<Record<string,unknown>>>({});
@@ -277,19 +276,20 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
       if (previous && previous.provenance.selectedMechanismId !== decision.provenance.selectedMechanismId) await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'TEACHER_RECOMPOSED', phase: 'TEACHER_INTERACTION', interactionMode: nextInteraction.mode, teacherAction: decision.action, mechanismId: decision.provenance.selectedMechanismId, eventKey: `recomposed:${decision.provenance.decisionPointId}` });
     } else if (nextDone) {
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'SESSION_COMPLETED', phase: 'COMPLETED', teacherAction: decision?.action, mechanismId: decision?.provenance.selectedMechanismId, eventKey: 'completed' });
-      await onActivityComplete();
+      await onActivityComplete(decision);
     }
     return nextRuntime;
   }
 
-  async function submit() {
+  async function submit(responseOverride?:Record<string,string>) {
     if(submitInFlightRef.current)return;submitInFlightRef.current=true;setTransportError(false);setBusy(true);
     try {
-      const submitted=updateExamOperationalRuntimeV1(baseRuntime(),{responses:answers,submittedAt:new Date().toISOString()});runtimeRef.current=submitted;await saveExamOperationalCheckpointV1(lessonPlan,submitted);
+      const committedAnswers=responseOverride??answers;if(responseOverride)setAnswers(responseOverride);
+      const submitted=updateExamOperationalRuntimeV1(baseRuntime(),{responses:committedAnswers,submittedAt:new Date().toISOString()});runtimeRef.current=submitted;await saveExamOperationalCheckpointV1(lessonPlan,submitted);
       await savePrivateBetaProductEventV1({ learnerId, sessionId, taskId: task.task_id, family: task.family, type: 'RESPONSE_SUBMITTED', phase: 'ANSWERING', eventKey: `response:${runtimeRef.current?.decisionHistory.length ?? 0}` });
       const truth = await learnerTruth();
-      const localSemantic = assessExamSemanticUnitsV1({ task, response: answers });
-      const liveSemantic=['TRANSLATION','WRITING'].includes(task.family)?await assessGsatSemanticLiveV1({task,response:answers,lookupExposure,request:requestGsatSemanticAssessment}):undefined;
+      const localSemantic = assessExamSemanticUnitsV1({ task, response: committedAnswers });
+      const liveSemantic=['TRANSLATION','WRITING'].includes(task.family)?await assessGsatSemanticLiveV1({task,response:committedAnswers,lookupExposure,request:requestGsatSemanticAssessment}):undefined;
       const usableLive=liveSemantic?Object.fromEntries(Object.entries(liveSemantic).filter(([unitId,decision])=>{
         if(decision.abstained||['AMBIGUOUS','ABSTAIN'].includes(decision.outcome))return false;
         const local=localSemantic.decisionsByUnitId[unitId];
@@ -306,7 +306,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
         lessonPlan,
         productContext: runtimeProductContext,
         learnerTruth: truth,
-        response: answers,
+        response: committedAnswers,
         semanticAssessmentsByUnitId: semantic.decisionsByUnitId,
         lookupExposure,
         support: assessmentSupport,
@@ -394,7 +394,7 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const lookupMode=formal?'FORMAL_ASSESSMENT' as const:'NONE' as const;
   const recordLookup=(result:{senseId?:string;lemma?:string})=>{setLookupExposure(current=>[...new Set([...current,result.senseId??result.lemma??'lookup'])]);if(!coachMarks.lookup)markCoach('lookup')};
   const recordLookupResult=(result:{status:string})=>void savePrivateBetaProductEventV1({learnerId,sessionId,taskId:task.task_id,family:task.family,type:result.status==='LOCKED'?'LOOKUP_LOCKED':result.status==='RESOLVED'?'LOOKUP_OPENED':'LOOKUP_UNRESOLVED',eventKey:`lookup:${result.status}:${runtimeRef.current?.attemptId??'pending'}`});
-  const learnerSurface=interaction&&teacherDecision?projectExamLearnerActionV1({decision:teacherDecision,interaction,task,learnerResponse:firstUnit?answers[firstUnit.responseKey]:undefined}):undefined;
+  const learnerSurface=interaction&&teacherDecision?projectExamLearnerActionV1({decision:teacherDecision,interaction,task,learnerResponse:firstUnit?answers[firstUnit.responseKey]:undefined,learnerActionState}):undefined;
   const commitLearnerAction=(event:LearnerActionEvent)=>{
     const response=typeof event.value==='string'?event.value:JSON.stringify(event.value);
     if(typeof event.value==='string'&&firstUnit&&['REPAIR','DEVELOP','TRANSFORM'].includes(event.kind)){
@@ -418,54 +418,49 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const sourceText=String(payload.passage||payload.source||'');
   const sourceRepeatsPrompt=Boolean(sourceText&&questions.some(question=>question.prompt.trim()===sourceText.trim()));
   const submitLabel=task.family==='WRITING'?'完成修改':task.family==='TRANSLATION'?'完成翻譯':'送出答案';
+  const authored=task.family==='TRANSLATION'||task.family==='WRITING',authoredKey=task.family==='WRITING'?'writing':String(firstUnit?.responseKey??'0');
   useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(hasAllChoiceResponses&&hydrated&&!teacherDecision&&!done&&!busy)setTimeout(()=>void submit(),0)},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <Shell onBack={exitExam} family={familyLabel[task.family]??'英文'}>
+  return <Shell onBack={exitExam} onEnd={onEndSession} family={familyLabel[task.family]??'英文'}>
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
     {task.family === 'MIXED' ? <Pressable accessibilityRole="button" accessibilityState={{expanded:sourceOpen}} onPress={() => setSourceOpen(value => !value)} style={styles.sourceToggle}><Text style={styles.sourceToggleText}>{sourceOpen ? '題目素材　收起' : '題目素材　展開'}</Text></Pressable> : null}
     {formal&&!done?<Text style={styles.lockNotice}>模考中先不提供查字。交卷後可以查。</Text>:null}
-    {sourceText&&sourceOpen&&!sourceRepeatsPrompt ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
+    {sourceText&&sourceOpen&&!sourceRepeatsPrompt&&!['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family) ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
 
-    {!teacherDecision && !done ? <>
+    {!teacherDecision && !done && !authored ? <>
       <View style={styles.answerArea}>
       {task.family === 'COMPREHENSIVE' ? blanks.map(value => {
         const blank = value as Blank;
         return <View key={blank.id} style={styles.block}><Text style={styles.label}>第 {blank.id} 空</Text>{blank.options?.map(item => option(blank.id, item))}</View>;
       }) : null}
       {shared.length ? <>
-        {['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family)?<SpatialPlacementBoard blanks={blanks.map(value=>typeof value==='string'?value:value.id)} options={shared} answers={answers} onPlace={placeSpatial} onRemove={id=>setAnswers(current=>{const next={...current};delete next[id];return next})}/>:<><View style={styles.row}>{blanks.map(value => {const id = typeof value === 'string' ? value : value.id;return <Pressable key={id} onPress={() => setActiveBlank(id)} style={[styles.blank, activeBlank === id && styles.selected]}><Text>{id}: {answers[id] ?? '＿'}</Text></Pressable>})}</View><Text style={styles.label}>目前作答：第 {activeBlank} 空（可重新選）</Text>{shared.filter(item=>!Object.entries(answers).some(([id,value])=>id!==activeBlank&&value===item.id)).map(item=>option(activeBlank,item))}</>}
+        {['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family)?<SpatialLanguageWorkspace kind={task.family as 'CONTEXTUAL_FILL'|'DISCOURSE'} passage={sourceText} blankIds={blanks.map(value=>typeof value==='string'?value:value.id)} choices={shared} answers={answers} onPlace={placeSpatial} onRemove={id=>setAnswers(current=>{const next={...current};delete next[id];return next})} onLookupUsed={recordLookup}/>:<><View style={styles.row}>{blanks.map(value => {const id = typeof value === 'string' ? value : value.id;return <Pressable key={id} onPress={() => setActiveBlank(id)} style={[styles.blank, activeBlank === id && styles.selected]}><Text>{id}: {answers[id] ?? '＿'}</Text></Pressable>})}</View><Text style={styles.label}>目前作答：第 {activeBlank} 空（可重新選）</Text>{shared.filter(item=>!Object.entries(answers).some(([id,value])=>id!==activeBlank&&value===item.id)).map(item=>option(activeBlank,item))}</>}
       </> : null}
       {questions.map(question => <View key={question.id} style={styles.block}><UniversalLookupText text={question.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{question.options?.map(item => option(question.id, item))}</View>)}
       {parts.map(part => <View key={part.id} style={styles.block}><UniversalLookupText text={part.prompt} assessmentMode={lookupMode} style={styles.label} onLookupUsed={recordLookup}/>{part.options ? part.options.map(item => option(part.id, item)) : <TextInput value={answers[part.id] ?? ''} onChangeText={value => setAnswer(part.id, value)} style={styles.input} />}</View>)}
-      {task.family === 'TRANSLATION' ? (payload.chineseSentences as string[]).map((sentence, index) => <View key={sentence} style={styles.authoredBlock}><Text style={styles.authoredLabel}>中文</Text><Text style={styles.zh}>{sentence}</Text><Text style={styles.authoredLabel}>你的翻譯</Text><TextInput accessibilityLabel="你的翻譯" multiline value={answers[String(index)] ?? ''} onChangeText={value => setAnswer(String(index), value)} placeholder="從這裡開始寫" placeholderTextColor={t.colors.subtle} style={styles.authoredInput}/></View>) : null}
-      {task.family === 'WRITING' ? <View style={styles.writingWorkspace}><Pressable accessibilityRole="button" accessibilityState={{expanded:writingPromptOpen}} onPress={()=>setWritingPromptOpen(value=>!value)} style={styles.promptToggle}><Text style={styles.authoredLabel}>{writingPromptOpen?'題目':'查看題目'}</Text><Text style={styles.promptChevron}>{writingPromptOpen?'收起':''}</Text></Pressable>{writingPromptOpen?<><UniversalLookupText text={String(payload.prompt)} instruction style={styles.zh}/><View style={styles.requirements}>{(payload.requirementBullets as string[]).map(item => <UniversalLookupText key={item} text={`• ${item}`} instruction style={styles.requirement}/>)}</View></>:null}<Text style={styles.authoredLabel}>你的文章</Text><TextInput accessibilityLabel="你的文章" multiline value={answers.writing ?? ''} onChangeText={value => {setAnswer('writing', value);if(!answers.writing?.trim()&&value.trim())setWritingPromptOpen(false)}} placeholder="寫下你的第一版" placeholderTextColor={t.colors.subtle} style={[styles.authoredInput, styles.long]} />{answers.writing?.trim()?<UniversalLookupText text={answers.writing} sourceFamily="WRITING" taskId={task.task_id} responsePhase="PRE_RESPONSE" assessmentMode={lookupMode} submitted={done} onLookupUsed={recordLookup} onLookupResult={recordLookupResult}/>:null}</View> : null}
       </View>
       {tapCommitsChoiceSet?busy?<Text style={styles.checking}>正在看你的選擇…</Text>:<Text style={styles.checking}>{Object.keys(answers).filter(id=>choiceIds.includes(id)).length}／{choiceIds.length}</Text>:<Button label={busy ? '正在確認…' : submitLabel} disabled={busy||!hasResponse} onPress={() => { if (!busy&&hasResponse) void submit(); }} />}
     </> : null}
 
-    {interaction&&learnerSurface ? <View style={styles.repairRegion}>
+    {authored&&!done?<AuthoredResponseWorkspace family={task.family as 'TRANSLATION'|'WRITING'} prompt={task.family==='TRANSLATION'?String((payload.chineseSentences as string[]|undefined)?.[0]??''):String(payload.prompt??'')} requirements={(payload.requirementBullets as string[]|undefined)??[]} value={answers[authoredKey]??''} surface={learnerSurface} busy={busy} onChange={value=>setAnswer(authoredKey,value)} onLookupUsed={recordLookup} onSubmit={value=>{if(teacherDecision&&learnerSurface)commitLearnerAction({surfaceId:learnerSurface.id,kind:'REPAIR',value});else void submit({...answers,[authoredKey]:value})}}/>:null}
+
+    {interaction&&learnerSurface&&!authored ? <View style={styles.repairRegion}>
       {teacherDecision?.composition?.pieces[teacherDecision.composition.cursor]?.kind==='FRESH_ATTEMPT'?<Button label={busy?'正在準備…':'繼續這一輪'} disabled={busy} onPress={()=>void startFreshAttempt()}/>:<LearnerActionRenderer surface={learnerSurface} initialState={learnerActionState} onStateChange={state=>setLearnerActionState(state)} onEvent={commitLearnerAction}/>}
     </View> : null}
 
     {transportError?<View accessibilityRole="alert" style={styles.transportError}><Text style={styles.transportCopy}>剛才沒有送出去。你的內容還在。</Text><Pressable accessibilityRole="button" onPress={()=>void (teacherDecision?completeInteraction('SUBMITTED'):submit())} style={styles.retryAction}><Text style={styles.retryText}>再試一次</Text></Pressable></View>:null}
 
-    {done ? <View style={styles.completion}><Text style={styles.completionTitle}>正在前往下一個活動…</Text>{teacherMessage?<Text style={styles.completionBody}>{teacherMessage}</Text>:null}</View> : null}
+    {done&&teacherMessage ? <Text style={styles.completionBody}>{teacherMessage}</Text> : null}
   </Shell>;
 }
 
-function Shell({ children,onBack,family }: { children: React.ReactNode;onBack?:()=>void;family?:string }) {
+function Shell({ children,onBack,onEnd,family }: { children: React.ReactNode;onBack?:()=>void;onEnd?:()=>void;family?:string }) {
   const[menu,setMenu]=useState(false);
-  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>:<View style={styles.back}/>}<Text style={styles.headerFamily}>{family??''}</Text><Pressable accessibilityRole="button" accessibilityLabel="更多選項" onPress={()=>setMenu(value=>!value)} style={styles.back}><Text style={styles.more}>•••</Text></Pressable></View>{menu&&onBack?<View style={styles.menu}><Pressable onPress={onBack} style={styles.menuAction}><Text style={styles.menuText}>結束這次練習</Text></Pressable></View>:null}<KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
+  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>:<View style={styles.back}/>}<Text style={styles.headerFamily}>{family??''}</Text><Pressable accessibilityRole="button" accessibilityLabel="更多選項" onPress={()=>setMenu(value=>!value)} style={styles.back}><Text style={styles.more}>•••</Text></Pressable></View>{menu&&onEnd?<View style={styles.menu}><Pressable onPress={onEnd} style={styles.menuAction}><Text style={styles.menuText}>結束這次練習</Text></Pressable></View>:null}<KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
 }
 function Button({ label, onPress, disabled=false }: { label: string; onPress: () => void; disabled?:boolean }) {
   return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,disabled&&styles.buttonDisabled,pressed&&!disabled&&styles.pressed]}><Text style={styles.buttonText}>{label}</Text></Pressable>;
 }
-type DropBox={x:number;y:number;width:number;height:number};
-type DropTargetRef=View|null;
-function SpatialPlacementBoard({blanks,options,answers,onPlace,onRemove}:{blanks:string[];options:Option[];answers:Record<string,string>;onPlace:(id:string,value:string)=>void;onRemove:(id:string)=>void}){const targets=useRef(new Map<string,DropTargetRef>()),placed=new Set(Object.values(answers));return <View style={styles.spatialBoard}><Text style={styles.label}>把選項拖到實際空格；可再拖到別格，拖到空白處可取回。</Text>{blanks.map(id=><SpatialBlank key={id} id={id} item={options.find(x=>x.id===answers[id])} register={node=>targets.current.set(id,node)}><SpatialDrag item={options.find(x=>x.id===answers[id])} origin={id} targets={targets} onPlace={onPlace} onRemove={onRemove}/></SpatialBlank>)}<View style={styles.spatialPool}>{options.filter(item=>!placed.has(item.id)).map(item=><SpatialDrag key={item.id} item={item} targets={targets} onPlace={onPlace} onRemove={onRemove}/>)}</View></View>}
-function SpatialBlank({id,item,register,children}:{id:string;item?:Option;register:(node:DropTargetRef)=>void;children:React.ReactNode}){return <View ref={register} accessibilityLabel={`第 ${id} 空放置區`} style={[styles.spatialBlank,item&&styles.selected]}><Text style={styles.blankNumber}>{id}</Text>{item?children:<Text style={styles.dropHint}>拖到這裡</Text>}</View>}
-function locateDrop(targets:Map<string,DropTargetRef>,x:number,y:number,done:(id?:string)=>void){const entries=[...targets],boxes=new Map<string,DropBox>();if(!entries.length){done();return}let remaining=entries.length;for(const[id,node]of entries){if(!node){if(!--remaining)done();continue}node.measureInWindow((left,top,width,height)=>{boxes.set(id,{x:left,y:top,width,height});if(!--remaining)done([...boxes].find(([,b])=>x>=b.x&&x<=b.x+b.width&&y>=b.y&&y<=b.y+b.height)?.[0])})}}
-function SpatialDrag({item,origin,targets,onPlace,onRemove}:{item?:Option;origin?:string;targets:React.MutableRefObject<Map<string,DropTargetRef>>;onPlace:(id:string,value:string)=>void;onRemove:(id:string)=>void}){const[position]=useState(()=>new Animated.ValueXY()),responder=useMemo(()=>PanResponder.create({onStartShouldSetPanResponder:()=>Boolean(item),onMoveShouldSetPanResponder:()=>Boolean(item),onPanResponderMove:Animated.event([null,{dx:position.x,dy:position.y}],{useNativeDriver:false}),onPanResponderRelease:(_,g)=>{locateDrop(targets.current,g.moveX,g.moveY,hit=>{if(hit&&item){if(origin&&origin!==hit)onRemove(origin);onPlace(hit,item.id)}else if(origin)onRemove(origin);Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()})},onPanResponderTerminate:()=>Animated.spring(position,{toValue:{x:0,y:0},useNativeDriver:true}).start()}),[item,origin,onPlace,onRemove,position,targets]);if(!item)return null;return <Animated.View accessibilityRole="button" accessibilityLabel={`拖曳 ${item.text}`} {...responder.panHandlers} style={[styles.dragToken,{transform:position.getTranslateTransform()}]}><Text style={styles.optionText}>{item.text}</Text></Animated.View>}
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: t.colors.background },
   fixedTop:{height:48,paddingHorizontal:20,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderBottomWidth:1,borderBottomColor:t.colors.divider},headerFamily:{fontSize:14,lineHeight:21,fontWeight:'600',color:t.colors.ink},more:{fontSize:16,color:t.colors.muted,textAlign:'right'},menu:{position:'absolute',zIndex:5,top:50,right:20,backgroundColor:t.colors.surface,borderWidth:1,borderColor:t.colors.divider,borderRadius:10,padding:6},menuAction:{minHeight:44,paddingHorizontal:14,justifyContent:'center'},menuText:{fontSize:14,color:t.colors.ink},content: { width: '100%', maxWidth:390, alignSelf: 'center', paddingHorizontal:20,paddingTop:14, paddingBottom: 110, gap: 20 },

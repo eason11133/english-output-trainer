@@ -7,7 +7,7 @@ import { eotLearnerTokensV1 as t } from '../../src/ui';
 import {ContextualSpotlight} from '../experience/ContextualSpotlight';
 import { useCanonicalProductData } from '../../context/AppDataContext';
 import { canonicalLexicalEncounterStoreV1 } from '../../src/persistence';
-import { contentExposureEventV1, createLexicalEncounterEventV1, shouldShowLexicalReencounterCueV1 } from '../../src/learner-truth/lexicalEncounter';
+import { contentExposureEventV1, createLexicalEncounterEventV1 } from '../../src/learner-truth/lexicalEncounter';
 export const FORMAL_LOOKUP_LOCK_COPY_V1='模考中先不提供查字。交卷後可以查。';
 
 type Segment={text:string;index:number;interactive:boolean};
@@ -18,13 +18,12 @@ export function UniversalLookupText({text,paragraph,assessmentMode='NONE',active
   const[result,setResult]=useState<ContextualLookupResultV1>();
   const[pending,setPending]=useState(false);
   const[fallbackMessage,setFallbackMessage]=useState('');
-  const[reencounter,setReencounter]=useState(false);
   const action=useRef(0);
   const lookupInFlight=useRef(false);
   const parts=useMemo(()=>segmentLanguage(text),[text]);
   useEffect(()=>{if(!exposureIdentity||instruction||!text.trim())return;void canonicalLexicalEncounterStoreV1.append(contentExposureEventV1({learnerId:learnerPreferences.learnerId,sessionId:sessionId??'view',contentIdentity:exposureIdentity,span:text,sourceFamily,taskId,occurredAt:new Date().toISOString()}))},[exposureIdentity,instruction,learnerPreferences.learnerId,sessionId,sourceFamily,taskId,text]);
   const encounterFor=(next:ContextualLookupResultV1,token:string,eventId:string)=>createLexicalEncounterEventV1({eventId,learnerId:learnerPreferences.learnerId,sessionId,occurredAt:new Date().toISOString(),captureMethod:'EOT_IN_APP_LOOKUP',sourceType:'EOT_CONTENT',sourceAnchor:taskId,selectedSpan:next.resolvedSpan?.text??token,normalizedTargetCandidate:next.lemma??token,phraseOrChunkCandidate:next.localUnit?.text,canonicalTargetRef:next.status==='RESOLVED'?'lexical.contextual-fit':undefined,canonicalFacet:next.localUnit?'COLLOCATION':'SENSE_DISCRIMINATION',resolutionStatus:next.status==='RESOLVED'?'RESOLVED':next.status==='AMBIGUOUS'?'AMBIGUOUS':'UNRESOLVED',candidateSenseRefs:next.senseId?[next.senseId]:[],resolvedContextualSense:next.senseId,lookupRequested:true,lookupResultExposed:next.status==='RESOLVED',userMarkedRemember:false,lookupDirection:lookupDirectionForTextV1(token),localContext:(paragraph??text).slice(0,240),sourceFamily,taskId,responsePhase:submitted?'POST_RESPONSE':responsePhase,targetProtected:next.status==='LOCKED',provenanceRefs:next.provenanceRefs??[],privacyScope:'EOT_REFERENCE_ONLY'});
-  async function recordEncounter(next:ContextualLookupResultV1,token:string){const id=`lexical:${learnerPreferences.learnerId}:lookup:${Date.now()}:${++action.current}`;try{await canonicalLexicalEncounterStoreV1.append(encounterFor(next,token,id));const all=await canonicalLexicalEncounterStoreV1.listForLearner(learnerPreferences.learnerId);setReencounter(shouldShowLexicalReencounterCueV1(all,next.lemma??token));return true}catch{setFallbackMessage('查詢結果可以繼續看，但這次記錄沒有儲存成功。');return false}}
+  async function recordEncounter(next:ContextualLookupResultV1,token:string){const id=`lexical:${learnerPreferences.learnerId}:lookup:${Date.now()}:${++action.current}`;try{await canonicalLexicalEncounterStoreV1.append(encounterFor(next,token,id));return true}catch{setFallbackMessage('查詢結果可以繼續看，但這次記錄沒有儲存成功。');return false}}
   const publish=async(next:ContextualLookupResultV1,token:string)=>{setResult(next);onLookupResult?.(next);if(next.status!=='LOCKED')await recordEncounter(next,token);if(next.status==='RESOLVED'){onLookupUsed?.(next);if(profile.onboarding.status!=='COMPLETED'&&profile.onboarding.firstDay?.milestones.TODAY_STARTED&&!profile.onboarding.firstDay.milestones.FIRST_LOOKUP_USED)void recordTutorialAction('FIRST_LOOKUP_USED',`resolved-lookup:${next.senseId??next.lemma}`,profile.onboarding.firstDay.learningRoute??'/(tabs)').catch(()=>setFallbackMessage('查詢已開啟，但進度暫時無法儲存；下次可再點一下。'))}};
   async function lookup(token:string){
     if(lookupInFlight.current)return;lookupInFlight.current=true;
@@ -40,14 +39,13 @@ export function UniversalLookupText({text,paragraph,assessmentMode='NONE',active
       setFallbackMessage('本機辭典目前找不到這個詞；你仍可繼續作答。');onLookupResult?.(next);await recordEncounter(next,token);
     }catch{setFallbackMessage('本機辭典暫時無法開啟；你仍可繼續作答。');onLookupResult?.(next)}finally{setPending(false)}}finally{lookupInFlight.current=false}
   }
-  const close=()=>{setResult(undefined);setFallbackMessage('');setPending(false);setReencounter(false)};
+  const close=()=>{setResult(undefined);setFallbackMessage('');setPending(false)};
   return <ContextualSpotlight active={showHint} copy="點英文可以查意思"><View>
     <Pressable onPress={interactionPress} disabled={!interactionPress}><Text style={style}>{parts.map((part,i)=>part.interactive&&!instruction?<Text accessibilityRole="button" accessibilityLabel={`${lookupGesture==='LONG_PRESS'?'長按查詢':'查詢'} ${part.text}`} key={`${part.index}-${i}`} onPress={lookupGesture==='TAP'?event=>{event.stopPropagation();void lookup(part.text)}:undefined} onLongPress={lookupGesture==='LONG_PRESS'?event=>{event.stopPropagation();void lookup(part.text)}:undefined}>{part.text}</Text>:<Text key={`${part.index}-${i}`}>{part.text}</Text>)}</Text></Pressable>
     {result?<View style={s.popover}>
       {pending?<View style={s.lock}><Ionicons name="book" size={22} color={t.colors.midWood}/><Text style={s.note}>{fallbackMessage}</Text></View>:result?.status==='RESOLVED'?<><Text style={s.word}>{result.localUnit?.text??result.tappedToken}</Text><Text style={s.meaning}>{result.localUnit?.meaningZhTw??result.meaningZhTw}</Text>{result.localUnit?<Text style={s.fallback}>這裡的核心字義：{result.meaningZhTw}</Text>:null}{result.usageNote?<Text style={s.note}>{result.usageNote}</Text>:null}</>:<View style={s.lock}><Ionicons name={result?.status==='LOCKED'?'lock-closed':'information-circle'} size={22} color={t.colors.midWood}/><Text style={s.note}>{result?.status==='LOCKED'?(result.lockReason==='FORMAL_ASSESSMENT'?FORMAL_LOOKUP_LOCK_COPY_V1:'這個目標送出前先不顯示，避免直接透露答案。'):(fallbackMessage||(result?.status==='AMBIGUOUS'?'目前語境不足，還不能安全判定這個字在這裡的意思。':'本機辭典目前沒有這個詞。'))}</Text></View>}
-      {reencounter?<Text style={s.cue}>這個英文之前也出現過，可以先留意它。</Text>:null}
       <Pressable accessibilityRole="button" onPress={close} style={s.close}><Text style={s.closeText}>知道了</Text></Pressable>
     </View>:null}
   </View></ContextualSpotlight>;
 }
-const s=StyleSheet.create({popover:{marginTop:8,padding:14,borderRadius:12,backgroundColor:t.colors.paper,borderWidth:1,borderColor:t.colors.divider,gap:8},word:{fontSize:19,fontWeight:'700',color:t.colors.ink},meaning:{fontSize:17,lineHeight:25,fontWeight:'600',color:t.colors.deepWood},fallback:{fontSize:13,color:t.colors.muted},note:{fontSize:14,lineHeight:22,color:t.colors.muted},lock:{flexDirection:'row',gap:10,alignItems:'flex-start'},cue:{fontSize:13,lineHeight:20,color:t.colors.midWood},close:{minHeight:40,alignSelf:'flex-start',justifyContent:'center'},closeText:{fontSize:14,fontWeight:'600',color:t.colors.deepWood}});
+const s=StyleSheet.create({popover:{marginTop:8,padding:14,borderRadius:12,backgroundColor:t.colors.paper,borderWidth:1,borderColor:t.colors.divider,gap:8},word:{fontSize:19,fontWeight:'700',color:t.colors.ink},meaning:{fontSize:17,lineHeight:25,fontWeight:'600',color:t.colors.deepWood},fallback:{fontSize:13,color:t.colors.muted},note:{fontSize:14,lineHeight:22,color:t.colors.muted},lock:{flexDirection:'row',gap:10,alignItems:'flex-start'},close:{minHeight:40,alignSelf:'flex-start',justifyContent:'center'},closeText:{fontSize:14,fontWeight:'600',color:t.colors.deepWood}});

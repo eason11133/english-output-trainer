@@ -9,7 +9,7 @@ const{submitExamToCanonicalTeacherV1}=require(path.join(build,'application/exam/
 const{buildExamTeacherInteractionV1,continueExamTeacherAfterInteractionV1}=require(path.join(build,'application/exam/examTeacherInteraction.js'));
 const{projectExamLearnerActionV1}=require(path.join(build,'application/exam/examPuzzleProjection.js'));
 const{createExamOperationalRuntimeV1,updateExamOperationalRuntimeV1,resumableExamOperationalRuntimeV1}=require(path.join(build,'application/exam/examOperationalRuntime.js'));
-const{createLearningSessionV1,currentLearningActivityV1,advanceLearningSessionV1}=require(path.join(build,'application/session/learningSessionState.js'));
+const{createLearningSessionV1,currentLearningActivityV1,advanceLearningSessionV1,appendLearningActivityV1,closeLearningSessionV1}=require(path.join(build,'application/session/learningSessionState.js'));
 
 const families=['VOCABULARY','COMPREHENSIVE','CONTEXTUAL_FILL','DISCOURSE','READING','MIXED','TRANSLATION','WRITING'];
 const learnerId='frontend-acceptance';
@@ -80,24 +80,29 @@ test('all eight production families execute a real wrong-answer direct-learning 
  const out=path.resolve('artifacts/eot-production-frontend-acceptance');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'eight-family-paths.json'),JSON.stringify({generatedAt:new Date().toISOString(),count:receipts.length,receipts},null,2));
 });
 
-test('Batch 2 production route uses a persisted multi-activity session and spatial direct manipulation',()=>{
+test('production route uses boundary-selected sessions and passage-bound spatial manipulation',()=>{
  const examRoute=fs.readFileSync('app/exam-practice.tsx','utf8');
  const renderers=fs.readFileSync('components/learning/PuzzleRenderers.tsx','utf8');
+ const spatial=fs.readFileSync('components/learning/SpatialLanguageWorkspace.tsx','utf8');
+ const authored=fs.readFileSync('components/learning/AuthoredResponseWorkspace.tsx','utf8');
  const session=fs.readFileSync('src/application/session/learningSessionState.ts','utf8');
- assert.match(session,/kind:'CORE'/);assert.match(session,/kind:'UNRELATED'/);assert.match(session,/kind:'REENCOUNTER'/);
+ assert.match(session,/appendLearningActivityV1/);assert.match(session,/closeLearningSessionV1/);
  assert.match(examRoute,/advanceLearningSessionV1/);
  assert.doesNotMatch(examRoute,/router\.replace\(`\/exam-practice\?/);
  assert.doesNotMatch(examRoute,/看看這次改變了什麼/);
- assert.match(renderers,/measureInWindow/);assert.match(renderers,/g\.moveX/);assert.match(renderers,/g\.moveY/);
+ assert.match(spatial,/measureInWindow/);assert.match(spatial,/g\.moveX/);assert.match(spatial,/g\.moveY/);
+ assert.match(spatial,/splitPassage/);assert.match(examRoute,/SpatialLanguageWorkspace/);
+ assert.match(authored,/ref=\{input\}/);assert.match(examRoute,/AuthoredResponseWorkspace/);
  assert.match(renderers,/accessibilityLabel="可直接修改的原作"/);
  assert.doesNotMatch(renderers,/authored!==undefined\?<Text/);
  assert.match(renderers,/lookupGesture="LONG_PRESS"/);
 });
 
-test('session re-encounter is scheduled only after unrelated work and closes once',()=>{
- let session=createLearningSessionV1({id:'s',learnerId:'l',occurredAt:'2026-09-29T00:00:00.000Z',primary:{taskId:'read-a',family:'READING'},unrelated:{taskId:'vocab-b',family:'VOCABULARY'},reencounter:{taskId:'read-c',family:'READING'}});
+test('session work is appended only at real boundaries and explicit close cannot resurrect it',()=>{
+ let session=createLearningSessionV1({id:'s',learnerId:'l',occurredAt:'2026-09-29T00:00:00.000Z',primary:{taskId:'read-a',family:'READING'}});
  assert.equal(currentLearningActivityV1(session).kind,'CORE');
- session=advanceLearningSessionV1(session,'2026-09-29T00:01:00.000Z');assert.equal(currentLearningActivityV1(session).kind,'UNRELATED');
- session=advanceLearningSessionV1(session,'2026-09-29T00:02:00.000Z');assert.equal(currentLearningActivityV1(session).kind,'REENCOUNTER');
- session=advanceLearningSessionV1(session,'2026-09-29T00:03:00.000Z');assert.equal(session.status,'COMPLETED');assert.equal(currentLearningActivityV1(session),undefined);assert.equal(session.completedActivityIds.length,3);
+ session=advanceLearningSessionV1(session,'2026-09-29T00:01:00.000Z');assert.equal(session.status,'COMPLETED');
+ session=appendLearningActivityV1({...session,status:'ACTIVE'},{taskId:'vocab-b',family:'VOCABULARY',kind:'UNRELATED',sourceActivityId:'s:core'});assert.equal(currentLearningActivityV1(session).kind,'UNRELATED');
+ session=closeLearningSessionV1(session,'2026-09-29T00:02:00.000Z');assert.equal(session.status,'COMPLETED');assert.equal(currentLearningActivityV1(session),undefined);
+ assert.equal(appendLearningActivityV1(session,{taskId:'read-c',family:'READING',kind:'REENCOUNTER'}),session);
 });
