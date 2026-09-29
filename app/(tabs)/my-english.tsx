@@ -1,35 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCanonicalProductData } from '../../context/AppDataContext';
-import { loadMyEnglishAbilityV1, loadMyEnglishVMV1, MyEnglishVMV1 } from '../../src/experience';
-import { Href, router } from 'expo-router';
-import { eotLearnerTokensV1 as t } from '../../src/ui';
-import { LexicalEncounterPanel } from '../../components/learning/LexicalEncounterPanel';
-import { UniversalLookupText } from '../../components/learning/UniversalLookupText';
-import {MemoryTruthSurface,type MemoryTruthGroup} from '../../components/experience/MemoryTruthSurface';
+import {Href,router} from 'expo-router';
+import React,{useEffect,useState} from 'react';
+import {ActivityIndicator,Pressable,ScrollView,StyleSheet,Text,View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useCanonicalProductData} from '../../context/AppDataContext';
+import {loadMyEnglishAbilityV1,loadMyEnglishVMV1,practiceEntryV1,practiceRouteParamsV1,type MyEnglishVMV1} from '../../src/experience';
+import {eotLearnerTokensV1 as t} from '../../src/ui';
 
-export default function MyEnglish(){
-  const {learnerPreferences,profile,recordTutorialAction}=useCanonicalProductData();
-  const [vm,setVM]=useState<MyEnglishVMV1|null>(null);
-  const [ability,setAbility]=useState<Awaited<ReturnType<typeof loadMyEnglishAbilityV1>>|null>(null);
-  const [captureOpen,setCaptureOpen]=useState(false);
-  useEffect(()=>{void Promise.all([loadMyEnglishVMV1(learnerPreferences.learnerId),loadMyEnglishAbilityV1(learnerPreferences.learnerId)]).then(([nextVM,nextAbility])=>{setVM(nextVM);setAbility(nextAbility)})},[learnerPreferences.learnerId]);
-
-  const memoryGroups:MemoryTruthGroup[]=ability?.state==='EMPTY'?[]:[{title:'已經能自己做到',items:(ability?.areas??[]).filter(x=>x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))},{title:'還常需要一點支援',items:(ability?.areas??[]).filter(x=>!x.statusLabel.includes('自己')).map(x=>({when:'最近',target:x.label,truth:x.statusLabel}))},{title:'最近出現',items:(vm?.recentMemory??[]).map((truth,index)=>({when:index?'最近':'今天',target:ability?.areas[index]?.label??'這次練過的英文',truth}))}];
-  return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}><Text style={s.title}>My English</Text><Text style={s.subtitle}>EOT 最近記得這些</Text>
-    {!vm||!ability?<ActivityIndicator/>:ability.state==='EMPTY'
-      ?<View style={s.empty}><Text style={s.emptyTitle}>先做一次練習</Text><Text style={s.note}>這裡只會記下你真的用過的英文；現在空白，不代表你不會。</Text><Pressable accessibilityRole="button"onPress={()=>router.push('/(tabs)/practice' as Href)}style={s.action}><Text style={s.actionTitle}>開始練習</Text></Pressable></View>
-      :<>
-        <MemoryTruthSurface groups={memoryGroups}/>
-        <View style={s.direction}><Text style={s.sectionTitle}>接下來</Text><Text style={s.directionText}>{vm.progressNarrative}</Text></View>
-        {vm.practiceAgain.length?<View style={s.direction}><Text style={s.sectionLabel}>再找回來</Text>{vm.practiceAgain.slice(0,2).map(item=><Text key={item} style={s.example}>{item}</Text>)}</View>:null}
-        {vm.recentLearnerEnglish.slice(0,1).map((example,index)=><UniversalLookupText key={`${index}-${example}`} text={example} sourceFamily="MY_ENGLISH" responsePhase="POST_RESPONSE" style={s.example}/>)}
-        {profile.onboarding.status!=='COMPLETED'?<Pressable accessibilityRole="button" onPress={()=>{router.push('/(tabs)/practice' as Href);void recordTutorialAction('MY_ENGLISH_EXPLAINED_FROM_REAL_CHANGE',`my-english-reviewed:${learnerPreferences.learnerId}`,'/(tabs)/my-english')}}style={s.action}><Text style={s.actionTitle}>我看懂了，看看相關練習</Text></Pressable>:null}
-      </>}
-    <View style={s.capture}><Pressable accessibilityRole="button" accessibilityState={{expanded:captureOpen}} onPress={()=>setCaptureOpen(value=>!value)} style={s.captureToggle}><Text style={s.captureTitle}>記下我遇到的英文</Text><Text style={s.chevron}>{captureOpen?'−':'＋'}</Text></Pressable>{captureOpen?<LexicalEncounterPanel/>:null}</View>
-    <Pressable accessibilityRole="button"onPress={()=>router.push('/progress-history' as Href)}style={s.history}><Text style={s.historyText}>查看完整歷程</Text></Pressable>
-  </ScrollView></SafeAreaView>;
-}
-const s=StyleSheet.create({safe:{flex:1,backgroundColor:t.colors.canvas},page:{width:'100%',maxWidth:t.layout.learnerShellMaxWidth,alignSelf:'center',paddingHorizontal:20,paddingTop:28,paddingBottom:96},title:{fontSize:30,lineHeight:37,fontWeight:'600',color:t.colors.ink},subtitle:{fontSize:16,lineHeight:24,color:t.colors.muted,marginTop:8,marginBottom:40},note:{fontSize:14,lineHeight:21,color:t.colors.muted},capture:{borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.line,marginTop:24},captureToggle:{minHeight:58,flexDirection:'row',alignItems:'center',justifyContent:'space-between'},captureTitle:{fontSize:15,fontWeight:'600',color:t.colors.deepWood},empty:{paddingVertical:32,borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.line,gap:16},emptyTitle:{fontSize:24,lineHeight:31,fontWeight:'600',color:t.colors.ink},memoryGroup:{marginBottom:32},sectionTitle:{fontSize:18,lineHeight:25,fontWeight:'600',color:t.colors.ink,marginBottom:8},memoryItem:{paddingVertical:16,borderBottomWidth:1,borderBottomColor:t.colors.line,gap:6},when:{fontSize:12,lineHeight:18,color:t.colors.subtle},memoryText:{fontSize:16,lineHeight:24,color:t.colors.ink},chevron:{fontSize:24,color:t.colors.muted},direction:{paddingVertical:8,marginBottom:24},directionText:{fontSize:16,lineHeight:24,color:t.colors.ink},sectionLabel:{fontSize:12,color:t.colors.muted},example:{fontSize:14,lineHeight:21,color:t.colors.muted,marginBottom:8},action:{minHeight:52,paddingHorizontal:18,borderRadius:14,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center',marginBottom:24},actionTitle:{color:t.colors.paper,fontSize:16,fontWeight:'600'},history:{minHeight:44,justifyContent:'center'},historyText:{color:t.colors.deepWood,fontSize:14,fontWeight:'600'}});
-
+type Ability=Awaited<ReturnType<typeof loadMyEnglishAbilityV1>>;
+export default function MyEnglish(){const{learnerPreferences}=useCanonicalProductData(),[ability,setAbility]=useState<Ability>(),[vm,setVM]=useState<MyEnglishVMV1>();useEffect(()=>{void Promise.all([loadMyEnglishAbilityV1(learnerPreferences.learnerId),loadMyEnglishVMV1(learnerPreferences.learnerId)]).then(([a,v])=>{setAbility(a);setVM(v)})},[learnerPreferences.learnerId]);if(!ability||!vm)return <SafeAreaView style={s.safe}><ActivityIndicator style={s.loading}/></SafeAreaView>;
+ const stable=ability.areas.filter(x=>!['NEEDS_WORK','MOST_WORTH_PRACTICING'].includes(x.status)),stuck=ability.areas.filter(x=>['NEEDS_WORK','MOST_WORTH_PRACTICING'].includes(x.status));
+ const open=(family:string)=>{const entry=practiceEntryV1(family);if(!entry?.destination)return;const query=new URLSearchParams(Object.entries(practiceRouteParamsV1({entry,origin:'MY_ENGLISH'})).filter((x):x is [string,string]=>typeof x[1]==='string')).toString();router.push(`${entry.destination}?${query}` as Href)};
+ return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}><Text style={s.title}>My English</Text>{ability.state==='EMPTY'?<View style={s.empty}><Text style={s.emptyTitle}>這裡會留下你真正做過的英文</Text><Text style={s.meta}>做過練習後，最近比較穩和還會卡的內容會出現在這裡。</Text><Pressable onPress={()=>router.push('/(tabs)/practice')} style={s.practice}><Text style={s.practiceText}>去練一下</Text></Pressable></View>:<><Group title="最近比較穩" rows={stable} onPress={open}/><Group title="最近還會卡" rows={stuck} onPress={open}/>{vm.recentMemory.length?<View style={s.group}><Text style={s.heading}>最近碰到</Text>{vm.recentMemory.slice(0,2).map(x=><Text key={x} style={s.memory}>{x.replace(/：查過，但還不算已經會了。/,'')}</Text>)}</View>:null}</>}</ScrollView></SafeAreaView>}
+const learnerTarget=(family:string)=>family==='READING'?'回到文章找答案':family==='TRANSLATION'?'把中文意思說成英文':family==='WRITING'?'把想法寫得更完整':family==='VOCABULARY'?'把字放回句子裡':family==='DISCOURSE'?'讓前後文接得起來':family==='MIXED'?'讀懂不同形式的資料':'完成一題英文';
+function Group({title,rows,onPress}:{title:string;rows:Ability['areas'];onPress:(family:string)=>void}){if(!rows.length)return null;return <View style={s.group}><Text style={s.heading}>{title}</Text>{rows.slice(0,4).map(row=><Pressable key={row.id} onPress={()=>onPress(row.family)} style={s.row}><View style={s.flex}><Text style={s.family}>{row.label.replace('測驗','')}</Text><Text style={s.target}>{learnerTarget(row.family)}</Text></View><Text style={s.arrow}>›</Text></Pressable>)}</View>}
+const s=StyleSheet.create({safe:{flex:1,backgroundColor:t.colors.canvas},loading:{flex:1},page:{width:'100%',maxWidth:430,alignSelf:'center',paddingHorizontal:20,paddingTop:28,paddingBottom:100},title:{fontSize:30,lineHeight:37,fontWeight:'600',color:t.colors.ink,marginBottom:40},group:{marginBottom:38},heading:{fontSize:18,lineHeight:25,fontWeight:'600',color:t.colors.ink,marginBottom:8},row:{minHeight:72,flexDirection:'row',alignItems:'center',borderBottomWidth:1,borderBottomColor:t.colors.divider},flex:{flex:1},family:{fontSize:15,lineHeight:22,color:t.colors.muted},target:{fontSize:17,lineHeight:26,fontWeight:'600',color:t.colors.ink},arrow:{fontSize:24,color:t.colors.muted},memory:{fontSize:16,lineHeight:24,color:t.colors.ink,paddingVertical:12,borderBottomWidth:1,borderBottomColor:t.colors.divider},empty:{paddingVertical:20,gap:16},emptyTitle:{fontSize:22,lineHeight:31,fontWeight:'600',color:t.colors.ink},meta:{fontSize:15,lineHeight:23,color:t.colors.muted},practice:{minHeight:50,alignSelf:'flex-start',paddingHorizontal:22,borderRadius:13,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},practiceText:{color:t.colors.paper,fontWeight:'600'}});

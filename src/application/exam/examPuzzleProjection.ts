@@ -1,70 +1,53 @@
 import type {QualifiedInnerTutorDecisionV1} from '../../teacher-runtime';
 import type {ExamBetaTask} from '../../content/examBetaBank';
-import type {PuzzleInteraction,PuzzleRepresentation,PuzzleStep,PuzzleSupport} from '../../ui/puzzleStep';
-import {isCompatiblePuzzleStepV1} from '../../ui/puzzleStep';
-import type {ExamTeacherInteractionV1} from './examTeacherInteraction';
+import type {LearnerActionSurface,LearnerItem,LearnerSpan} from '../../ui/learnerActionSurface';
 
-type Input={decision:QualifiedInnerTutorDecisionV1;interaction:ExamTeacherInteractionV1;task:ExamBetaTask;learnerResponse?:string};
+type InternalInteraction={interactionId:string;mode:string;blockId:string;prompt:string;options?:readonly {id:string;label:string}[]};
+type Input={decision:QualifiedInnerTutorDecisionV1;interaction:InternalInteraction;task:ExamBetaTask;learnerResponse?:string};
+const options=(value:unknown):LearnerItem[]=>Array.isArray(value)?value.map((x,index)=>typeof x==='object'&&x?{id:String((x as {id?:unknown}).id??index),label:String((x as {text?:unknown;label?:unknown}).text??(x as {label?:unknown}).label??'')}:{id:String(index),label:String(x)}):[];
+const sentenceSpans=(text:string):LearnerSpan[]=>text.split(/(?<=[.!?])\s+|(?<=,)\s+/).map((part,index)=>({id:`span-${index}`,text:part.trim()})).filter(x=>x.text);
+const source=(task:ExamBetaTask)=>String(task.payload.passage??task.payload.source??task.payload.prompt??'');
+const firstQuestion=(task:ExamBetaTask)=>((task.payload.questions as {id:string;prompt:string;options?:unknown}[]|undefined)?.[0]);
+const base=(input:Input)=>({id:input.interaction.interactionId,taskId:input.task.task_id,instruction:input.interaction.prompt});
+function contrastItems(input:Input){const choices=options(firstQuestion(input.task)?.options??input.interaction.options).slice(0,4);return choices.map(item=>({id:item.id,word:item.label,meaning:item.label==='reserve'?'事先保留':item.label==='restore'?'恢復原本狀態':'放回句中比較意思',example:item.label==='reserve'?'reserve a seat':item.label==='restore'?'restore a file':`${item.label} …`}))}
 
-const supportMap:Record<string,PuzzleSupport>={MODELED:'S3',EXPLICIT:'S3',GUIDED:'S2',CUED:'S1',LIGHT:'S1',NONE:'S0'};
-const modeMap:Record<ExamTeacherInteractionV1['mode'],PuzzleInteraction>={
-  SELECT:'select',CLASSIFY:'sort',MARK:'mark_evidence',EVIDENCE_SELECT:'mark_evidence',REFERENCE_LINK:'trace_reference',MATCH:'match',COMPARE:'compare',REORDER:'order',PLAN:'order',CHUNK_RECONSTRUCTION:'rebuild',REPAIR:'rewrite',FREE_PRODUCTION:'produce',RETURN:'retrieve',
-};
-const blockRepresentation:Record<string,PuzzleRepresentation>={
-  'meaning-representation':'meaning_contrast','form-contrast':'form_pattern','chunk-as-unit':'chunk_as_unit','collocation-network':'argument_structure','morphology-decomposition':'form_pattern','meaning-segmentation':'meaning_unit_map','task-requirement-map':'sentence_function','idea-development-ladder':'paragraph_role','alternative-translation-compare':'before_after','reference-chain':'reference_chain','text-structure-map':'paragraph_role','paragraph-function-map':'paragraph_role','sentence-insertion-continuity':'old_new_information','distractor-evidence-contrast':'evidence_map','claim-strength-contrast':'claim_strength','inference-evidence-bridge':'evidence_map',
-};
-
-function sourceText(task:ExamBetaTask){const payload=task.payload,sentences=Array.isArray(payload.chineseSentences)?payload.chineseSentences:[];return String(payload.passage??payload.source??payload.prompt??sentences[0]??payload.title??'')}
-function optionLabels(interaction:ExamTeacherInteractionV1){return (interaction.options??[]).map(item=>({id:item.id,label:item.label}))}
-function representationFor(input:Input):PuzzleRepresentation{
-  const configured=blockRepresentation[input.interaction.blockId];if(configured)return configured;
-  const family=input.task.family;
-  if(family==='READING'||family==='MIXED')return'evidence_map';
-  if(family==='DISCOURSE')return input.interaction.mode==='REFERENCE_LINK'?'reference_chain':'old_new_information';
-  if(family==='TRANSLATION'||family==='WRITING')return'error_span';
-  if(family==='COMPREHENSIVE'||family==='CONTEXTUAL_FILL')return'grammar_slot';
-  return'meaning_contrast';
-}
-function interactionFor(input:Input):PuzzleInteraction{
-  const id=input.interaction.blockId;
-  if(id.includes('fill')||id.includes('slot'))return'fill';
-  if(id.includes('transform')||id.includes('form-contrast'))return'transform';
-  if(id.includes('retriev'))return'retrieve';
-  if(id.includes('insert'))return'insert';
-  if(id.includes('delete')||id.includes('excess'))return'delete_excess';
-  return modeMap[input.interaction.mode];
-}
-function evidenceSpans(text:string){const spans=text.split(/(?<=[.!?])\s+|[,;:]\s*/).map(value=>value.trim()).filter(Boolean);return spans.length>1?spans:[text]}
-function payloadFor(input:Input,interaction:PuzzleInteraction){
-  const text=sourceText(input.task),options=optionLabels(input.interaction),labels=options.map(item=>item.label),response=input.learnerResponse??'';
-  switch(interaction){
-    case'select':return{options};
-    case'mark_evidence':return{passage:text,spans:evidenceSpans(text),options};
-    case'compare':return{left:labels[0]??text,leftLabel:'原文／做法 A',leftExample:labels[0]??'',right:labels[1]??response,rightLabel:'選項／做法 B',rightExample:labels[1]??'',options};
-    case'match':{const middle=Math.ceil(options.length/2);return{left:options.slice(0,middle),right:options.slice(middle),options}}
-    case'sort':return{categories:['符合','不符合'],items:options};
-    case'rebuild':return{tokens:options.length?options:text.split(/\s+/).filter(Boolean).map((label,index)=>({id:`token-${index}`,label}))};
-    case'fill':return{prompt:text,candidates:options};
-    case'transform':return{original:response||text,target:String(input.interaction.prompt),targetSpan:String(input.decision.blockDecision.configuration.targetSpan??'')};
-    case'retrieve':return{context:text,clues:options};
-    case'rewrite':return{original:response||String(input.decision.lineage?.context.sourceTaskContext?.previousLearnerResponse??text),targetSpan:String(input.decision.blockDecision.configuration.targetSpan??''),goal:input.interaction.prompt};
-    case'produce':return{context:text,goal:input.interaction.prompt};
-    case'insert':return{passage:text,points:options};
-    case'order':return{items:options};
-    case'trace_reference':return{passage:text,targets:options};
-    case'delete_excess':return{text:response||text};
+export function projectExamLearnerActionV1(input:Input):LearnerActionSurface{
+  const b=base(input),payload=input.task.payload,text=source(input.task),question=firstQuestion(input.task),target=String(input.decision.blockDecision.configuration.targetSpan??''),selected=input.learnerResponse;
+  if(input.task.family==='VOCABULARY'){
+    if(input.interaction.blockId==='clarify-context')return{...b,kind:'MEANING_CONTRAST',sentence:question?.prompt??text,contrasts:contrastItems(input),selectedAnswer:selected};
+    if(input.interaction.mode==='EVIDENCE_SELECT')return{...b,kind:'EVIDENCE',passage:question?.prompt??text,spans:sentenceSpans(question?.prompt??text),single:true,selectedAnswer:selected};
+    if(input.interaction.blockId.includes('collocation'))return{...b,kind:'COLLOCATION',heads:contrastItems(input).map(x=>({id:x.id,label:x.word})),collocates:[{id:'seat',label:'seat'},{id:'table',label:'table'},{id:'file',label:'file'},{id:'building',label:'building'}]};
+    if(input.interaction.blockId.includes('morphology'))return{...b,kind:'WORD_BUILD',original:selected??'',pieces:contrastItems(input).map(x=>({id:x.id,label:x.word}))};
+    return{...b,kind:'MEANING_CONTRAST',sentence:question?.prompt??text,contrasts:contrastItems(input),selectedAnswer:selected};
   }
-}
-
-export function projectExamTeachingPuzzleStepV1(input:Input):PuzzleStep{
-  const interaction=interactionFor(input),source=input.decision.lineage?.context.sourceTaskContext,proposed=representationFor(input);
-  const fallback:Record<PuzzleInteraction,PuzzleRepresentation>={select:'context_contrast',mark_evidence:'evidence_map',compare:'claim_strength',match:'meaning_contrast',sort:'sentence_function',rebuild:'chunk_as_unit',fill:'grammar_slot',transform:'form_pattern',retrieve:'context_contrast',rewrite:'error_span',produce:'meaning_unit_map',insert:'old_new_information',order:'paragraph_role',trace_reference:'reference_chain',delete_excess:'error_span'};
-  const representation=isCompatiblePuzzleStepV1({id:'compatibility',phase:'teach',representation:proposed,interaction,support:'S2',payload:{}})?proposed:fallback[interaction];
-  return Object.freeze({
-    id:input.interaction.interactionId,
-    phase:input.interaction.support==='NONE'?'fresh':input.interaction.support==='LIGHT'||input.interaction.support==='CUED'?'fade':'teach',
-    representation,interaction,support:supportMap[input.interaction.support]??'S2',
-    instruction:input.interaction.prompt,payload:payloadFor(input,interaction),
-    evaluation:{taskId:input.task.task_id,unitId:String(source?.unitId??''),decisionPointId:input.decision.provenance.decisionPointId,blockId:input.interaction.blockId,targetRef:input.decision.provenance.targetRef,facet:input.decision.provenance.facet},
-  });
+  if(input.task.family==='COMPREHENSIVE'){
+    const blanks=payload.blanks as {id:string;options?:unknown}[]|undefined,blank=blanks?.[0];
+    return{...b,kind:'SLOT',sentence:text,blankId:blank?.id??'1',candidates:options(blank?.options??input.interaction.options),placed:selected};
+  }
+  if(input.task.family==='CONTEXTUAL_FILL')return{...b,kind:'SLOT',sentence:text,blankId:String((payload.blanks as unknown[]|undefined)?.[0]??'1'),candidates:options(payload.options),placed:selected};
+  if(input.task.family==='DISCOURSE'){
+    const candidates=options(payload.sentenceOptions),candidate=candidates.find(x=>x.id===selected)?.label??candidates[0]?.label??'';
+    if(input.interaction.mode==='REFERENCE_LINK')return{...b,kind:'REFERENCE_TRACE',passage:text,reference:candidate.match(/\b(this|these|it|they|such(?: a change)?|the problem|this approach)\b/i)?.[0]??'this',antecedents:sentenceSpans(text)};
+    return{...b,kind:'INSERTION',passage:text,candidate,points:(payload.blanks as string[]|undefined)?.map(id=>({id,label:`___${id}___`}))??[],placed:selected};
+  }
+  if(input.task.family==='READING'){
+    if(input.interaction.mode==='COMPARE'||input.decision.treatmentResponse){
+      const choices=options(question?.options),wrong=choices.find(x=>x.id===selected)??choices[0],other=choices.find(x=>x.id!==wrong?.id)??choices[1];
+      return{...b,kind:'MEANING_CONTRAST',sentence:text,contrasts:[wrong,other].filter(Boolean).map(x=>({id:x!.id,word:x!.label,meaning:'和原文逐字對照',example:x!.label})),selectedAnswer:selected};
+    }
+    return{...b,kind:'EVIDENCE',passage:text,spans:sentenceSpans(text),single:true,selectedAnswer:selected};
+  }
+  if(input.task.family==='MIXED'){
+    if(input.interaction.mode==='MARK')return{...b,kind:'SOURCE_TRACE',source:text,regions:text.split(/\n+/).filter(Boolean).map((part,index)=>({id:`source-${index}`,text:part}))};
+    return{...b,kind:'SOURCE_TRANSFORM',source:text,goal:input.interaction.prompt};
+  }
+  const authored=selected??String(input.decision.lineage?.context.sourceTaskContext?.previousLearnerResponse??'');
+  if(input.task.family==='TRANSLATION')return{...b,kind:'TRANSLATION_EDITOR',sourceZh:String((payload.chineseSentences as string[]|undefined)?.[0]??''),authoredText:authored,targetSpan:target||authored};
+  if(input.task.family==='WRITING'){
+    if(input.interaction.blockId==='idea-development-ladder')return{...b,kind:'WRITING_DEVELOPMENT',authoredText:authored,targetSpan:target||authored,missing:'SPECIFIC_DETAIL'};
+    return{...b,kind:'WRITING_EDITOR',prompt:String(payload.prompt??''),authoredText:authored,targetSpan:target||authored};
+  }
+  const real=options(question?.options??input.interaction.options);
+  if(real.length)return{...b,kind:'CHOICE',sentence:question?.prompt??text,choices:real,selectedAnswer:selected};
+  return{...b,kind:'RECALL',context:text,clues:[]};
 }

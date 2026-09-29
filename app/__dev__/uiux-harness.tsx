@@ -6,7 +6,6 @@ import{LearnerPage,SparseCard}from'../../components/experience/LearnerPage';
 import{ContextualLookup}from'../../components/learning/ContextualLookup';
 import{OutputWorkspace}from'../../components/learning/OutputWorkspace';
 import{lessonHarnessFixtureV1}from'../../src/ui/qa/lessonHarness';
-import{ResultTruthSurface}from'../../components/experience/ResultTruthSurface';
 import{MemoryTruthSurface}from'../../components/experience/MemoryTruthSurface';
 import{LessonErrorState,LessonLoadingState}from'../../components/learning/LessonAsyncState';
 
@@ -14,7 +13,7 @@ export default function UiuxHarness(){const p=useLocalSearchParams<{state?:strin
 if(['OPENING','TIME','DATE','MOCK','ROUTE','PRACTICE'].includes(p.state??''))return <Setup state={p.state!} meta={meta}/>;
 if(p.state==='LOADING')return <Page kicker="" title="" meta={meta}><LessonLoadingState context="The clinic reserves two appointments for urgent cases every morning."/></Page>;
 if(p.state==='NETWORK_ERROR')return <Page kicker="" title="" meta={meta}><LessonErrorState context="我非常同意這個想法。" draft="I am very agree with this idea."/></Page>;
-if(f.productionEntry==='RESULT')return <Page kicker="" title="" meta={meta}><ResultTruthSurface primary="換到新的句子後，你已經自己判斷對一次。" secondary="一開始你需要提示才能分清 qualify 和 quantify。" next="隔一天，再換一個句子確認一次。"/><Primary label="回到今天"/></Page>;
+if(f.productionEntry==='RESULT')return <Page kicker="" title="今天先到這裡" meta={meta}><Text>18 分鐘</Text><Primary label="完成"/></Page>;
 if(f.productionEntry==='MY_ENGLISH')return <Page kicker="MY ENGLISH" title="我的英文" meta={meta}><MemoryTruthSurface groups={[{title:'最近有變化',items:[{when:'今天',target:'qualify / quantify',truth:'換到新的句子後，已經自己判斷對一次。'},{when:'昨天',target:'be responsible for',truth:'看得懂了，自己寫還不穩。'}]}]}/></Page>;
 if(f.productionEntry==='PROGRESS_HISTORY')return <Page kicker="PROGRESS / HISTORY" title="進展與歷程" meta={meta}><SparseCard title="回到原作完成修改" body="你把剛才學到的做法帶回原本的作品；這是有意義的里程碑，而不是一次點擊紀錄。"/><SparseCard title="第一次獨立產出" body="在沒有提示與答案曝光的情況下完成。"/></Page>;
 return <SafeAreaView style={s.safe}><Stack.Screen options={{headerShown:false}}/><ScrollView contentContainerStyle={s.page}>{meta}{f.productionEntry==='TODAY'?<Today/>:f.productionEntry==='CONTEXTUAL_LOOKUP'?<Lookup/>:f.productionEntry==='READING_PRACTICE'||f.productionEntry==='FORMAL_LOCKED_ATTEMPT'?<Reading formal={f.productionEntry==='FORMAL_LOCKED_ATTEMPT'}/>:f.vm?<OutputWorkspace vm={f.vm} value={f.vm.output.text} onChangeText={()=>{}} onPrimary={()=>{}} onPlaceLanguageObject={()=>{}} onStuck={()=>{}} onCorrectIntent={()=>{}}/>:<Text>{f.transport}</Text>}</ScrollView></SafeAreaView>}

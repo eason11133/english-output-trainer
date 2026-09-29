@@ -1,70 +1,42 @@
-import { Href, router, useFocusEffect } from 'expo-router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCanonicalProductData } from '../../context/AppDataContext';
-import { loadMyEnglishAbilityV1, loadTodayCurriculumVMV1, loadTodayRuntimeVMV1 } from '../../src/experience';
-import { productTaskForTargetV1 } from '../../src/content';
-import { resolveProductionExamContentForTargetV1 } from '../../src/content/productionContentSupply';
-import { examFamilyToPracticeFamilyV1 } from '../../src/content/examBetaBank';
-import { productExperienceAccessDecisionV2 } from '../../src/product';
-import { eotLearnerTokensV1 as t } from '../../src/ui';
-import { loadActiveExamOperationalCheckpointV1 } from '../../src/persistence/examOperationalPersistence';
-import { gsatColdStartDecisionV1 } from '../../src/product-policy/exam';
-import{savePrivateBetaProductEventV1}from'../../src/market-validation/privateBetaPulse';
-import{UniversalLookupText}from'../../components/learning/UniversalLookupText';
-import type { CapabilityFacet } from '../../src/domain/english/EnglishDomain';
+import {Href,router,useFocusEffect} from 'expo-router';
+import React,{useCallback,useEffect,useMemo,useRef,useState} from 'react';
+import {ActivityIndicator,Pressable,ScrollView,StyleSheet,Text,View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useCanonicalProductData} from '../../context/AppDataContext';
+import {examFamilyToPracticeFamilyV1} from '../../src/content/examBetaBank';
+import {resolveProductionExamContentForTargetV1} from '../../src/content/productionContentSupply';
+import type {CapabilityFacet} from '../../src/domain/english/EnglishDomain';
+import {loadMyEnglishAbilityV1,loadTodayCurriculumVMV1,loadTodayRuntimeVMV1,practiceRouteParamsV1,practiceEntryV1} from '../../src/experience';
+import {loadActiveExamOperationalCheckpointV1} from '../../src/persistence/examOperationalPersistence';
+import {productExperienceAccessDecisionV2} from '../../src/product';
+import {eotLearnerTokensV1 as t} from '../../src/ui';
 
-type TodayRuntime=Awaited<ReturnType<typeof loadTodayRuntimeVMV1>>;
-type TodayCurriculum=Awaited<ReturnType<typeof loadTodayCurriculumVMV1>>;
+type Curriculum=Awaited<ReturnType<typeof loadTodayCurriculumVMV1>>;
+type Runtime=Awaited<ReturnType<typeof loadTodayRuntimeVMV1>>;
+type Ability=Awaited<ReturnType<typeof loadMyEnglishAbilityV1>>;
 type ActiveExam=Awaited<ReturnType<typeof loadActiveExamOperationalCheckpointV1>>;
-
-const areaZh:Record<string,string>={LEXICAL:'詞彙產出',FORMULAIC:'語塊表達',GRAMMAR:'句型控制',MEANING_ENCODING:'意思轉英文',WRITING:'寫作產出',TRANSLATION:'翻譯產出',READING:'閱讀理解',DISCOURSE:'篇章組織'};
-const needZh:Record<string,string>={NEW_LEARNING:'建立新能力',REPAIR:'修回不穩能力',REACTIVATION:'把之前會的拉回來',INDEPENDENCE:'從提示帶到獨立',TRANSFER:'換情境確認',RETENTION:'延後確認',MAINTENANCE:'自然維持'};
-const examFamilyZh:Record<string,string>={VOCABULARY:'詞彙辨義',CLOZE:'文意選填',READING:'閱讀理解',TRANSLATION:'中譯英',WRITING:'英文作文',MIXED:'綜合測驗'};
+const areaLabel:Record<string,string>={LEXICAL:'詞彙',FORMULAIC:'片語',GRAMMAR:'綜合測驗',MEANING_ENCODING:'中譯英',WRITING:'英文作文',TRANSLATION:'中譯英',READING:'閱讀',DISCOURSE:'篇章結構'};
+const examLabel:Record<string,string>={VOCABULARY:'詞彙',COMPREHENSIVE:'綜合測驗',CONTEXTUAL_FILL:'文意選填',DISCOURSE:'篇章結構',READING:'閱讀',MIXED:'混合題',TRANSLATION:'中譯英',WRITING:'英文作文'};
 
 export default function Today(){
-  const {learnerPreferences,profile,runtimeProductContext,recordTutorialAction}=useCanonicalProductData();
-  const [active,setActive]=useState<TodayRuntime>({hasActiveLesson:false});
-  const [curriculum,setCurriculum]=useState<TodayCurriculum>({state:'EMPTY',timeBudgetMinutes:runtimeProductContext.studyMinutes,reasonCodes:[]});
-  const [activeExam,setActiveExam]=useState<ActiveExam>(null);
-  const [hasEvidence,setHasEvidence]=useState<boolean|null>(null);
-  const launchInFlight=useRef(false);
-  const accessDecision=productExperienceAccessDecisionV2(profile,profile.access.activeExperience);
-  useEffect(()=>{void loadTodayRuntimeVMV1(learnerPreferences.learnerId).then(setActive)},[learnerPreferences.learnerId]);
-  useEffect(()=>{void loadTodayCurriculumVMV1(learnerPreferences.learnerId,runtimeProductContext).then(setCurriculum)},[learnerPreferences.learnerId,runtimeProductContext]);
-  useEffect(()=>{void loadActiveExamOperationalCheckpointV1(learnerPreferences.learnerId).then(setActiveExam)},[learnerPreferences.learnerId]);
-  useEffect(()=>{void loadMyEnglishAbilityV1(learnerPreferences.learnerId).then(value=>setHasEvidence(value.state!=='EMPTY'))},[learnerPreferences.learnerId]);
-  useFocusEffect(useCallback(()=>{void loadTodayRuntimeVMV1(learnerPreferences.learnerId).then(setActive);void loadTodayCurriculumVMV1(learnerPreferences.learnerId,runtimeProductContext).then(setCurriculum);void loadActiveExamOperationalCheckpointV1(learnerPreferences.learnerId).then(setActiveExam)},[learnerPreferences.learnerId,runtimeProductContext]));
-  if(hasEvidence===null)return <SafeAreaView style={s.safe}><View style={s.loading}><ActivityIndicator color={t.colors.deepWood}/><Text style={s.focusBody}>正在準備今天的下一步…</Text></View></SafeAreaView>;
-  const examResume=runtimeProductContext.productMode==='EXAM'&&!curriculum.reconsideredAfterNoEffect?activeExam:null;
-  const hasResume=runtimeProductContext.productMode==='EXAM'?Boolean(examResume):active.hasActiveLesson;
-  const coldStart=hasEvidence===false?gsatColdStartDecisionV1(profile,false):undefined;
-  const curriculumLabel=curriculum.state==='READY'&&curriculum.focusArea&&curriculum.focusNeed?`${needZh[curriculum.focusNeed]??'今天的學習重點'} · ${areaZh[curriculum.focusArea]??'英文產出'}`:profile.goals.primaryGoal;
-  const missionLabel=examResume?`${examFamilyZh[examResume.runtime.family]??'英文練習'} · 接回剛才那一步`:curriculumLabel;
-  const todayExamResolution=runtimeProductContext.productMode==='EXAM'&&curriculum.state==='READY'&&curriculum.lessonPlan?resolveProductionExamContentForTargetV1({learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',targetRef:curriculum.lessonPlan.targetRef,facet:curriculum.lessonPlan.facet as CapabilityFacet,rotationKey:`today:${new Date().toISOString().slice(0,10)}`}):undefined;
-  const todayExamTask=todayExamResolution?.status==='READY'?todayExamResolution.content.task:undefined;
-  const todayTask=runtimeProductContext.productMode!=='EXAM'&&curriculum.state==='READY'?productTaskForTargetV1(curriculum.lessonPlan?.targetRef):undefined;
-  const examResumeHref=examResume?`/exam-practice?practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(examResume.runtime.family as Parameters<typeof examFamilyToPracticeFamilyV1>[0]))}`:undefined;
-  const startHref=examResumeHref??(runtimeProductContext.productMode!=='EXAM'&&active.hasActiveLesson?'/daily-lesson':coldStart?.kind==='CALIBRATION'?'/quick-calibration':coldStart?.kind==='MOCK_DIAGNOSTIC'?`/exam-practice?practiceFamily=${encodeURIComponent(coldStart.practiceFamily)}`:todayExamTask?`/exam-practice?practiceFamily=${encodeURIComponent(examFamilyToPracticeFamilyV1(todayExamTask.family))}&taskId=${encodeURIComponent(todayExamTask.task_id)}`:todayTask?`/daily-lesson?origin=TODAY&systemTask=${encodeURIComponent(todayTask.id)}`:'/(tabs)/practice');
-  const actionLabel=hasResume?'繼續今天的練習':'開始今天的練習';
-  const reason=hasResume?'你做到一半，進度還在。':curriculum.learnerReason??(hasEvidence?'上次的學習紀錄顯示，這是現在最值得確認的一段。':'先從你最近模考最容易追回的地方開始。');
-  return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.content}>
-    <View style={s.header}><View><Text style={s.title}>今天</Text><Text style={s.focusBody}>學測英文 · {runtimeProductContext.studyMinutes} 分鐘</Text></View><Pressable accessibilityRole="button" accessibilityLabel="個人設定" onPress={()=>router.push('/profile')} style={s.profile}><Text style={s.profileText}>設定</Text></Pressable></View>
-    <View style={s.mission}><Text style={[s.focusLabel,hasResume&&s.resumeLabel]}>{hasResume?'接著上次':coldStart?.kind==='CALIBRATION'?'先抓準起點':missionLabel.split(' · ')[1]??'今日任務'}</Text><UniversalLookupText text={coldStart?.kind==='CALIBRATION'?'先用幾個小動作，抓準你的英文起點。':coldStart?.kind==='MOCK_DIAGNOSTIC'?`先確認${coldStart.label}最容易追回的地方。`:todayTask?.title??String(todayExamTask?.payload.title??missionLabel)} style={s.focusTitle}/><Text numberOfLines={3} style={s.reason}>{reason}</Text><Text style={s.duration}>約 {coldStart?.kind==='CALIBRATION'?'8':curriculum.timeBudgetMinutes} 分鐘</Text></View>
-    <Pressable accessibilityRole="button" accessibilityHint={hasResume?'從保存的位置繼續':undefined} onPress={()=>void (async()=>{if(launchInFlight.current)return;launchInFlight.current=true;try{if(accessDecision!=='FULL'){router.push('/profile');return}if(!startHref.startsWith('/(tabs)')){await recordTutorialAction('TODAY_STARTED','today-mission-pressed','/(tabs)',startHref);await savePrivateBetaProductEventV1({learnerId:learnerPreferences.learnerId,sessionId:`today:${new Date().toISOString().slice(0,10)}`,taskId:'today',family:runtimeProductContext.productMode,type:'TODAY_STARTED',phase:'STARTED',eventKey:'today-action'})}router.push(startHref as Href)}finally{setTimeout(()=>{launchInFlight.current=false},800)}})()} style={({pressed})=>[s.primary,pressed&&s.pressed]}><Text style={s.primaryText}>{accessDecision==='FULL'?actionLabel:'查看產品設定'}</Text></Pressable>
-  </ScrollView></SafeAreaView>;
+ const{learnerPreferences,profile,runtimeProductContext}=useCanonicalProductData(),[curriculum,setCurriculum]=useState<Curriculum>(),[runtime,setRuntime]=useState<Runtime>(),[ability,setAbility]=useState<Ability>(),[exam,setExam]=useState<ActiveExam>(null),launching=useRef(false);
+ const load=useCallback(()=>{void Promise.all([loadTodayCurriculumVMV1(learnerPreferences.learnerId,runtimeProductContext),loadTodayRuntimeVMV1(learnerPreferences.learnerId),loadMyEnglishAbilityV1(learnerPreferences.learnerId),loadActiveExamOperationalCheckpointV1(learnerPreferences.learnerId)]).then(([c,r,a,e])=>{setCurriculum(c);setRuntime(r);setAbility(a);setExam(e)})},[learnerPreferences.learnerId,runtimeProductContext]);
+ useEffect(load,[load]);useFocusEffect(load);
+ const access=productExperienceAccessDecisionV2(profile,profile.access.activeExperience),authoredResume=runtime?.hasActiveLesson&&['WRITING','TRANSLATION'].includes(runtime.mode),examAuthored=exam&&['WRITING','TRANSLATION'].includes(exam.runtime.family)?exam:null;
+ const resolution=runtimeProductContext.productMode==='EXAM'&&curriculum?.state==='READY'&&curriculum.lessonPlan?resolveProductionExamContentForTargetV1({learnerId:learnerPreferences.learnerId,role:'GUIDED_PRACTICE',targetRef:curriculum.lessonPlan.targetRef,facet:curriculum.lessonPlan.facet as CapabilityFacet,rotationKey:`today:${new Date().toISOString().slice(0,10)}`}):undefined,task=resolution?.status==='READY'?resolution.content.task:undefined;
+ const round=useMemo(()=>{const values=[curriculum?.state==='READY'&&curriculum.focusArea?areaLabel[curriculum.focusArea]:undefined,task?examLabel[task.family]:undefined].filter((x):x is string=>Boolean(x));return [...new Set(values)].slice(0,3)},[curriculum,task]);
+ const start=task?`/exam-practice?practiceFamily=${examFamilyToPracticeFamilyV1(task.family)}&taskId=${task.task_id}`:'/(tabs)/practice';
+ const quick=ability?.state==='READY'?ability.recommendations.slice(0,3):[];
+ const go=(href:string)=>{if(launching.current)return;launching.current=true;if(access!=='FULL')router.push('/profile');else router.push(href as Href);setTimeout(()=>{launching.current=false},600)};
+ if(!curriculum||!runtime||!ability)return <SafeAreaView style={s.safe}><View style={s.loading}><ActivityIndicator color={t.colors.deepWood}/></View></SafeAreaView>;
+ return <SafeAreaView style={s.safe}><ScrollView contentContainerStyle={s.page}>
+  <View style={s.header}><Text style={s.title}>今天</Text><Pressable onPress={()=>router.push('/profile')}><Text style={s.settings}>設定</Text></Pressable></View>
+  <View style={s.round}><View style={s.roundHead}><Text style={s.sectionTitle}>今天這一輪</Text><Text style={s.minutes}>約 {curriculum.timeBudgetMinutes} 分鐘</Text></View><View style={s.roundItems}>{(round.length?round:['英文練習']).map(item=><Text key={item} style={s.roundItem}>{item}</Text>)}</View><Pressable onPress={()=>go(start)} style={s.start}><Text style={s.startText}>開始</Text></Pressable></View>
+  {quick.length?<Section title="快速練">{quick.map(item=><Row key={item.id} title={item.label} meta="3 分鐘" onPress={()=>{const entry=practiceEntryV1(item.family);if(entry?.destination){const query=new URLSearchParams(Object.entries(practiceRouteParamsV1({entry,origin:'MY_ENGLISH'})).filter((x):x is [string,string]=>typeof x[1]==='string')).toString();go(`${entry.destination}?${query}`)}}}/>)}</Section>:null}
+  {authoredResume||examAuthored?<Section title="繼續"><Row title={examAuthored?examLabel[examAuthored.runtime.family]:runtime.mode==='WRITING'?'英文作文':'中譯英'} meta={(examAuthored?.runtime.responses.writing??runtime.source??'').slice(0,34)} onPress={()=>go(examAuthored?`/exam-practice?practiceFamily=${examFamilyToPracticeFamilyV1(examAuthored.runtime.family as Parameters<typeof examFamilyToPracticeFamilyV1>[0])}`:'/daily-lesson')}/></Section>:null}
+  <Pressable onPress={()=>router.push('/(tabs)/practice')} style={s.choose}><Text style={s.chooseText}>自己選題型</Text><Text style={s.arrow}>›</Text></Pressable>
+ </ScrollView></SafeAreaView>
 }
-
-const s=StyleSheet.create({
-  safe:{flex:1,backgroundColor:t.colors.background},
-  loading:{flex:1,alignItems:'center',justifyContent:'center',gap:12},
-  content:{flexGrow:1,width:'100%',maxWidth:t.layout.learnerShellMaxWidth,alignSelf:'center',paddingHorizontal:20,paddingTop:28,paddingBottom:88},
-  header:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},
-  title:{color:t.colors.ink,fontSize:30,lineHeight:37,fontWeight:'600'},
-  body:{color:t.colors.muted,fontSize:16,lineHeight:25},
-  mission:{flex:1,justifyContent:'center',paddingVertical:48,gap:16},focusLabel:{color:t.colors.muted,fontSize:12,lineHeight:18,fontWeight:'500'},resumeLabel:{color:t.colors.focus},duration:{fontSize:14,lineHeight:21,color:t.colors.muted,marginTop:4},focusTitle:{color:t.colors.ink,fontSize:24,lineHeight:31,fontWeight:'600'},focusBody:{color:t.colors.muted,fontSize:14,lineHeight:21},
-  reason:{color:t.colors.muted,fontSize:16,lineHeight:24},profile:{minHeight:44,justifyContent:'center',paddingLeft:16},profileText:{fontSize:14,color:t.colors.muted},
-  primary:{minHeight:52,borderRadius:14,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},pressed:{opacity:.9,transform:[{scale:.98}]},
-  primaryText:{color:t.colors.paper,fontSize:16,fontWeight:'600'}
-});
+function Section({title,children}:{title:string;children:React.ReactNode}){return <View style={s.section}><Text style={s.sectionTitle}>{title}</Text>{children}</View>}
+function Row({title,meta,onPress}:{title:string;meta?:string;onPress:()=>void}){return <Pressable onPress={onPress} style={s.row}><View style={s.flex}><Text style={s.rowTitle}>{title}</Text>{meta?<Text numberOfLines={1} style={s.rowMeta}>{meta}</Text>:null}</View><Text style={s.arrow}>›</Text></Pressable>}
+const s=StyleSheet.create({safe:{flex:1,backgroundColor:t.colors.canvas},page:{width:'100%',maxWidth:430,alignSelf:'center',paddingHorizontal:20,paddingTop:28,paddingBottom:100},loading:{flex:1,alignItems:'center',justifyContent:'center'},header:{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginBottom:42},title:{fontSize:30,lineHeight:37,fontWeight:'600',color:t.colors.ink},settings:{fontSize:14,color:t.colors.muted},round:{gap:20,paddingBottom:34,borderBottomWidth:1,borderBottomColor:t.colors.divider},roundHead:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},sectionTitle:{fontSize:18,lineHeight:25,fontWeight:'600',color:t.colors.ink},minutes:{fontSize:14,color:t.colors.muted},roundItems:{gap:6},roundItem:{fontSize:22,lineHeight:31,fontWeight:'600',color:t.colors.ink},start:{minHeight:50,alignSelf:'flex-start',minWidth:112,borderRadius:13,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},startText:{fontSize:16,fontWeight:'600',color:t.colors.paper},section:{marginTop:34},row:{minHeight:68,flexDirection:'row',alignItems:'center',borderBottomWidth:1,borderBottomColor:t.colors.divider},flex:{flex:1},rowTitle:{fontSize:16,lineHeight:24,fontWeight:'600',color:t.colors.ink},rowMeta:{fontSize:13,lineHeight:20,color:t.colors.muted},arrow:{fontSize:24,color:t.colors.muted},choose:{minHeight:64,marginTop:34,flexDirection:'row',alignItems:'center',justifyContent:'space-between',borderTopWidth:1,borderBottomWidth:1,borderColor:t.colors.divider},chooseText:{fontSize:16,fontWeight:'600',color:t.colors.ink}});

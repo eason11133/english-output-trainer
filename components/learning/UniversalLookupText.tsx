@@ -1,7 +1,6 @@
-import { eotLearnerTokensV1 as woodTheme } from '../../src/ui/tokens';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Modal, Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
 import { coreReverseLookupLexiconV1, lookupDirectionForTextV1, normalizeTappedLemmaV1, resolveReverseContextV1, resolveTapPhraseFirstContextV1, type ContextualLookupResultV1, type LookupAssessmentModeV1 } from '../../src/lookup';
 import { nativeCorpusServiceV1 } from '../../src/persistence/nativeCorpus';
 import { eotLearnerTokensV1 as t } from '../../src/ui';
@@ -44,11 +43,11 @@ export function UniversalLookupText({text,paragraph,assessmentMode='NONE',active
   const close=()=>{setResult(undefined);setFallbackMessage('');setPending(false);setReencounter(false)};
   return <ContextualSpotlight active={showHint} copy="點英文可以查意思"><View>
     <Text style={style}>{parts.map((part,i)=>part.interactive&&!instruction?<Text accessibilityRole="button" accessibilityLabel={`查詢 ${part.text}`} key={`${part.index}-${i}`} onPress={event=>{event.stopPropagation();void lookup(part.text)}}>{part.text}</Text>:<Text key={`${part.index}-${i}`}>{part.text}</Text>)}</Text>
-    <Modal transparent visible={Boolean(result)} animationType="slide" onRequestClose={close}><Pressable style={s.backdrop} onPress={close}/><View style={s.sheet}><View style={s.handle}/>
+    {result?<View style={s.popover}>
       {pending?<View style={s.lock}><Ionicons name="book" size={22} color={t.colors.midWood}/><Text style={s.note}>{fallbackMessage}</Text></View>:result?.status==='RESOLVED'?<><Text style={s.word}>{result.localUnit?.text??result.tappedToken}</Text><Text style={s.meaning}>{result.localUnit?.meaningZhTw??result.meaningZhTw}</Text>{result.localUnit?<Text style={s.fallback}>這裡的核心字義：{result.meaningZhTw}</Text>:null}{result.usageNote?<Text style={s.note}>{result.usageNote}</Text>:null}</>:<View style={s.lock}><Ionicons name={result?.status==='LOCKED'?'lock-closed':'information-circle'} size={22} color={t.colors.midWood}/><Text style={s.note}>{result?.status==='LOCKED'?(result.lockReason==='FORMAL_ASSESSMENT'?FORMAL_LOOKUP_LOCK_COPY_V1:'這個目標送出前先不顯示，避免直接透露答案。'):(fallbackMessage||(result?.status==='AMBIGUOUS'?'目前語境不足，還不能安全判定這個字在這裡的意思。':'本機辭典目前沒有這個詞。'))}</Text></View>}
       {reencounter?<Text style={s.cue}>這個英文之前也出現過，可以先留意它。</Text>:null}
       <Pressable accessibilityRole="button" onPress={close} style={s.close}><Text style={s.closeText}>知道了</Text></Pressable>
-    </View></Modal>
+    </View>:null}
   </View></ContextualSpotlight>;
 }
-const s=StyleSheet.create({backdrop:{...StyleSheet.absoluteFill,backgroundColor:woodTheme.colors.overlay},sheet:{position:'absolute',left:0,right:0,bottom:0,paddingHorizontal:22,paddingTop:10,paddingBottom:30,borderTopLeftRadius:24,borderTopRightRadius:24,backgroundColor:t.colors.paper,gap:11},handle:{width:42,height:4,borderRadius:2,backgroundColor:t.colors.line,alignSelf:'center',marginBottom:4},word:{fontSize:23,fontWeight:'900',color:t.colors.ink},meaning:{fontSize:20,lineHeight:28,fontWeight:'800',color:t.colors.deepWood},fallback:{fontSize:13,color:t.colors.muted},note:{fontSize:14,lineHeight:22,color:t.colors.muted},lock:{flexDirection:'row',gap:10,alignItems:'flex-start'},cue:{fontSize:13,lineHeight:20,color:t.colors.midWood},close:{minHeight:50,borderRadius:t.radius.medium,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center'},closeText:{fontSize:15,fontWeight:'900',color:t.colors.paper}});
+const s=StyleSheet.create({popover:{marginTop:8,padding:14,borderRadius:12,backgroundColor:t.colors.paper,borderWidth:1,borderColor:t.colors.divider,gap:8},word:{fontSize:19,fontWeight:'700',color:t.colors.ink},meaning:{fontSize:17,lineHeight:25,fontWeight:'600',color:t.colors.deepWood},fallback:{fontSize:13,color:t.colors.muted},note:{fontSize:14,lineHeight:22,color:t.colors.muted},lock:{flexDirection:'row',gap:10,alignItems:'flex-start'},cue:{fontSize:13,lineHeight:20,color:t.colors.midWood},close:{minHeight:40,alignSelf:'flex-start',justifyContent:'center'},closeText:{fontSize:14,fontWeight:'600',color:t.colors.deepWood}});

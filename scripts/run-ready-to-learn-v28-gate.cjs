@@ -1,7 +1,7 @@
 const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),failures=[];const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const today=read('app/(tabs)/index.tsx'),practice=read('app/(tabs)/practice.tsx'),practiceContract=read('src/experience/practiceProduct.ts'),lesson=read('app/daily-lesson.tsx'),tabs=read('app/(tabs)/_layout.tsx'),catalog=read('src/content/productTaskCatalog.ts');
-if(!/systemTask=/.test(today)||!/開始今天的練習/.test(today))failures.push('Today does not direct-start a system task');
-if(!/systemTask:'AUTO'/.test(practiceContract)||!/帶入我自己的作品（選用）/.test(practice))failures.push('Practice does not separate EOT tasks from optional own work');
+const today=read('app/(tabs)/index.tsx'),practice=read('app/(tabs)/practice.tsx'),lesson=read('app/daily-lesson.tsx'),tabs=read('app/(tabs)/_layout.tsx'),catalog=read('src/content/productTaskCatalog.ts');
+if(!/resolveProductionExamContentForTargetV1/.test(today)||!/taskId=\$\{task\.task_id\}/.test(today)||!/>開始</.test(today))failures.push('Today does not direct-start a validated system task');
+for(const label of ['詞彙','綜合測驗','文意選填','篇章結構','閱讀','混合題','中譯英','英文作文'])if(!practice.includes(label))failures.push(`Practice family missing: ${label}`);
 if(!/beginSystemTask/.test(lesson)||!/practiceLessonPlanV1/.test(lesson))failures.push('system task does not enter canonical lesson runtime');
 if(!/G3_ACCEPTED_ANSWER_CONTRADICTS_SOURCE/.test(catalog)||!/V24-MIX-002/.test(catalog))failures.push('bad Mixed validation tripwire missing');
 const names=[...tabs.matchAll(/Tabs\.Screen name="([^"]+)"/g)].map(x=>x[1]);if(JSON.stringify(names)!==JSON.stringify(['index','practice','my-english']))failures.push('canonical bottom navigation diverged');
