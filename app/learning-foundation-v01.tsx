@@ -1,0 +1,21 @@
+import React,{useState}from'react';
+import{SafeAreaView,StyleSheet,Text,View}from'react-native';
+import{useLocalSearchParams}from'expo-router';
+import{FoundationPuzzleRenderer}from'../components/learning/v2/TeachingPuzzles';
+import type{LearnerActionEvent,LearnerActionSurface}from'../src/ui/learnerActionSurface';
+import{eotLearnerTokensV1 as t}from'../src/ui/tokens';
+
+type Scene='evidence'|'contrast'|'cloze'|'paragraph'|'translation'|'writing';
+const surfaces:Record<Scene,LearnerActionSurface>={
+ evidence:{id:'accept-evidence',taskId:'reading-foundation',kind:'READING_EVIDENCE',passage:'Alerts must guide people quickly. Reliable facts come first. Background details can follow.',selectedOption:'Every detail must come first.',spans:[{id:'e1',text:'Alerts must guide people quickly.'},{id:'e2',text:'Reliable facts come first.'},{id:'e3',text:'Background details can follow.'}]},
+ contrast:{id:'accept-contrast',taskId:'vocabulary-foundation',kind:'MEANING_CONTRAST',sentence:'Students can restore books online before visiting the library.',selectedAnswer:'restore',contrasts:[{id:'reserve',word:'reserve',meaning:'先保留，之後領取',example:'reserve a book'},{id:'restore',word:'restore',meaning:'使回復原狀',example:'restore an old book'}]},
+ cloze:{id:'accept-cloze',taskId:'context-foundation',kind:'SLOT',sentence:'The most ___1___ facts come first.',blankId:'1',placed:'reliable',candidates:[{id:'reliable',label:'reliable'},{id:'decorative',label:'decorative'},{id:'distant',label:'distant'}]},
+ paragraph:{id:'accept-paragraph',taskId:'discourse-foundation',kind:'INSERTION',passage:'One class tested the alert.\n\n___A___\n\nTeachers revised unclear words.\n\nThe whole school tried it next.',candidate:'The trial exposed a problem.',points:[{id:'A',label:'___A___'}],placed:'A'},
+ translation:{id:'accept-translation',taskId:'translation-foundation',kind:'TRANSLATION_EDITOR',sourceZh:'科技使生活更容易。',authoredText:'Technology make life easier.',targetSpan:'make'},
+ writing:{id:'accept-writing',taskId:'writing-foundation',kind:'WRITING_DEVELOPMENT',authoredText:'Social media is part of school life.\nI think it is very good for students.\nIt lets classmates exchange ideas.\nA quiet student can ask questions after class.',targetSpan:'very good',missing:'SPECIFIC_DETAIL'},
+};
+const initial:Partial<Record<Scene,Readonly<Record<string,unknown>>>>={evidence:{chosen:['e2']},cloze:{placed:'reliable'},paragraph:{point:'A'},translation:{text:'Technology make life easier.'},writing:{text:'Social media is part of school life.\nI think it is very good for students.\nIt lets classmates exchange ideas.\nA quiet student can ask questions after class.'}};
+const labels:Record<Scene,string>={evidence:'Reading · Evidence connect',contrast:'Vocabulary · Contrast + replace',cloze:'Contextual Fill · Inline cloze',paragraph:'Discourse · Paragraph insert',translation:'Translation · Inline repair',writing:'Writing · Inline repair'};
+
+export default function LearningFoundationAcceptance(){const params=useLocalSearchParams<{scene?:string}>(),scene=(Object.hasOwn(surfaces,String(params.scene))?String(params.scene):'evidence')as Scene,[state,setState]=useState(initial[scene]??{}),[last,setLast]=useState<LearnerActionEvent>();return <SafeAreaView style={s.safe}><View style={s.top}><Text style={s.brand}>EOT</Text><Text style={s.label}>{labels[scene]}</Text><Text style={s.progress}>01 / 01</Text></View><View style={s.stage}><Text style={s.teacher}>直接碰英文，看看它怎麼改變。</Text><FoundationPuzzleRenderer surface={surfaces[scene]} initialState={state} onStateChange={setState} onEvent={event=>setLast(event)}/>{last?<Text style={s.settled}>已記下這一步；英文留在原位。</Text>:null}</View></SafeAreaView>}
+const s=StyleSheet.create({safe:{flex:1,backgroundColor:t.colors.canvas},top:{height:58,paddingHorizontal:20,flexDirection:'row',alignItems:'center',borderBottomWidth:1,borderBottomColor:t.colors.divider},brand:{fontSize:14,fontWeight:'900',letterSpacing:1.8,color:t.colors.deepWood},label:{flex:1,textAlign:'center',fontSize:12,fontWeight:'700',color:t.colors.muted},progress:{fontSize:11,color:t.colors.subtle},stage:{flex:1,width:'100%',maxWidth:350,alignSelf:'center',paddingTop:26,gap:22},teacher:{fontSize:13,lineHeight:20,color:t.colors.muted},settled:{fontSize:12,color:t.colors.success,marginTop:6}});

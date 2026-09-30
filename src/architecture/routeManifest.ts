@@ -17,6 +17,7 @@ export const eotLearnerRouteManifestV1:readonly LearnerRouteDefinitionV1[]=Objec
   {id:'PROGRESS_HISTORY',path:'/progress-history',owner_subsystem:'N',visibility:'SECONDARY',first_level:false,purpose:'Meaningful capability events across time, reached from My English.'},
   {id:'LESSON',path:'/daily-lesson',owner_subsystem:'N',visibility:'PRODUCTION',first_level:false,purpose:'Persistent adaptive Output Workspace and lesson runtime.'},
   {id:'READING_ATTEMPT',path:'/reading-attempt',owner_subsystem:'N',visibility:'SECONDARY',first_level:false,purpose:'Imported Reading practice or locked assessment attempt.'},
+  {id:'LEARNING_FOUNDATION_V01',path:'/learning-foundation-v01',owner_subsystem:'N',visibility:'SECONDARY',first_level:false,purpose:'Production acceptance entry for the first five teacher-selected language manipulation puzzles.'},
   {id:'RESULT',path:'/result',owner_subsystem:'N',visibility:'PRODUCTION',first_level:false,purpose:'Evidence-grounded story of what changed and what remains unproven.'},
   {id:'PROFILE',path:'/profile',owner_subsystem:'N',visibility:'SECONDARY',first_level:false,purpose:'Learner settings and product context.'},
   {id:'SETTINGS',path:'/settings',owner_subsystem:'N',visibility:'SECONDARY',first_level:false,purpose:'Secondary settings surface.'},

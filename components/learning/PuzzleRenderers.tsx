@@ -3,10 +3,11 @@ import {AccessibilityInfo,Animated,Easing,PanResponder,Pressable,StyleSheet,Text
 import type {LearnerActionEvent,LearnerActionSurface,LearnerItem} from '../../src/ui/learnerActionSurface';
 import {eotLearnerTokensV1 as t} from '../../src/ui/tokens';
 import {UniversalLookupText} from './UniversalLookupText';
+import {FoundationPuzzleRenderer,isFoundationPuzzle} from './v2/TeachingPuzzles';
 
 type Props={surface:LearnerActionSurface;initialState?:Readonly<Record<string,unknown>>;onStateChange?:(state:Readonly<Record<string,unknown>>)=>void;onEvent:(event:LearnerActionEvent)=>void};
 const send=(p:Props,kind:LearnerActionEvent['kind'],value:unknown)=>p.onEvent({surfaceId:p.surface.id,kind,value});
-export function LearnerActionRenderer(props:Props){return <Motion identity={`${props.surface.id}:${props.surface.kind}`}><View style={s.root}><Surface {...props}/></View></Motion>}
+export function LearnerActionRenderer(props:Props){return <Motion identity={`${props.surface.id}:${props.surface.kind}`}><View style={s.root}>{isFoundationPuzzle(props.surface)?<FoundationPuzzleRenderer {...props}/>:<Surface {...props}/>}</View></Motion>}
 
 function Motion({identity,children}:{identity:string;children:React.ReactNode}){const[value]=useState(()=>new Animated.Value(0)),[reduced,setReduced]=useState(true);useEffect(()=>{const sub=AccessibilityInfo.addEventListener('reduceMotionChanged',setReduced);void AccessibilityInfo.isReduceMotionEnabled().then(setReduced);return()=>sub.remove()},[]);useEffect(()=>{value.setValue(reduced?1:0);if(!reduced)Animated.timing(value,{toValue:1,duration:220,easing:Easing.out(Easing.cubic),useNativeDriver:true}).start()},[identity,reduced,value]);return <Animated.View style={{opacity:value,transform:[{translateY:value.interpolate({inputRange:[0,1],outputRange:[4,0]})}]}}>{children}</Animated.View>}
 function Surface(p:Props){switch(p.surface.kind){
