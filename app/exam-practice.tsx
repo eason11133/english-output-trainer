@@ -421,11 +421,11 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   const authored=task.family==='TRANSLATION'||task.family==='WRITING',authoredKey=task.family==='WRITING'?'writing':String(firstUnit?.responseKey??'0');
   useEffect(()=>{if(!tapCommitPendingRef.current)return;tapCommitPendingRef.current=false;if(hasAllChoiceResponses&&hydrated&&!teacherDecision&&!done&&!busy)setTimeout(()=>void submit(),0)},[answers]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <Shell onBack={exitExam} onEnd={onEndSession} family={familyLabel[task.family]??'英文'}>
+  return <Shell onBack={exitExam} onSkip={()=>void onActivityComplete(teacherDecision)} onEnd={onEndSession} family={familyLabel[task.family]??'英文'}>
     {resumeMessage ? <Text style={styles.resume}>{resumeMessage}</Text> : null}
     {task.family === 'MIXED' ? <Pressable accessibilityRole="button" accessibilityState={{expanded:sourceOpen}} onPress={() => setSourceOpen(value => !value)} style={styles.sourceToggle}><Text style={styles.sourceToggleText}>{sourceOpen ? '題目素材　收起' : '題目素材　展開'}</Text></Pressable> : null}
     {formal&&!done?<Text style={styles.lockNotice}>模考中先不提供查字。交卷後可以查。</Text>:null}
-    {sourceText&&sourceOpen&&!sourceRepeatsPrompt&&!['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family) ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
+    {sourceText&&sourceOpen&&!sourceRepeatsPrompt&&!['CONTEXTUAL_FILL','DISCOURSE'].includes(task.family)&&!(task.family==='READING'&&interaction) ? <UniversalLookupText text={sourceText} assessmentMode={lookupMode} submitted={done} showHint={!formal&&!coachMarks.lookup} style={styles.passage} onLookupUsed={recordLookup}onLookupResult={recordLookupResult}/> : null}
 
     {!teacherDecision && !done && !authored ? <>
       <View style={styles.answerArea}>
@@ -454,9 +454,9 @@ function ExamPracticeSession({ task, sessionId, allocationPurpose, learnerId, ru
   </Shell>;
 }
 
-function Shell({ children,onBack,onEnd,family }: { children: React.ReactNode;onBack?:()=>void;onEnd?:()=>void;family?:string }) {
+function Shell({ children,onBack,onSkip,onEnd,family }: { children: React.ReactNode;onBack?:()=>void;onSkip?:()=>void;onEnd?:()=>void;family?:string }) {
   const[menu,setMenu]=useState(false);
-  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>:<View style={styles.back}/>}<Text style={styles.headerFamily}>{family??''}</Text><Pressable accessibilityRole="button" accessibilityLabel="更多選項" onPress={()=>setMenu(value=>!value)} style={styles.back}><Text style={styles.more}>•••</Text></Pressable></View>{menu&&onEnd?<View style={styles.menu}><Pressable onPress={onEnd} style={styles.menuAction}><Text style={styles.menuText}>結束這次練習</Text></Pressable></View>:null}<KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
+  return <SafeAreaView style={styles.safe}><View style={styles.fixedTop}>{onBack?<Pressable accessibilityRole="button" accessibilityLabel="返回" onPress={onBack} style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>:<View style={styles.back}/>}<Text style={styles.headerFamily}>{family??''}</Text><Pressable accessibilityRole="button" accessibilityLabel="更多選項" onPress={()=>setMenu(value=>!value)} style={styles.back}><Text style={styles.more}>•••</Text></Pressable></View>{menu&&onEnd?<View style={styles.menu}>{onSkip?<Pressable onPress={()=>{setMenu(false);onSkip()}} style={styles.menuAction}><Text style={styles.menuText}>跳過</Text></Pressable>:null}<Pressable onPress={onEnd} style={styles.menuAction}><Text style={styles.menuText}>結束這次練習</Text></Pressable></View>:null}<KeyboardAwareScrollView style={styles.safe} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" bottomOffset={100}>{children}</KeyboardAwareScrollView></SafeAreaView>;
 }
 function Button({ label, onPress, disabled=false }: { label: string; onPress: () => void; disabled?:boolean }) {
   return <Pressable accessibilityRole="button" accessibilityState={{disabled}} disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,disabled&&styles.buttonDisabled,pressed&&!disabled&&styles.pressed]}><Text style={styles.buttonText}>{label}</Text></Pressable>;

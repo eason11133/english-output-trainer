@@ -3,7 +3,7 @@ import {mkdir,rm,stat,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 
-const repo=process.cwd(),root=resolve(repo,'artifacts/eot-production-final'),dist=resolve(repo,'.eot-production-final-export'),base='http://127.0.0.1:8094';
+const repo=process.cwd(),root=resolve(repo,'artifacts/eot-production-final-v2'),dist=resolve(repo,'.eot-production-final-export'),base='http://127.0.0.1:8094';
 if(!root.startsWith(resolve(repo,'artifacts')))throw new Error('unsafe_output');
 await rm(root,{recursive:true,force:true});await mkdir(root,{recursive:true});
 const run=(command,args,{stdio='inherit',env=process.env}={})=>new Promise((ok,bad)=>{const child=spawn(command,args,{cwd:repo,stdio,shell:command.endsWith('.cmd'),env});child.once('error',bad);child.once('exit',code=>code===0?ok():bad(new Error(`${command} exited ${code}`)))});
@@ -32,7 +32,7 @@ try{
     await delay(700);
   }
   await navigate('/(tabs)');await delay(1800);await shot('01-today.png','TODAY','/(tabs)');
-  const reading='/exam-practice?practiceFamily=READING&origin=PRACTICE';await navigate(reading);const radioCount=await evaluate("document.querySelectorAll('[role=radio]').length");for(let index=0;index<radioCount;index+=4)await evaluate(`document.querySelectorAll('[role=radio]')[${index}]?.click()`);await delay(9000);let readingState=await body();await shot('02-reading-evidence.png','READING_EVIDENCE_REAL',reading,readingState.includes('點原文句子')?'點原文句子':undefined);if(readingState.includes('點原文句子'))await clickText('The design of a neighborhood');await delay(500);readingState=await body();await shot('03-reading-compare.png','READING_COMPARE_REAL',reading,readingState.includes('你選的原文依據')?'你選的原文依據':undefined);
+  const reading='/exam-practice?practiceFamily=READING&origin=PRACTICE';await navigate(reading);const radioCount=await evaluate("document.querySelectorAll('[role=radio]').length");for(let index=0;index<radioCount;index+=4)await evaluate(`document.querySelectorAll('[role=radio]')[${index}]?.click()`);await delay(9000);let readingState=await body();await shot('02-reading-evidence.png','READING_EVIDENCE_REAL',reading);if(readingState.includes('選一句原文'))await clickText('The design of a neighborhood');await delay(500);readingState=await body();await shot('03-reading-compare.png','READING_COMPARE_REAL',reading,readingState.includes('你的選擇')?'原文':undefined);
   const setEditor=async(label,value)=>{const focused=await evaluate(`(()=>{const node=document.querySelector('[aria-label=${JSON.stringify(label)}]');if(!node)return false;node.focus();node.select?.();return true})()`);if(!focused)throw new Error(`editor_not_found:${label}`);await devtools.call('Input.insertText',{text:value});await delay(300)};
   const translation='/exam-practice?practiceFamily=TRANSLATION&origin=PRACTICE';await navigate(translation);await setEditor('你的翻譯','x');await delay(300);await clickText('完成翻譯');await delay(9000);await shot('04-translation-repair.png','TRANSLATION_REPAIR_REAL',translation);
   const writing='/exam-practice?practiceFamily=WRITING&origin=PRACTICE';await navigate(writing);await setEditor('你的文章','I agree. This is good. It helps people.');await delay(300);await clickText('完成這一版');await delay(9000);await shot('05-writing-repair.png','WRITING_REPAIR_REAL',writing);
