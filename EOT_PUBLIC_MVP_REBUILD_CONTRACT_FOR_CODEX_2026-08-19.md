@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # EOT Public MVP — Full-Repo Rebuild Contract for Codex
 **Date:** 2026-08-19  
 **Baseline SHA-256:** `0301f77b2121ba0b1e7383f1da0b332295b6422f80930d400d5c539c39a60abc`  
