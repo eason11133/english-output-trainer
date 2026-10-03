@@ -1,43 +1,39 @@
 # J. Vocabulary / Chunks / Grammar / Reading Runtimes
 
+> Current overall status: **PARTIAL**. The current Exam/shared-teaching architecture contains real Vocabulary/grammar/reading behavior, but J has not completed one dedicated full-subsystem upgrade/audit.  
+> For repository-wide status, see [../../../CURRENT_STATUS.md](../../../CURRENT_STATUS.md).
+
 ## Ownership
 
-Canonical owner: `src/specializations/language`
+Canonical owner: `src/specializations/language`.
 
-This subsystem exists as a first-class part of the EOT V1 architecture. The current Main Architecture Skeleton establishes its location, ownership boundary, public entrypoint, dependency direction, and fine-grained capability inventory. Deep implementation is intentionally deferred to a dedicated major-subsystem upgrade wave.
+J owns specialized language-teaching behavior for vocabulary, chunks, grammar and reading. It does not own separate learner truth or a separate learner-facing product silo.
 
-## Depends on
+## What is implemented now
 
-`B`, `C`, `E`, `F`, `G`, `K`
+The current J package contains concrete Reading runtime/review/diagnosis behavior:
 
-## Does not own
+- Practice / Mock / Formal reading-attempt state;
+- immutable submit and result boundary;
+- review focus and teaching handoff;
+- evidence-focused diagnosis that can ask for learner explanation, evidence selection or option contrast and can abstain when evidence is insufficient.
 
-Separate learner-facing product silos or separate learner truth.
+Vocabulary, Comprehensive, Contextual Fill, Discourse, Reading and Mixed also participate in the current shared Exam path through:
 
-## Fine-grained capability scope
+- `src/content/examBetaBank.ts`;
+- `src/application/exam/examFamilyDiagnosis.ts`;
+- `src/application/exam/examTeacherInteraction.ts`;
+- `src/application/exam/examPuzzleProjection.ts`;
+- `app/exam-practice.tsx`.
 
-The following items define the subsystem scope for later full-subsystem audits. Their presence here does **not** claim implementation completion.
+The shared Teacher/Teaching-Block layer already contains vocabulary, chunk, morphology, spelling, construction and reading-oriented mechanisms. That does **not** mean every J capability has a complete specialized runtime.
 
-- `J.vocab-representation` — Lexical representation
-- `J.vocab-retrieval` — Vocabulary retrieval
-- `J.vocab-production` — Vocabulary productive use
-- `J.morphology-teaching` — Morphology teaching
-- `J.collocation-teaching` — Collocation teaching
-- `J.chunk-reuse` — Chunk productive reuse
-- `J.register-teaching` — Register teaching
-- `J.grammar-meaning-form` — Grammar meaning-form mapping
-- `J.grammar-construction` — Construction teaching
-- `J.grammar-contrast` — Grammar contrast
-- `J.reading-decomposition` — Reading decomposition
-- `J.reading-reference` — Reference tracking
-- `J.reading-logic` — Reading logic
-- `J.reading-structure` — Reading structure
-- `J.reading-inference` — Reading inference
-- `J.input-output-reuse` — Input-to-output reuse
-- `J.domain-repertoire-selection` — Domain-specific repertoire selection
+## J capability scope still to deepen
 
-## Upgrade rule
+- lexical representation/retrieval/productive use;
+- morphology, collocation, chunk and register teaching;
+- grammar meaning/form, construction and contrast;
+- reading decomposition, reference, logic, structure and inference;
+- input-to-output reuse and domain-specific repertoire selection.
 
-When this subsystem becomes the active upgrade wave, audit **every** capability above before implementation. Advance every capability that can legally move in the same wave, group shared root causes, and run cross-subsystem regression before the wave is accepted.
-
-Do not split the wave into serial micro-patches unless a genuine external dependency prevents completion.
+Treat J as a real but incomplete specialization layer, not as either an empty concept or a finished subsystem.
