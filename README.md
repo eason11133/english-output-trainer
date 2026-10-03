@@ -1,6 +1,6 @@
 # EOT — English learning system for Taiwan GSAT
 
-EOT is an adaptive AI English-learning system built around Taiwan's GSAT (學測) English exam. It started from a simple problem I met while preparing for the exam myself: English that looked familiar in recognition tasks did not always remain available when I had to translate or write.
+EOT is an adaptive AI English-learning system built around Taiwan's GSAT (學測) English exam. It started from a problem I encountered while preparing for the exam myself: English that looked familiar in recognition tasks did not always remain available when I had to translate or write.
 
 The project has since expanded beyond output practice to cover all eight current GSAT learning/practice families used in this repository: **Vocabulary, Comprehensive, Contextual Fill, Discourse, Reading, Mixed, Translation, and Writing**.
 
