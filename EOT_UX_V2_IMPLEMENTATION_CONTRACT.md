@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # EOT UX V2 — Learner Experience Implementation Contract
 
 **Status:** AUTHORITATIVE  
