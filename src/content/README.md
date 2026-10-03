@@ -1,40 +1,43 @@
 # G. Content / Task / Context Generation
 
+> Current overall status: **PARTIAL / READY_FOR_AUDIT**.  
+> For the repository-wide snapshot, see [../../CURRENT_STATUS.md](../../CURRENT_STATUS.md).
+
 ## Ownership
 
-Canonical owner: `src/content`
+Canonical owner: `src/content`.
 
-This subsystem exists as a first-class part of the EOT V1 architecture. The current Main Architecture Skeleton establishes its location, ownership boundary, public entrypoint, dependency direction, and fine-grained capability inventory. Deep implementation is intentionally deferred to a dedicated major-subsystem upgrade wave.
+G owns bounded content/task/context supply and validation. It does **not** own learner mastery/evidence state, curriculum target selection, or Teacher policy.
 
-## Depends on
+## Current implementation
 
-`B`, `C`, `T`
+The current capability catalog marks the following as **FIRST_PASS**:
 
-## Does not own
+- prompt-generation contracts/runtime pieces;
+- fresh-task supply;
+- changed-context tasks;
+- semantic validity;
+- valid-alternative handling;
+- context relevance;
+- generated-content validation;
+- content/material packs.
 
-Learner mastery/evidence state.
+The following remain **CONTRACT_ONLY / incomplete**:
 
-## Fine-grained capability scope
+- broad examples and counterexamples;
+- distractor generation depth;
+- general difficulty control;
+- cognitive-load control;
+- content-safety depth across generated content.
 
-The following items define the subsystem scope for later full-subsystem audits. Their presence here does **not** claim implementation completion.
+The current GSAT content path also includes promoted, project-authored tasks with canonical bindings and validation receipts for all eight repository families through `examBetaBank.ts` and related promotion/validation code.
 
-- `G.prompt-generation` — Prompt generation
-- `G.examples` — Examples
-- `G.counterexamples` — Counterexamples
-- `G.distractors` — Distractors
-- `G.fresh-task` — Fresh tasks
-- `G.changed-context` — Changed-context tasks
-- `G.difficulty` — Difficulty control
-- `G.load` — Cognitive load control
-- `G.semantic-validity` — Semantic validity
-- `G.valid-alternatives` — Valid alternative handling
-- `G.content-safety` — Content safety
-- `G.context-relevance` — Context relevance
-- `G.generated-validation` — Generated-content validation
-- `G.content-packs` — Content/material packs
+## Authority boundary
 
-## Upgrade rule
+G can supply a validated task opportunity. It cannot decide what a learner has mastered, select the curriculum target, or turn model-generated content into canonical evidence on its own.
 
-When this subsystem becomes the active upgrade wave, audit **every** capability above before implementation. Advance every capability that can legally move in the same wave, group shared root causes, and run cross-subsystem regression before the wave is accepted.
+Generated/model-authored content must pass the owning validation path before it can be used for a learning/evidence claim.
 
-Do not split the wave into serial micro-patches unless a genuine external dependency prevents completion.
+## Why this is not “complete”
+
+Fresh/changed-context content exists, but broad content coverage, generation quality, difficulty/load calibration, examples/counterexamples/distractors, and real learner validation are still unfinished.

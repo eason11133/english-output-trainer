@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # CHANGELOG CURRENT — 2026-08-28 UI/UX PRE-CLOSURE WAVE
 
 ## Blocking semantic fixes

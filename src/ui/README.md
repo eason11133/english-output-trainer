@@ -1,20 +1,35 @@
 # O. UI / Interaction Design System
 
+> Current subsystem status: **PARTIAL / READY_FOR_AUDIT**. Existing components/tokens are first-pass implementation and **must not be read as the final EOT visual or interaction direction**.  
+> Repository-wide status: [../../CURRENT_STATUS.md](../../CURRENT_STATUS.md).
+
 ## Ownership
 
-Canonical owner: `src/ui`
+Canonical owner: `src/ui`.
 
-O renders N's learner-facing contracts. It owns tokens, visual hierarchy, manuscript surfaces, language objects, inputs, action states and accessibility/touch-target presentation. It does not encode pedagogy or evidence meaning.
+O renders N's learner-facing contracts. It owns current tokens, visual hierarchy, manuscript/language-object surfaces, inputs, action states and accessibility/touch-target presentation. It does not encode pedagogy or evidence meaning.
 
-## Current visual language
+## What exists in current main
 
-- Mobile-first warm paper/wood palette.
-- Learner output/manuscript is visually dominant.
-- Teaching appears inline around the exact output being manipulated rather than as a chat transcript.
-- Primary action is visually dominant; help/correct-intent remain secondary.
-- Minimum canonical touch target is 44.
-- Production and `__dev__` review surfaces remain separated.
+The current code includes:
 
-## Current limits
+- shared learner-facing tokens and bounded mobile layouts;
+- manuscript/output surfaces;
+- manipulable language-object renderers;
+- Writing/Translation inputs;
+- primary/secondary action states;
+- several intervention renderers;
+- feedback states;
+- >=44pt touch-target contracts;
+- mobile-first responsive bounds;
+- separation between production and `__dev__` review surfaces.
 
-Motion, general sheets/overlays and full accessibility acceptance remain contract-only until rendered/device review. Existing roles/labels/touch sizes are not sufficient to claim screen-reader or dynamic-type acceptance.
+These are implementation facts, not a claim that the current visual language or interaction composition is final.
+
+## Current rebuild boundary
+
+The learner-facing UI/UX is being redesigned so the adaptive teaching loop is understandable through learner action rather than through engineering/debug structure. Existing palette, component composition and renderer layouts may be replaced. Backend authority, learner-truth boundaries and Teacher/Teaching-Block contracts remain the stable integration constraints.
+
+## Known limits
+
+Motion, general sheets/overlays, final responsive behavior, screen-reader behavior, dynamic text scaling, physical keyboard/IME behavior and final device acceptance remain incomplete.
