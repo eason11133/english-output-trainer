@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](../CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # EOT core authority audit — 2026-08-19
 
 This audit classifies the repository after the public-MVP learner-path cutover. `ACTIVE AUTHORITY` means a value can affect Today, Mission, Result, My English, Next Frontier, Journey, or tutor policy. All other classifications are explicitly non-governing.
