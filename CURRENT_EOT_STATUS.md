@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # CURRENT EOT STATUS — UI/UX PRE-CLOSURE CANDIDATE
 
 Date: 2026-08-28
