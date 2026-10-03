@@ -1,3 +1,6 @@
+HISTORICAL — superseded by CURRENT_STATUS.md.
+Preserved as development history. Do not use this file as current product/status authority.
+
 You are the independent reviewer. Do NOT trust ChatGPT's completion claims, status files, test counts, comments, package manifest, or summaries. Do not modify any file.
 
 Audit only the actual local repository supplied to you.

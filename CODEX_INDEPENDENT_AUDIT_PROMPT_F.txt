@@ -1,3 +1,6 @@
+HISTORICAL — superseded by CURRENT_STATUS.md.
+Preserved as development history. Do not use this file as current product/status authority.
+
 You are the independent reviewer for EOT subsystem F (Teaching Intelligence / PCK). This is a READ-ONLY audit. Do not edit any file, do not generate a patch, do not “finish” the implementation, and do not assume ChatGPT's design choices or completion claims are correct.
 
 Use the CURRENT REAL REPOSITORY as the source of truth. Do not treat test names, CURRENT_EOT_STATUS.md, changelog text, architecture status flags, or prior assistant claims as proof. Derive the actual runtime behavior from production source and executable paths.
