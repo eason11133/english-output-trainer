@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # DATA × BETA CORE SEMANTIC MERGE REPORT — 2026-08-28
 
 ## Merge bases

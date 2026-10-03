@@ -1,3 +1,6 @@
+HISTORICAL — superseded by CURRENT_STATUS.md.
+Preserved as development history. Do not use this file as current product/status authority.
+
 EOT Adaptive Placement + Learn/Growth Surface Patch v1
 
 這不是新 HTML demo。這份 patch 直接修改真 Expo App。

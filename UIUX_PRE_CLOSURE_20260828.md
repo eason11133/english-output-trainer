@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # UI/UX PRE-CLOSURE — 2026-08-28
 
 Purpose: close the last two semantic blockers found by the post-Data integrated audit before locking learner-facing UI/UX runtime contracts.

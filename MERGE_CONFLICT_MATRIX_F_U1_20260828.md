@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # F Audit-Fix + U1 Merge Conflict Matrix — 2026-08-28
 
 ## Why a merge was required
