@@ -24,7 +24,7 @@ Current production-facing integration is visible in:
 - `src/application/exam/examSubmissionAdapter.ts`
 - `src/application/exam/examFamilyDiagnosis.ts`
 - `src/specializations/translation/freshTaskCoordinator.ts`
-- `src/specializations/translation/freshAssessmentBridge.ts`
+- `src/specializations/translation/freshTask.ts`
 
 ## Contract-only / incomplete specialized capabilities
 
