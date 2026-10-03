@@ -1,3 +1,6 @@
+> **HISTORICAL — superseded by [CURRENT_STATUS.md](CURRENT_STATUS.md).**  
+> Preserved as development history. Do not use this file as current product/status authority.
+
 # EOT Learner Experience Visual Contract — Vertical Slice V1
 **Date:** 2026-08-20  
 **Scope:** first-use → Today → Mission → focused feedback → reteach → re-output → Result → My English → updated Today
