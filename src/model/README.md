@@ -1,38 +1,45 @@
 # T. AI / Model Layer
 
+> Current overall status: **PARTIAL / READY_FOR_AUDIT**.  
+> For the repository-wide snapshot, see [../../CURRENT_STATUS.md](../../CURRENT_STATUS.md).
+
 ## Ownership
 
-Canonical owner: `src/model`
+Canonical owner: `src/model`.
 
-This subsystem exists as a first-class part of the EOT V1 architecture. The current Main Architecture Skeleton establishes its location, ownership boundary, public entrypoint, dependency direction, and fine-grained capability inventory. Deep implementation is intentionally deferred to a dedicated major-subsystem upgrade wave.
+T owns the bounded model-call boundary: operation contracts, provider/server separation, structured-output requirements, prompt/schema identity, timeout/retry ownership, proposal guards and model-run lineage.
 
-## Depends on
+T does **not** own learner truth, mastery, curriculum selection, pedagogical diagnosis authority, or generated-content validity.
 
-No upstream EOT product subsystem dependency at the ownership level.
+## Current first-pass capabilities
 
-## Does not own
+- server-owned provider abstraction;
+- required structured output for production operations;
+- timeout/retry ownership;
+- authority/hallucination guard boundary;
+- prompt/schema version identity;
+- deterministic failure/fallback boundary.
 
-Direct mastery/state writes.
+Current production operation contracts include:
 
-## Fine-grained capability scope
+- Teacher planning;
+- qualified Teaching Block selection;
+- artifact transcription/OCR;
+- GSAT semantic assessment.
 
-The following items define the subsystem scope for later full-subsystem audits. Their presence here does **not** claim implementation completion.
+The learner client does not select a provider/model or receive provider secrets.
 
-- `T.provider-abstraction` — Model provider abstraction
-- `T.structured-output` — Structured output
-- `T.semantic-diagnosis` — Semantic diagnosis
-- `T.content-generation` — Model-assisted content generation
-- `T.fallback-model` — Fallback model
-- `T.timeout-retry` — Timeout/retry
-- `T.hallucination-guards` — Hallucination/grounding guards
-- `T.prompt-versioning` — Prompt/schema versioning
-- `T.cost-control` — Cost controls
-- `T.rate-control` — Rate controls
-- `T.model-evaluation` — Model evaluation hooks
-- `T.deterministic-fallback` — Deterministic fallback where appropriate
+## Contract-only / incomplete areas
 
-## Upgrade rule
+- semantic diagnosis as a T-owned capability — intentionally not claimed; H/I/E/F own interpretation/qualification;
+- model-assisted content generation — G owns validity and current generation coverage is incomplete;
+- alternate paid-model fallback routing;
+- whole-product monetary cost governance;
+- global learner/account rate governance;
+- calibrated whole-product model evaluation.
 
-When this subsystem becomes the active upgrade wave, audit **every** capability above before implementation. Advance every capability that can legally move in the same wave, group shared root causes, and run cross-subsystem regression before the wave is accepted.
+## Core truth rule
 
-Do not split the wave into serial micro-patches unless a genuine external dependency prevents completion.
+> Structured model output is a proposal. Guards and owning subsystems decide whether it may affect execution or canonical learner truth.
+
+See `src/model/contracts.ts`, `src/model/capabilities.ts`, `src/model/guards.ts`, and `coach-server/teacher-server.mjs`.
