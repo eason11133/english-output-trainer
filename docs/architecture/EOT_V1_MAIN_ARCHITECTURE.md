@@ -69,7 +69,7 @@ This table mirrors the current `src/architecture/registry.ts` at the audited 202
 | G | Content / Task / Context Generation | `src/content` | Partial | READY_FOR_AUDIT |
 | H | Writing Teacher Runtime | `src/specializations/writing` | Partial | READY_FOR_AUDIT |
 | I | Translation Teacher Runtime | `src/specializations/translation` | Partial | READY_FOR_AUDIT |
-| J | Vocabulary / Chunks / Grammar / Reading Runtimes | `src/specializations/language` | Partial | Established/adapted; dedicated deep upgrade not complete |
+| J | Vocabulary / Chunks / Grammar / Reading Runtimes | `src/specializations/language` | Partial | ADAPTED; dedicated deep upgrade not complete |
 | K | Assessment / Measurement | `src/assessment` | Production core | READY_FOR_AUDIT |
 | L | Longitudinal Learning System | `src/longitudinal` | Partial | READY_FOR_AUDIT |
 | M | Lesson / Session Runtime | `src/lesson-runtime` | Production core | READY_FOR_AUDIT |
@@ -82,9 +82,9 @@ This table mirrors the current `src/architecture/registry.ts` at the audited 202
 | T | AI / Model Layer | `src/model` | Partial | READY_FOR_AUDIT |
 | U | Persistence / Backend / Data | `src/persistence` | Production core | COMPLETE_FIRST_PASS for current U1/local wave; full U remains partial |
 | V | Production Reliability | `src/reliability` | Partial | READY_FOR_AUDIT |
-| W | Analytics / Product Intelligence | `src/analytics` | Skeleton | Deep implementation deferred |
-| X | Evaluation / QA / Research Harness | `src/evaluation` | Partial | Established |
-| Y | Market / Commercial Validation Readiness | `src/market-validation` | Future boundary | Future |
+| W | Analytics / Product Intelligence | `src/analytics` | Skeleton | DEFERRED_DEEP_IMPLEMENTATION |
+| X | Evaluation / QA / Research Harness | `src/evaluation` | Partial | ADAPTED |
+| Y | Market / Commercial Validation Readiness | `src/market-validation` | Future | ESTABLISHED boundary; product implementation remains future |
 
 ## Key cross-cutting implementation notes
 
