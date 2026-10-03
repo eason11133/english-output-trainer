@@ -1,41 +1,63 @@
 # I. Translation Teacher Runtime
 
+> Current overall status: **PARTIAL / READY_FOR_AUDIT**. One Translation-specific capability is currently FIRST_PASS; the rest of the specialized capability set remains contract-only.  
+> Repository-wide status: [../../../CURRENT_STATUS.md](../../../CURRENT_STATUS.md).
+
 ## Ownership
 
-Canonical owner: `src/specializations/translation`
+Canonical owner: `src/specializations/translation`.
 
-This subsystem exists as a first-class part of the EOT V1 architecture. The current Main Architecture Skeleton establishes its location, ownership boundary, public entrypoint, dependency direction, and fine-grained capability inventory. Deep implementation is intentionally deferred to a dedicated major-subsystem upgrade wave.
+I owns Translation-specific source/learner-work semantics. It does not own a separate learner model, curriculum policy, teaching-mechanism registry, content-generation authority, evidence admission, or Exam scoring authority.
 
-## Depends on
+## What is implemented now
 
-`C`, `E`, `F`, `G`, `K`
+Translation participates in the current shared Exam/learner path through canonical task bindings, semantic assessment, family-specific diagnosis, Teacher decisions, learner-authored repair, and the shared evidence/runtime path.
 
-## Does not own
+The Translation-specific capability currently marked **FIRST_PASS** is:
 
-A separate learner identity/evidence store.
+- `I.changed-context-retranslation` — a separately delivered changed-context retranslation opportunity can be carried into the shared G/K/C verification path.
 
-## Fine-grained capability scope
+Current production-facing integration is visible in:
 
-The following items define the subsystem scope for later full-subsystem audits. Their presence here does **not** claim implementation completion.
+- `src/content/examBetaBank.ts`
+- `src/content/examCanonicalBindings.ts`
+- `src/application/exam/examSubmissionAdapter.ts`
+- `src/application/exam/examFamilyDiagnosis.ts`
+- `src/specializations/translation/freshTaskCoordinator.ts`
+- `src/specializations/translation/freshAssessmentBridge.ts`
 
-- `I.source-meaning` — Source meaning decomposition
-- `I.meaning-fidelity` — Meaning fidelity
-- `I.lexical-retrieval` — Lexical retrieval
-- `I.collocation` — Collocation
-- `I.verb-pattern` — Verb patterns
-- `I.grammar-form` — Grammar/form
-- `I.role-mapping` — Sentence-role mapping
-- `I.l1-l2-contrast` — L1/L2 contrast
-- `I.restructuring` — Restructuring
-- `I.guided-reconstruction` — Guided reconstruction
-- `I.valid-realizations` — Alternative valid realizations
-- `I.naturalness-precision` — Naturalness/precision
-- `I.exam-alignment` — Exam scoring alignment
-- `I.changed-context-retranslation` — Changed-context retranslation
-- `I.translation-evaluation` — Translation-specific evaluation
+## Contract-only / incomplete specialized capabilities
 
-## Upgrade rule
+The following Translation-specific capabilities remain contract-only in current main:
 
-When this subsystem becomes the active upgrade wave, audit **every** capability above before implementation. Advance every capability that can legally move in the same wave, group shared root causes, and run cross-subsystem regression before the wave is accepted.
+- source-meaning decomposition;
+- meaning fidelity;
+- lexical retrieval;
+- collocation;
+- verb patterns;
+- grammar/form;
+- sentence-role mapping;
+- L1/L2 contrast;
+- restructuring;
+- guided reconstruction;
+- alternative valid realizations;
+- naturalness/precision;
+- Exam alignment;
+- Translation-specific evaluation.
 
-Do not split the wave into serial micro-patches unless a genuine external dependency prevents completion.
+The shared Teacher/Teaching-Block layer can still teach some lexical, grammar, reconstruction and repair needs encountered inside Translation. That does **not** make the full Translation specialization complete.
+
+## Authority boundary
+
+- WHAT / WHY / WHEN → Curriculum (D)
+- HOW NOW → AI Teacher (E)
+- teaching mechanism / support policy → F
+- fresh/changed-context content → G
+- evidence admission / transfer / delayed proof → C/K
+- Exam scoring policy → S/K
+
+Translation preserves source meaning and learner authorship/provenance; it must not replace the learner's translation with model-authored text and then treat that text as learner evidence.
+
+## Why this is not complete
+
+Changed-context retranslation has a real first-pass implementation, but most Translation-specific diagnosis/teaching/evaluation depth is still represented by contracts and shared mechanisms rather than a complete dedicated runtime. Coverage, measurement depth and native learner acceptance remain unfinished.

@@ -1,10 +1,7 @@
 # H. Writing Teacher Runtime
 
-## Current wave status
-
-`READY_FOR_AUDIT` — integrated first-pass candidate, not sealed.
-
-H is now connected to the learner-owned Writing path, but the capability set is deliberately mixed-status. Capabilities that only have authority/contracts are not promoted to FIRST_PASS, and fresh-writing transfer remains BLOCKED_EXTERNAL until G/K provide real generated-task + measurement integration.
+> Current overall status: **PARTIAL / READY_FOR_AUDIT**. Writing is connected to the learner path, but the capability set is intentionally mixed between FIRST_PASS and CONTRACT_ONLY.  
+> Repository-wide status: [../../../CURRENT_STATUS.md](../../../CURRENT_STATUS.md).
 
 ## Canonical ownership
 
@@ -13,49 +10,38 @@ H owns Writing-specific work semantics:
 - authentic prompt / rubric / source context;
 - immutable original + learner revision provenance;
 - Writing-specific opportunity/focus representation;
-- feedback-attention budgeting;
-- local repair / return-to-original semantics;
-- bounded Writing context supplied to E/F;
-- Writing-specific requirements supplied toward G/K;
+- bounded Writing context supplied to the shared Teacher/Teaching layer;
+- Writing-specific requirements supplied toward content/measurement;
 - analytic Writing observations that cannot themselves become mastery or official scores.
 
-H does **not** own:
-
-- WHAT / WHY / WHEN → D;
-- HOW NOW → E;
-- teaching mechanism / support policy → F;
-- fresh task generation → G;
-- evidence admission / independent / transfer / delayed status → C/K;
-- exam scoring policy → S/K;
-- persistence authority → U/M.
-
-A Writing artifact may legitimately have a non-`writing.*` D target, for example a grammar construction exposed inside a real essay. H specializes the artifact/work context and must not hijack D's target namespace.
+H does **not** own WHAT/WHY/WHEN (D), HOW NOW (E), teaching mechanism/support policy (F), fresh-task generation (G), evidence admission (C/K), Exam scoring policy (S/K), or persistence authority (U/M).
 
 ## Learner-facing spine
 
-Authentic prompt / learner original
-→ preserve source truth
-→ bounded Writing focus context
-→ D/E/F teaching
-→ learner revision
-→ return to original
-→ fresh-writing requirement
-→ G/K downstream verification.
+Authentic prompt / learner original  
+→ preserve source truth  
+→ bounded Writing focus context  
+→ D/E/F teaching  
+→ learner revision  
+→ return to original  
+→ separately delivered fresh-writing opportunity  
+→ G/K/C verification.
 
 AI-generated full rewrites are not learner revisions. Same-session return-to-original is not transfer or retention.
 
-## Capability status
+## Current FIRST_PASS capabilities
 
-### FIRST_PASS
+According to `waveHStatus.ts`:
 
 - `H.sentence-realization`
 - `H.meaning-encoding`
-- `H.feedback-budget`
-- `H.local-repair`
 - `H.revision`
 - `H.return-original`
+- `H.fresh-writing-transfer`
 
-### CONTRACT_ONLY
+The fresh-writing transfer path is real but limited to current curated/validated content coverage and downstream measurement support. It is **not** a claim of broad Writing transfer coverage.
+
+## Current CONTRACT_ONLY capabilities
 
 - `H.purpose-audience-genre`
 - `H.idea-generation`
@@ -63,13 +49,15 @@ AI-generated full rewrites are not learner revisions. Same-session return-to-ori
 - `H.planning`
 - `H.organization`
 - `H.cohesion`
+- `H.feedback-budget`
+- `H.local-repair`
 - `H.joint-construction`
 - `H.writing-evaluation`
 
-### BLOCKED_EXTERNAL
+Some of these contracts already have partial executable plumbing—for example bounded issue policy or span-level revision operations—but current main does not promote them to FIRST_PASS.
 
-- `H.fresh-writing-transfer` — H emits/holds the writing-specific fresh-task requirement and protects fresh-output provenance, but actual changed-context task generation and measurement require G/K.
+## Why this is not complete
 
-## Audit rule
+Higher-level Writing analysis and teaching—planning, organization, cohesion, reasoning depth, dedicated local-repair behavior and full Writing evaluation—remain incomplete. Fresh transfer is constrained by current content packs, measurement depth and native acceptance.
 
-Independent review must challenge both implementation correctness and this capability-status classification. Green tests or this README do not establish completion.
+Green tests or this README do not establish completion or real-learner efficacy.

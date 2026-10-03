@@ -1,10 +1,13 @@
 # CURRENT STATUS
 
 **Date:** 2026-10-03  
-**Audited main:** `ea07dbaf212c3c8284c8759d0688279df55c08a8`  
-**Purpose:** professor-facing snapshot of what is implemented now, what is partial, and what remains unfinished.
+**Audited implementation baseline:** `ea07dbaf212c3c8284c8759d0688279df55c08a8`  
+**Documentation cleanup on main:** begun at `a3ac30c3a2bd2d4694e8c615d83b7b64b0219b77`  
+**Purpose:** professor-facing snapshot of what is implemented now, what is first-pass/partial, and what remains unfinished.
 
-This file is the repository's **authoritative current status**. Dated rebuild contracts, closure reports, audit prompts, and older “current” documents are historical unless this file links to them.
+This file is the repository's **authoritative current status**. Dated rebuild contracts, closure reports, audit prompts, older “current” documents, and legacy visual contracts are historical unless this file explicitly adopts them.
+
+The implementation baseline above is the latest behavior-changing commit before the professor-facing documentation cleanup. Documentation-only commits after that SHA do not imply new product behavior.
 
 ## What EOT is now
 
@@ -16,13 +19,15 @@ It began from an output problem: English that could be recognized was not always
 
 The central engineering problem is not simply generating explanations. EOT tries to preserve a shared learner model, distinguish observation from admissible evidence, choose a justified teaching action, track how much support was used, and verify whether later performance is independent, transferable, and retained.
 
-## Status language used here
+## How to read status labels
 
-- **Implemented / active:** executable code exists and is used by, or directly connected to, the current learner path.
-- **First pass:** executable implementation exists, but coverage/calibration/device acceptance is incomplete.
-- **Partial:** meaningful implementation exists, but important capability areas remain contract-only or unfinished.
-- **Contract-only:** types/policy/boundaries exist without enough executable product behavior to call the capability implemented.
-- **Unfinished:** not currently implemented to the level required for the product claim.
+- **Implemented / active path:** executable code exists and is used by, or directly connected to, a current learner path.
+- **First pass:** executable implementation exists, but coverage, calibration, integration, or device acceptance is incomplete.
+- **Partial:** meaningful implementation exists, but important capabilities remain contract-only or unfinished.
+- **Contract-only:** types, policy, or authority boundaries exist without enough executable product behavior to call the capability implemented.
+- **Unfinished:** not implemented to the level needed for the product claim.
+
+The architecture registry also uses the label `PRODUCTION_CORE`. In this repository that means “canonical executable subsystem/owner,” **not** “the product is production-ready.”
 
 No status below is a claim of real-learner efficacy.
 
@@ -30,62 +35,60 @@ No status below is a claim of real-learner efficacy.
 
 | Area | Current status | What is real in current main |
 | --- | --- | --- |
-| Shared learner truth / model | **First-pass production core** | Immutable observations and canonical evidence; guards; provenance; uncertainty; competing hypotheses; assisted-vs-independent rules; transfer/delayed evidence; deterministic learner-state projection. |
-| Curriculum / Outer Loop | **First-pass production core** | Ready/reinforcement/transfer/retention/blocked frontiers, Today planning, LessonPlan generation, time/priority signals, General/Exam allocation over shared learner truth. |
-| AI Teacher / Inner Tutor | **First-pass production core** | Bounded pedagogical context, legal actions, mechanism selection, support policy, representation change, support fade, return/stop behavior, qualification/guards, provider fallback and decision replay semantics. |
-| Teaching intelligence / Learning Blocks | **First-pass production core** | Registered teaching mechanisms, suitability/contraindication metadata, learner cognitive actions, support/replan/fade contracts, block runtime and evidence ceilings. |
-| Assessment / evidence qualification | **Existing production core, still being audited** | Formal-integrity boundaries, measurement qualification, source/assistance conditions, semantic-assessment integration. |
-| Lesson / Session Runtime | **Production core, ready for audit** | Session lifecycle, pause/resume, time budget, checkpoint/hydration, duplicate-action identity and continuity semantics. |
-| Local persistence | **U1 first-pass foundation / partial overall** | Native Expo SQLite schema/transactions, migration, durable artifacts, local event/Teacher lineage, bounded reads, replay/idempotency. Server truth/sync are not implemented. |
-| Contextual lookup | **First pass** | Phrase-first selection, word fallback, contextual sense resolution, zh-TW explanation, lookup history, lookup locking, and assistance contamination rules. |
-| Authentic input / OCR | **Production core, ready for audit** | Direct/paste/image/PDF intake, immutable artifact, OCR/transcription path, learner/prompt/annotation/unknown-region separation, fail-closed uncertainty behavior. |
-| AI / model layer | **Partial** | Server-owned provider calls, structured-output contracts, prompt/schema versions, timeout/retry ownership, proposal guards, model-run lineage and deterministic fallback boundary. |
-| Eight-family GSAT practice path | **Implemented path; uneven teaching depth** | Promoted content/task contracts for all eight families, canonical bindings, family-specific diagnosis candidates, Teacher interaction and learner-action projection in Exam practice. |
+| Shared learner truth / model | **First pass** | Immutable observations and canonical evidence; evidence guards; provenance; uncertainty; competing hypotheses; assisted-vs-independent rules; transfer/delayed evidence; deterministic learner-state projection. |
+| Curriculum / Outer Loop | **First pass** | Ready/reinforcement/transfer/retention/blocked frontiers, Today planning, LessonPlan generation, time/priority signals, and General/Exam allocation over shared learner truth. |
+| AI Teacher / Inner Tutor | **First pass** | Bounded pedagogical context, legal actions, mechanism selection, support policy, representation change, support fade, return/stop behavior, proposal qualification, deterministic provider fallback, and decision replay semantics. |
+| Teaching intelligence / Learning Blocks | **First pass** | Registered teaching mechanisms, suitability/contraindication metadata, learner cognitive actions, support/replan/fade rules, block runtime and evidence ceilings. |
+| Assessment / evidence qualification | **First-pass measurement core; partial formal Exam** | Diagnostic/practice/fresh/transfer/delayed/retention qualification exists. Formal Exam, answer-reveal, lookup-lock integration and universal scoring/rubric authority remain contract-heavy. |
+| Lesson / Session Runtime | **First pass; native lifecycle gaps remain** | Session lifecycle, pause/resume, time budget, checkpoint/hydration, duplicate-action identity, session close and continuity semantics. Physical AppState/background/foreground and interruption acceptance remain incomplete. |
+| Local persistence | **U1 first-pass foundation / partial overall** | Native Expo SQLite schema/transactions, migrations, durable artifacts, event/evidence/Teacher lineage, bounded reads, replay/idempotency and learner-scoped local deletion. Server truth/sync/cross-device/backup are not implemented. |
+| Contextual lookup | **First-pass slice / partial subsystem** | Phrase-first selection, word fallback, contextual sense resolution, zh-TW explanation, lookup history, assessment locking, and the rule that lookup exposure is assistance rather than capability evidence. |
+| Authentic input / OCR | **First-pass slice / partial overall** | Direct typing/paste, Writing/Translation artifacts, image/PDF intake, role-separated transcription, immutable source truth and fail-closed uncertainty handling. School/teacher-source metadata and broad device/layout acceptance remain incomplete. |
+| AI / model layer | **Partial** | Server-owned provider calls, structured-output contracts, prompt/schema versions, timeout/retry ownership, authority guards, operation lineage and deterministic failure/fallback boundaries. Whole-product rate/cost governance, alternate-model fallback and calibrated model evaluation remain incomplete. |
+| Eight-family GSAT practice path | **Implemented path; uneven teaching depth** | Promoted project-authored tasks, canonical bindings, family-specific diagnosis candidates, Teacher interaction and learner-action projection exist for all eight families. This does not mean equal specialized teaching depth. |
 
 ## Eight GSAT families in current main
 
-All eight families are represented in the current Exam/practice architecture. This does **not** mean every family has the same teaching-runtime depth.
-
 | Family | Current implementation status |
 | --- | --- |
-| Vocabulary | Active Exam/practice path with contextual sense, collocation, form/retrieval diagnosis candidates and teaching-block projection. Broader vocabulary/chunk specialization remains partial. |
+| Vocabulary | Active Exam/practice path with contextual sense, collocation, form/retrieval diagnosis candidates and shared teaching-block projection. Broader specialized lexical teaching remains partial. |
 | Comprehensive | Active passage-local choice path with vocabulary/sense, phrase/collocation, grammar-fit, local-context and discourse-clue diagnosis candidates. |
 | Contextual Fill | Active shared-pool path with syntax/POS, semantics, collocation, local/global context and pool-chain diagnosis candidates. |
 | Discourse | Active sentence-insertion path with reference, cohesion, logical relation, sentence-function and before/after-fit diagnosis candidates. |
 | Reading | Dedicated attempt/review runtime exists, including immutable submit, evidence-focused review, diagnosis probes and Teacher handoff. |
 | Mixed | Active multi-part path with cross-source integration, evidence localization, paraphrase, retrieval/form and short-response diagnosis candidates. |
-| Translation | Active learner-facing/Exam path and changed-context retranslation first pass. Most Translation-specialized teaching capabilities are still contract-only. |
-| Writing | Active learner-facing/Exam path. Sentence realization, meaning encoding, revision, return-original and current fresh-writing transfer have first-pass implementations; planning, organization, cohesion, idea/reasoning and full writing evaluation remain incomplete. |
+| Translation | Active shared Exam/learner path. Changed-context retranslation is first pass; the rest of the Translation-specific capability set remains mostly contract-only. |
+| Writing | Active shared Exam/learner path. Sentence realization, meaning encoding, revision, return-to-original and current fresh-writing transfer are first pass; planning, organization, cohesion, idea/reasoning and full Writing evaluation remain incomplete. |
 
 ## What is currently being rebuilt / integrated
 
-The repository contains functional learner-facing surfaces and first-pass UI/experience capabilities, but the current UI is **not the final learner experience**.
+The repository contains functional learner-facing screens and first-pass interaction renderers, but the current UI is **not the final learner experience**.
 
-The active product milestone is to rebuild and integrate the learner-facing teaching UX on top of the existing learner-truth, Teacher, mechanism, and persistence architecture. The immediate design focus is the core Vocabulary teaching experience and the shared interaction language that later families can reuse.
+The active product milestone is the learner-facing adaptive teaching UX rebuild and integration, beginning with the core Vocabulary teaching experience and a shared interaction model that later families can reuse.
 
-The goal is not a cosmetic reskin. The interface must make the underlying adaptive behavior legible through learner action: diagnosis-specific teaching, different representations after failure, support fading, return to the original task, contextual lookup, and later independent re-checks.
+The goal is not a cosmetic reskin. The interface must make the existing adaptive behavior understandable through learner action: diagnosis-specific teaching, representation changes after failure, support fading, return to the original task, contextual lookup, and later independent re-checks.
 
 ## Partial / contract-heavy areas
 
-- **Content generation:** fresh/changed-context tasks, semantic validity, alternatives, context relevance, validation and content packs have first-pass pieces; examples/counterexamples/distractors, broad difficulty/load control and content-safety depth are not complete.
-- **Writing specialization:** several source/revision/return/fresh-transfer paths are first pass, while higher-level planning/organization/cohesion/reasoning/evaluation remain incomplete.
-- **Translation specialization:** the changed-context retranslation path is first pass; most Translation-specific teaching/evaluation capability is still contract-only.
-- **Vocabulary / chunks / grammar / reading specialization:** Reading has concrete runtime/diagnosis implementation and the shared Exam layer handles all families, but the full J subsystem has not completed a dedicated upgrade/audit.
-- **Longitudinal learning:** reencounter/retention infrastructure exists, but broad scheduling/policy calibration is not finished.
-- **Formal Exam product behavior:** formal-integrity policy exists, but full mock runtime/rendering and post-assessment teaching remain incomplete.
-- **Model system:** production structured endpoints exist, but model-wide cost/rate governance, fallback-model routing and calibrated whole-product model evaluation are not complete.
+- **Content generation:** fresh/changed-context tasks, semantic validity, valid alternatives, context relevance, validation and content packs have first-pass pieces; broad examples/counterexamples/distractors, difficulty/load control and content-safety depth remain incomplete.
+- **Writing specialization:** sentence realization, meaning encoding, revision, return-to-original and current fresh-transfer are first pass; higher-level planning/organization/cohesion/reasoning/evaluation are not.
+- **Translation specialization:** changed-context retranslation is first pass; most Translation-specific teaching/evaluation capabilities remain contract-only.
+- **Vocabulary / chunks / grammar / reading specialization:** Reading has concrete runtime/diagnosis implementation and the shared Exam layer handles the relevant families, but the full J specialization has not completed a dedicated major upgrade/audit.
+- **Longitudinal learning:** reencounter, delayed verification, transfer scheduling and retention-history pieces exist; a broad spacing optimizer and policy calibration are not finished.
+- **Formal Exam product behavior:** integrity boundaries exist, but full mock/formal runtime, reveal/lookup integration and post-assessment teaching are incomplete.
+- **Model system:** production structured endpoints exist, but global cost/rate governance, alternate-model routing and calibrated whole-product model evaluation are incomplete.
 
 ## Unfinished
 
 - server-authoritative learner truth;
 - sync and cross-device continuity;
-- backup/restore and cloud/account-level deletion completion;
-- complete native process-death, AppState race, keyboard/IME, accessibility, permission and difficult OCR/PDF acceptance;
+- backup/restore and cloud/account-level deletion;
+- complete native process-death, AppState race, keyboard/IME, accessibility, permissions and difficult OCR/PDF acceptance;
 - full formal/mock GSAT product experience;
 - complete specialized teaching repertoire across all eight families;
 - broad validated content-generation coverage and difficulty/load calibration;
 - real-learner efficacy validation and calibrated learning-outcome evidence;
-- final learner-facing UX/visual design.
+- final learner-facing interaction and visual system.
 
 ## Active learner path
 
@@ -99,7 +102,7 @@ My English
 
 Learning flows then enter lesson/exam runtime, Teacher decisions, learner actions, evidence/persistence, and Result. Development/review routes remain under `/__dev__/*`.
 
-Important authority rules in current main:
+Important current authority rules:
 
 - General and Exam share learner truth.
 - UI does not decide pedagogy.
@@ -115,27 +118,21 @@ Important authority rules in current main:
 
 The milestone is successful when the existing backend behavior can be experienced coherently by a learner without exposing internal runtime/evidence terminology and without reducing the product to “wrong answer → AI explanation.”
 
-## Where the status comes from
+## Primary current implementation sources
 
-The primary implementation sources audited for this snapshot are:
-
-- `src/architecture/registry.ts`
-- `src/architecture/capabilityCatalog.ts`
-- `src/learner-truth/`
-- `src/curriculum/`
-- `src/teacher-runtime/`
-- `src/teaching/`
-- `src/content/`
-- `src/specializations/`
-- `src/assessment/`
-- `src/lesson-runtime/`
-- `src/lookup/`
-- `src/authentic-input/`
-- `src/model/`
-- `src/persistence/`
-- `src/product-policy/exam/`
-- `src/application/exam/`
-- `app/exam-practice.tsx`
-- `app/daily-lesson.tsx`
+- learner truth / model: `src/learner-truth/`, `src/domain/evidence/`
+- curriculum: `src/curriculum/`
+- AI Teacher: `src/teacher-runtime/`
+- teaching mechanisms: `src/teaching/`, `src/application/v4/blockRegistryV4.ts`
+- assessment: `src/assessment/`
+- session runtime: `src/lesson-runtime/`
+- eight-family Exam path: `src/content/examBetaBank.ts`, `src/content/examCanonicalBindings.ts`, `src/application/exam/`, `app/exam-practice.tsx`
+- Reading specialization: `src/specializations/language/`
+- Writing / Translation: `src/specializations/writing/`, `src/specializations/translation/`
+- local persistence: `src/persistence/`
+- contextual lookup / lexical encounters: `src/lookup/`, `src/learner-truth/lexicalEncounter.ts`
+- authentic input / OCR: `src/authentic-input/`, `coach-server/vision-v4.mjs`
+- model boundary / server operations: `src/model/`, `coach-server/teacher-server.mjs`
+- learner-facing surfaces: `app/`, `components/learning/`
 
 For the deeper A–Y ownership map, see [docs/architecture/EOT_V1_MAIN_ARCHITECTURE.md](docs/architecture/EOT_V1_MAIN_ARCHITECTURE.md).
