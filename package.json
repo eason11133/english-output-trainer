@@ -87,7 +87,7 @@
     "test:wave-d": "node scripts/run-isolated-domain-suite.cjs wave-d tests/domain/curriculumOuterLoopWaveD.test.cjs scripts/run-curriculum-wave-d-gate.cjs",
     "test:wave-e": "node scripts/run-isolated-domain-suite.cjs wave-e tests/domain/teacherRuntimeWaveE.test.cjs scripts/run-teacher-runtime-wave-e-gate.cjs",
     "test:wave-gates:parallel": "node scripts/run-wave-gates-parallel.cjs",
-    "test:wave-f": "node scripts/run-isolated-domain-suite.cjs wave-f tests/domain/teachingIntelligenceWaveF.test.cjs scripts/run-teaching-intelligence-wave-f-gate.cjs",
+    "test:wave-f": "node scripts/run-isolated-domain-suite.cjs wave-f tests/domain/teachingIntelligenceWaveF.test.cjs tests/domain/trueTeachingPuzzleComposer.test.cjs scripts/run-teaching-intelligence-wave-f-gate.cjs",
     "test:wave-u1": "node scripts/run-u1-local-persistence-gate.cjs",
     "test:wave-h": "node scripts/run-isolated-domain-suite.cjs wave-h tests/domain/writingTeacherWaveH.test.cjs scripts/run-writing-wave-h-gate.cjs",
     "test:wave-g": "node scripts/run-isolated-domain-suite.cjs wave-g tests/domain/contentTaskWaveG.test.cjs scripts/run-content-wave-g-gate.cjs",
