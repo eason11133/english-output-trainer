@@ -2,7 +2,8 @@ import { blockRegistryV4 } from '../application/v4/blockRegistryV4';
 import type { BlockSupportV4, LearningBlockDefinitionV4 } from '../domain/v4/LearningBlockV4';
 import { deriveAdaptiveTeacherEpisodeDecisionV1, deriveTeachingOptionsV1 } from './intelligence';
 import { canonicalPckMechanismsV1 } from './pckCatalog';
-import type { TeacherCompositionPieceKindV1, TeacherCompositionPlanV1, TeachingRequestV1, TeachingResponseSignalV1 } from './types';
+import { selectTeachingPuzzlePieceV1 } from './puzzleLibrary';
+import type { TeacherCompositionPieceKindV1, TeacherCompositionPlanV1, TeachingPuzzlePieceIdV1, TeachingRequestV1, TeachingResponseSignalV1 } from './types';
 
 type TeacherPuzzleModeV1='WRITING'|'TRANSLATION'|'READING'|'LANGUAGE';
 
@@ -13,7 +14,7 @@ const returnFor=(mode?:TeacherPuzzleModeV1)=>{
   const preferred=mode==='TRANSLATION'?'return-original-translation':mode==='WRITING'?'return-original-writing':'return-source-navigation';
   return blockRegistryV4.get(preferred)??blockRegistryV4.get('continue-source');
 };
-function piece(kind:TeacherCompositionPieceKindV1,block:LearningBlockDefinitionV4,support:BlockSupportV4,index:number,mechanismId?:string){return Object.freeze({id:`piece:${index}:${block.id}`,kind,blockId:block.id,mechanismId,learnerAction:block.learnerAction,support,advanceWhen:Object.freeze(['HELPED','SELF_REPAIRED','ASSISTED_SUCCESS','INDEPENDENT_SUCCESS'] as TeachingResponseSignalV1[]),recomposeWhen:Object.freeze(['NO_PROGRESS','CONFUSED','FAILURE'] as TeachingResponseSignalV1[]),evidenceCeiling:block.evidenceCeiling})}
+function piece(kind:TeacherCompositionPieceKindV1,block:LearningBlockDefinitionV4,support:BlockSupportV4,index:number,mechanismId?:string,surfacePieceId?:TeachingPuzzlePieceIdV1){return Object.freeze({id:`piece:${index}:${block.id}`,kind,blockId:block.id,mechanismId,surfacePieceId,learnerAction:block.learnerAction,support,advanceWhen:Object.freeze(['HELPED','SELF_REPAIRED','ASSISTED_SUCCESS','INDEPENDENT_SUCCESS'] as TeachingResponseSignalV1[]),recomposeWhen:Object.freeze(['NO_PROGRESS','CONFUSED','FAILURE'] as TeachingResponseSignalV1[]),evidenceCeiling:block.evidenceCeiling})}
 const teachingFor=(request:TeachingRequestV1,excluded:ReadonlySet<string>)=>{
   const options=deriveTeachingOptionsV1(request);
   const mechanismId=options.preferredMechanismIds.find(id=>!excluded.has(id));
@@ -21,8 +22,10 @@ const teachingFor=(request:TeachingRequestV1,excluded:ReadonlySet<string>)=>{
   const block=mechanism?blockRegistryV4.get(mechanism.id):undefined;
   return block?.role==='TEACH'?{block,mechanismId:block.id}:undefined;
 };
-const appendPiece=(plan:TeacherCompositionPlanV1,block:LearningBlockDefinitionV4,kind:TeacherCompositionPieceKindV1,support:BlockSupportV4,occurredAt:string,status:TeacherCompositionPlanV1['status']='ACTIVE',mechanismId?:string,excludedMechanismIds:readonly string[]=plan.excludedMechanismIds):TeacherCompositionPlanV1=>{
-  const next=piece(kind,block,support,plan.pieces.length,mechanismId);
+const appendPiece=(plan:TeacherCompositionPlanV1,block:LearningBlockDefinitionV4,kind:TeacherCompositionPieceKindV1,support:BlockSupportV4,occurredAt:string,status:TeacherCompositionPlanV1['status']='ACTIVE',mechanismId?:string,excludedMechanismIds:readonly string[]=plan.excludedMechanismIds,responseSignal?:TeachingResponseSignalV1):TeacherCompositionPlanV1=>{
+  const priorSurfaceIds=plan.pieces.map(item=>item.surfacePieceId).filter((id):id is TeachingPuzzlePieceIdV1=>Boolean(id));
+  const surfacePieceId=mechanismId?selectTeachingPuzzlePieceV1({mechanismId,support,priorPieceIds:priorSurfaceIds,responseSignal}):undefined;
+  const next=piece(kind,block,support,plan.pieces.length,mechanismId,surfacePieceId);
   return Object.freeze({...plan,pieces:Object.freeze([...plan.pieces,next]),cursor:plan.pieces.length,status,excludedMechanismIds:Object.freeze([...new Set(excludedMechanismIds)]),updatedAt:occurredAt});
 };
 
@@ -37,7 +40,9 @@ export function startTeacherPuzzleV1(input:{request:TeachingRequestV1;occurredAt
   const excluded=new Set(input.excludeMechanismIds??[]);
   const selected=teachingFor(input.request,excluded);
   if(!selected)throw new Error('no_admissible_teaching_piece');
-  const first=piece('REPRESENT',selected.block,deriveTeachingOptionsV1(input.request).supportPolicy.recommendedSupport,0,selected.mechanismId);
+  const initialSupport=deriveTeachingOptionsV1(input.request).supportPolicy.recommendedSupport;
+  const surfacePieceId=selectTeachingPuzzlePieceV1({mechanismId:selected.mechanismId,support:initialSupport});
+  const first=piece('REPRESENT',selected.block,initialSupport,0,selected.mechanismId,surfacePieceId);
   return Object.freeze({schemaVersion:1,planId:`puzzle:${stable(input.sessionId)}:${stable(input.request.targetRef)}:${stable(input.request.facet)}:${stable(input.occurredAt)}`,targetRef:input.request.targetRef,facet:input.request.facet,pieces:Object.freeze([first]),cursor:0,status:'ACTIVE',excludedMechanismIds:Object.freeze([...excluded]),createdAt:input.occurredAt,updatedAt:input.occurredAt,masteryMutationAllowed:false});
 }
 
@@ -61,7 +66,7 @@ export function decideNextTeacherPuzzleV1(input:{prior:TeacherCompositionPlanV1;
     if(currentBlock.role==='TEACH')excluded.add(current.mechanismId??current.blockId);
     const selected=teachingFor(request,excluded);
     if(!selected)return Object.freeze({...prior,status:'STOPPED' as const,excludedMechanismIds:Object.freeze([...excluded]),updatedAt:occurredAt});
-    return appendPiece(prior,selected.block,'REPRESENT',episode.support,occurredAt,'ACTIVE',selected.mechanismId,[...excluded]);
+    return appendPiece(prior,selected.block,'REPRESENT',episode.support,occurredAt,'ACTIVE',selected.mechanismId,[...excluded],signal);
   }
 
   if(currentBlock.role==='ASSESS'&&signal==='INDEPENDENT_SUCCESS'){
