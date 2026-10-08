@@ -158,3 +158,37 @@ export function validateTeachingPuzzlePayloadV1(pieceId:TeachingPuzzlePieceIdV1,
   if(pieceId==='EVIDENCE_BRIDGE'&&(!payload.claim||!nonEmpty(payload.evidence)))reasons.push('claim_and_evidence_required');
   return Object.freeze({valid:reasons.length===0,reasons:Object.freeze(reasons)});
 }
+
+
+export function compileTeachingPuzzlePayloadV1(input:{
+  pieceId:TeachingPuzzlePieceIdV1;
+  payloadJson?:string;
+  sourceText:string;
+  learnerText:string;
+  instructionalContent?:readonly string[];
+}):TeachingPuzzlePayloadV1{
+  if(input.payloadJson){
+    try{
+      const parsed=JSON.parse(input.payloadJson) as TeachingPuzzlePayloadV1;
+      if(validateTeachingPuzzlePayloadV1(input.pieceId,parsed).valid)return parsed;
+    }catch{}
+  }
+  const content=(input.instructionalContent??[]).filter(Boolean),base=input.learnerText||input.sourceText;
+  if(input.pieceId==='ANNOTATED_SPANS')return{segments:(content.length?content:[base]).map((text,index)=>({text,label:content.length?`重點 ${index+1}`:'目前句子',emphasis:index===0}))};
+  if(input.pieceId==='ROLE_RELATION_MAP'||input.pieceId==='RELATION_NETWORK'){
+    const values=content.length?content:[base],nodes=values.map((label,index)=>({id:`n${index}`,label})),edges=nodes.slice(1).map((node,index)=>({from:nodes[index].id,to:node.id}));
+    return{nodes,edges};
+  }
+  if(input.pieceId==='CONTRAST_PAIR'){
+    const left=content[0]??base,right=content[1]??input.sourceText;
+    return{left:{title:'A',lines:[left]},right:{title:'B',lines:[right]}};
+  }
+  if(input.pieceId==='CHUNK_GROUPING')return{groups:[{label:'一起看',items:content.length?content:[base]}]};
+  if(input.pieceId==='TRANSFORMATION_STEPS'){
+    const values=content.length?content:[base];
+    return{steps:values.map((after,index)=>({before:index===0?base:values[index-1],after}))};
+  }
+  if(input.pieceId==='REFORMULATION_SET')return{base,alternatives:(content.length?content:[input.sourceText]).map(text=>({text}))};
+  const evidence=content.length>1?content.slice(1):content.length?content:[input.sourceText];
+  return{claim:content[0]??base,evidence,bridge:''};
+}
