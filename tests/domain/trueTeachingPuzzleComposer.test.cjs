@@ -85,3 +85,25 @@ test('the same composer contract can start lexical and grammar teaching without 
   assert.ok(f.blockRegistryV4.get(grammar.pieces[0].blockId));
   assert.ok(f.blockRegistryV4.get(lexical.pieces[0].blockId));
 });
+
+
+test('teaching puzzle library is a reusable surface vocabulary, not one screen per grammar target',()=>{
+  assert.equal(f.teachingPuzzleLibraryV1.length,8);
+  const grammarPieces=f.teachingPuzzlePiecesForMechanismV1('grammar-role-map').map(x=>x.id);
+  assert.ok(grammarPieces.includes('ROLE_RELATION_MAP'));
+  assert.ok(grammarPieces.includes('TRANSFORMATION_STEPS'));
+  const first=f.selectTeachingPuzzlePieceV1({mechanismId:'grammar-role-map',support:'EXPLICIT'});
+  const afterFailure=f.selectTeachingPuzzlePieceV1({mechanismId:'grammar-role-map',support:'EXPLICIT',priorPieceIds:[first],responseSignal:'CONFUSED'});
+  assert.equal(first,'ROLE_RELATION_MAP');
+  assert.equal(afterFailure,'TRANSFORMATION_STEPS');
+});
+
+test('puzzle payload compiler binds real content to the selected piece without target-specific screen code',()=>{
+  const contrast=f.compileTeachingPuzzlePayloadV1({pieceId:'CONTRAST_PAIR',sourceText:'source',learnerText:'learner',instructionalContent:['A form','B form']});
+  assert.equal(f.validateTeachingPuzzlePayloadV1('CONTRAST_PAIR',contrast).valid,true);
+  assert.deepEqual(contrast.left.lines,['A form']);
+  assert.deepEqual(contrast.right.lines,['B form']);
+  const evidence=f.compileTeachingPuzzlePayloadV1({pieceId:'EVIDENCE_BRIDGE',sourceText:'passage',learnerText:'claim',instructionalContent:['claim','evidence 1','evidence 2']});
+  assert.equal(f.validateTeachingPuzzlePayloadV1('EVIDENCE_BRIDGE',evidence).valid,true);
+  assert.deepEqual(evidence.evidence,['evidence 1','evidence 2']);
+});
