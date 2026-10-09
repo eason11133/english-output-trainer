@@ -3,6 +3,7 @@ export * from './learnerSpineQueries';
 export * from './lessonExperience';
 export * from './outputWorkspaceVM';
 export * from './teacherDecisionExperience';
+export * from './teachingPuzzleExperience';
 export * from './frozenExamExperience';
 export const EXPERIENCE_BOUNDARY='Teacher decision -> ExperienceContract/OutputWorkspaceVM -> renderer; UI never chooses pedagogy.' as const;
 
