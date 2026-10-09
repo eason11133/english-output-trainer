@@ -147,8 +147,17 @@ function selectPuzzle(input:{
     }
   }
 
-  candidates.sort((a,b)=>b.score-a.score||a.definition.id.localeCompare(b.definition.id)||a.mechanismId.localeCompare(b.mechanismId));
-  const winner=candidates[0];
+  let pool=candidates;
+  if(failed&&input.prior){
+    const differentRepresentation=candidates.filter(candidate=>candidate.definition.representation.kind!==input.prior?.representationKind);
+    if(differentRepresentation.length)pool=differentRepresentation;
+    else{
+      const differentPair=candidates.filter(candidate=>candidate.definition.id!==input.prior?.puzzleId||candidate.mechanismId!==input.prior?.mechanismId);
+      if(differentPair.length)pool=differentPair;
+    }
+  }
+  pool.sort((a,b)=>b.score-a.score||a.definition.id.localeCompare(b.definition.id)||a.mechanismId.localeCompare(b.mechanismId));
+  const winner=pool[0];
   return winner?selectionFrom(winner.definition,winner.mechanismId,winner.support):undefined;
 }
 
