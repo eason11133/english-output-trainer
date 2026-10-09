@@ -11,15 +11,20 @@ export type TeachingPuzzleUIEventV1=
   |{type:'EVIDENCE_SELECTED';instanceId:string;index:number;value:string}
   |{type:'REFORMULATION_SELECTED';instanceId:string;index:number;value:string};
 
-export function TeachingPuzzleSurface({vm,onEvent}:{vm:TeachingPuzzleExperienceVMV1;onEvent?:(event:TeachingPuzzleUIEventV1)=>void}){
+export function TeachingPuzzleSurface({vm,onEvent,onComplete,onStuck}:{vm:TeachingPuzzleExperienceVMV1;onEvent?:(event:TeachingPuzzleUIEventV1)=>void;onComplete?:()=>void;onStuck?:()=>void}){
+  const[interacted,setInteracted]=useState(false),emit=(event:TeachingPuzzleUIEventV1)=>{setInteracted(true);onEvent?.(event)};
   return <View style={s.root} testID={`teaching-puzzle-${vm.puzzleId}`}>
     <Text style={s.instruction}>{vm.instruction}</Text>
-    {vm.kind==='CONTRAST'?<ContrastPuzzle vm={vm} onEvent={onEvent}/>:null}
-    {vm.kind==='RELATION_MAP'?<RelationPuzzle vm={vm} onEvent={onEvent}/>:null}
-    {vm.kind==='WORKED_TRANSFORMATION'?<TransformationPuzzle vm={vm} onEvent={onEvent}/>:null}
-    {vm.kind==='CHUNK_BUILD'?<ChunkPuzzle vm={vm} onEvent={onEvent}/>:null}
-    {vm.kind==='EVIDENCE_BRIDGE'?<EvidencePuzzle vm={vm} onEvent={onEvent}/>:null}
-    {vm.kind==='REFORMULATION'?<ReformulationPuzzle vm={vm} onEvent={onEvent}/>:null}
+    {vm.kind==='CONTRAST'?<ContrastPuzzle vm={vm} onEvent={emit}/>:null}
+    {vm.kind==='RELATION_MAP'?<RelationPuzzle vm={vm} onEvent={emit}/>:null}
+    {vm.kind==='WORKED_TRANSFORMATION'?<TransformationPuzzle vm={vm} onEvent={emit}/>:null}
+    {vm.kind==='CHUNK_BUILD'?<ChunkPuzzle vm={vm} onEvent={emit}/>:null}
+    {vm.kind==='EVIDENCE_BRIDGE'?<EvidencePuzzle vm={vm} onEvent={emit}/>:null}
+    {vm.kind==='REFORMULATION'?<ReformulationPuzzle vm={vm} onEvent={emit}/>:null}
+    <View style={s.actions}>
+      {onComplete?<Pressable accessibilityRole="button" disabled={!interacted} onPress={onComplete} style={[s.primaryAction,!interacted&&s.disabledAction]}><Text style={s.primaryActionText}>換我試</Text></Pressable>:null}
+      {onStuck?<Pressable accessibilityRole="button" onPress={onStuck} style={s.secondaryAction}><Text style={s.secondaryActionText}>還是不懂</Text></Pressable>:null}
+    </View>
   </View>;
 }
 
@@ -135,4 +140,5 @@ const s=StyleSheet.create({
   altList:{gap:t.spacing.sm},
   alt:{minHeight:t.layout.minimumTouchTarget,borderWidth:1,borderColor:t.colors.line,borderRadius:t.radius.medium,padding:t.spacing.md,justifyContent:'center',backgroundColor:t.colors.paper},
   altText:{fontSize:t.typography.body,lineHeight:t.lineHeight.body,color:t.colors.ink},
+  actions:{marginTop:t.spacing.lg,gap:t.spacing.xs},primaryAction:{minHeight:50,borderRadius:t.radius.action,backgroundColor:t.colors.deepWood,alignItems:'center',justifyContent:'center',paddingHorizontal:t.spacing.md},disabledAction:{opacity:.35},primaryActionText:{fontSize:t.typography.secondary,fontWeight:'700',color:t.colors.paper},
 });
