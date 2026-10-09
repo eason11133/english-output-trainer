@@ -171,7 +171,12 @@ export default function Lesson(){
               provenanceRefs:[current.artifact.id,...current.observations.slice(-2).map(item=>item.id)],
             },
           });
-          decision={...decision,configuration:{...decision.configuration,teachingPuzzleBindingStatus:bound.status,teachingPuzzleBindingReasons:bound.reasonCodes.join('|'),teachingPuzzleInstance:bound.status==='READY'?JSON.stringify(bound.instance):'',teachingPuzzleContentProvenance:bound.provenanceRefs.join('|')}};
+          if(bound.status==='READY'){
+            decision={...decision,configuration:{...decision.configuration,teachingPuzzleBindingStatus:'READY',teachingPuzzleBindingReasons:bound.reasonCodes.join('|'),teachingPuzzleInstance:JSON.stringify(bound.instance),teachingPuzzleContentProvenance:bound.provenanceRefs.join('|')}};
+          }else{
+            const{teachingPuzzleComposerState:_composerState,teachingPuzzleSelection:_selection,teachingPuzzleId:_puzzleId,teachingPuzzleMechanismId:_puzzleMechanism,teachingPuzzleRepresentation:_representation,teachingPuzzleInteraction:_interaction,...legacyConfiguration}=decision.configuration;
+            decision={...decision,configuration:{...legacyConfiguration,teachingPuzzleBindingStatus:'UNAVAILABLE',teachingPuzzleBindingReasons:bound.reasonCodes.join('|'),teachingPuzzleInstance:'',teachingPuzzleContentProvenance:bound.provenanceRefs.join('|')}};
+          }
         }
       }
       if(result.reused){const recovered=completePendingTeacherContinuationV1(current,event.id);if(recovered!==current)await persist(recovered);return}
