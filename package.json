@@ -90,7 +90,7 @@
     "test:wave-f": "node scripts/run-isolated-domain-suite.cjs wave-f tests/domain/teachingIntelligenceWaveF.test.cjs tests/domain/teachingPuzzleContract.test.cjs tests/domain/teachingPuzzleLibrary.test.cjs tests/domain/teachingPuzzleComposer.test.cjs scripts/run-teaching-intelligence-wave-f-gate.cjs",
     "test:wave-u1": "node scripts/run-u1-local-persistence-gate.cjs",
     "test:wave-h": "node scripts/run-isolated-domain-suite.cjs wave-h tests/domain/writingTeacherWaveH.test.cjs scripts/run-writing-wave-h-gate.cjs",
-    "test:wave-g": "node scripts/run-isolated-domain-suite.cjs wave-g tests/domain/contentTaskWaveG.test.cjs scripts/run-content-wave-g-gate.cjs",
+    "test:wave-g": "node scripts/run-isolated-domain-suite.cjs wave-g tests/domain/contentTaskWaveG.test.cjs tests/domain/teachingPuzzleContentBinding.test.cjs scripts/run-content-wave-g-gate.cjs",
     "test:wave-i": "node scripts/run-isolated-domain-suite.cjs wave-i tests/domain/translationTeacherWaveI.test.cjs scripts/run-translation-wave-i-gate.cjs",
     "test:wave-k": "node scripts/run-isolated-domain-suite.cjs wave-k tests/domain/assessmentWaveK.test.cjs scripts/run-assessment-wave-k-gate.cjs",
     "test:wave-m": "node scripts/run-isolated-domain-suite.cjs wave-m tests/domain/lessonRuntimeWaveM.test.cjs scripts/run-lesson-runtime-wave-m-gate.cjs",
