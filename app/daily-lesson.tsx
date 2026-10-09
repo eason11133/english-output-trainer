@@ -9,22 +9,23 @@ import { ActivityIndicator, AppState, Image, Keyboard, Platform, Pressable, Styl
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OutputWorkspace } from '../components/learning/OutputWorkspace';
+import { TeachingPuzzleSurface, type TeachingPuzzleUIEventV1 } from '../components/learning/TeachingPuzzleSurface';
 import { ContextualLookup, type ContextualLookupEntry } from '../components/learning/ContextualLookup';
 import { LessonErrorState, LessonLoadingState } from '../components/learning/LessonAsyncState';
 import { UniversalLookupText } from '../components/learning/UniversalLookupText';
 import { useLearnerBack } from '../components/experience/useLearnerBack';
 import { useCanonicalProductData } from '../context/AppDataContext';
-import { executeTeacherExperienceV1, loadTodayCurriculumVMV1, teacherDecisionToExperienceContractV1, withLearnerLessonExperienceV1 } from '../src/experience';
+import { executeTeacherExperienceV1, loadTodayCurriculumVMV1, projectTeachingPuzzleExperienceV1, teacherDecisionToExperienceContractV1, withLearnerLessonExperienceV1 } from '../src/experience';
 import { requestQualifiedBlockDecision, transcribeArtifact } from '../lib/teacherApi';
 import {providerFailureLearnerMessageV1} from '../src/reliability';
 import { backgroundLessonSessionV1, beginStage4RuntimeV4, canonicalLessonActionPayloadV1, closeReturnedLessonSessionV1, completePendingTeacherContinuationV1, confirmSourceSpanV4, correctInterpretationStage4V4, foregroundLessonSessionV1, hydrateLearnerDraftV1, lessonActionAlreadyRecordedV1, lessonActionIdentityV1, markPendingTeacherContinuationV1, pauseLessonSessionV1, projectAdaptiveWorkspaceV4, recordBlockEventStage4V4, recordContextualLookupExposureV4, resumeLessonSessionV1, saveLearnerDraftV1, selectBlockV4, type ArtifactModeV4, type ArtifactSpanV4, type IntakeSourceV4, type OriginalArtifactV4, type Stage4RuntimeV4 } from '../src/lesson-runtime';
 import { appendOriginalArtifactV4, canonicalLearnerTruthV1, composeTreatmentPersistenceV1, createOperationalIdV1, fingerprintV1, loadActiveOperationalLessonBundleV1, nativeCorpusServiceV1, operationalDatabaseV1, operationalHistoryReadPortV1, operationalRetentionNeedStoreV1, persistDurableArtifactV1, saveOperationalLessonCheckpointV1 } from '../src/persistence';
-import { createLearningContentGatewayV1, productTaskByIdV1, productTaskForFamilyV1, resolveProductionTeacherContentV1, type ProductTaskV1 } from '../src/content';
+import { bindSelectedTeachingPuzzleContentV1, createLearningContentGatewayV1, productTaskByIdV1, productTaskForFamilyV1, resolveProductionTeacherContentV1, type ProductTaskV1 } from '../src/content';
 import { practiceLessonPlanV1 } from '../src/curriculum';
 import { createContextualLookupRuntimeV1, lookupRequestsFromTapV1 } from '../src/lookup';
 import { productExperienceAccessDecisionV2 } from '../src/product';
 import { adaptLearnerEventToPedagogyV1, decideInnerTutorV1, productionOutcomeEvaluatorsV1, startTutorSessionV1, tutorTimeRemainingMinutesV1, type PedagogicalEventV1, type TreatmentResponseV1 } from '../src/teacher-runtime';
-import { blockRegistryV4 } from '../src/teaching';
+import { blockRegistryV4, type TeachingPuzzleInstanceV1, type TeachingPuzzleSelectionV1 } from '../src/teaching';
 import { taskPurposeForPedagogicalIntentV1, type TaskContract } from '../src/domain/task/TaskContract';
 import { supportExposedFromProductionConditionsV1 } from '../src/domain/task/productionConditions';
 import type { LessonPlanV1 } from '../src/architecture/contracts';
@@ -38,6 +39,8 @@ import { analyzeImportedWorkV1, createAuthenticOriginalArtifactV1, normalizeAuth
 import { futureRetentionNeedFromQualifiedEvidenceV1, reconcileNaturalEncounterV1 } from '../src/longitudinal';
 
 const uid=createOperationalIdV1;
+function parseTeachingPuzzleSelectionV1(value:unknown):TeachingPuzzleSelectionV1|undefined{if(typeof value!=='string'||!value.trim())return undefined;try{const parsed=JSON.parse(value) as TeachingPuzzleSelectionV1;return parsed&&typeof parsed.puzzleId==='string'&&typeof parsed.mechanismId==='string'?parsed:undefined}catch{return undefined}}
+function parseTeachingPuzzleInstanceV1(value:unknown):TeachingPuzzleInstanceV1|undefined{if(typeof value!=='string'||!value.trim())return undefined;try{const parsed=JSON.parse(value) as TeachingPuzzleInstanceV1;return parsed?.schemaVersion===1&&typeof parsed.instanceId==='string'&&typeof parsed.puzzleId==='string'?parsed:undefined}catch{return undefined}}
 
 export default function Lesson(){
   const routeContext=useLocalSearchParams<{origin?:string;practiceFamily?:string;practiceArea?:string;amount?:string;mode?:string;systemTask?:string}>();
