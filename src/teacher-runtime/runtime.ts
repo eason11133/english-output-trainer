@@ -1,7 +1,7 @@
 import { adaptQualifiedBlockDecisionV4 } from '../application/stage4/blockDecisionAdapterV4';
 import { coreEnglishDomainPortV2 } from '../domain/english';
 import type { LearningBlockDefinitionV4, PedagogicalRoleV4 } from '../domain/v4/LearningBlockV4';
-import { advanceTeacherCompositionV1, blockRegistryV4, bundledPckAssetsV1, composeTeacherPlanV1, defaultTeachingOpportunityConditionsV1, deriveAdaptiveTeacherEpisodeDecisionV1, deriveTeachingOptionsV1, eligiblePckAssetsForRequestV1, recomposeTeacherPlanV1, selectPreferredTeachingBlockV1, treatmentConfoundsV1, validateContingentSupportChoiceV1, validateTeachingMechanismChoiceV1, type TeacherCompositionPlanV1, type TeachingRequestV1, type TeachingResponseSignalV1 } from '../teaching';
+import { blockRegistryV4, bundledPckAssetsV1, decideNextTeacherPuzzleV1, defaultTeachingOpportunityConditionsV1, deriveAdaptiveTeacherEpisodeDecisionV1, deriveTeachingOptionsV1, eligiblePckAssetsForRequestV1, selectPreferredTeachingBlockV1, startTeacherPuzzleV1, treatmentConfoundsV1, validateContingentSupportChoiceV1, validateTeachingMechanismChoiceV1, type TeacherCompositionPlanV1, type TeachingRequestV1, type TeachingResponseSignalV1 } from '../teaching';
 import { compilePedagogicalContextV1, isPedagogicalDecisionPointV1 } from './contextCompiler';
 import { teacherModelCallRouteV1 } from './modelRouting';
 import { legalTeacherActionsV1, type InnerTutorDecisionInputV1, type InnerTutorProposalV1, type LegalTeacherActionV1, type PedagogicalContextV1, type QualifiedInnerTutorDecisionV1, type TeacherExperienceRequestV1 } from './types';
@@ -81,7 +81,35 @@ function fConfiguration(context:PedagogicalContextV1,event:InnerTutorDecisionInp
 }
 
 const responseSignal=(event:InnerTutorDecisionInputV1['event']):TeachingResponseSignalV1=>event.learnerIntent==='IMPASSE_REPLAN'?'CONFUSED':event.outcome==='EXPOSURE_ONLY'?'HELPED':event.outcome==='SUCCESS'?(event.support==='NONE'?'INDEPENDENT_SUCCESS':'ASSISTED_SUCCESS'):event.outcome==='PARTIAL'?'HELPED':event.outcome==='FAILURE'?'FAILURE':'UNKNOWN';
-function compositionFor(input:InnerTutorDecisionInputV1,context:PedagogicalContextV1,decision:QualifiedInnerTutorDecisionV1){let prior:TeacherCompositionPlanV1|undefined;const raw=input.currentDecision?.configuration.teacherComposition;if(typeof raw==='string')try{prior=JSON.parse(raw) as TeacherCompositionPlanV1}catch{prior=undefined}const request=fRequest(context,input.event,input.currentDecision?.selectedBlockId);let composition=prior?advanceTeacherCompositionV1(prior,responseSignal(input.event),input.event.occurredAt):undefined;if(composition?.status==='RECOMPOSED')composition=recomposeTeacherPlanV1({prior:composition,request,occurredAt:input.event.occurredAt,sessionId:input.lessonPlan.id,mode:input.sourceTaskContext?.kind==='READING_REVIEW'?'READING':'WRITING'});if(!composition&&decision.action==='TEACH')try{composition=composeTeacherPlanV1({request,occurredAt:input.event.occurredAt,sessionId:input.lessonPlan.id,mode:input.sourceTaskContext?.kind==='READING_REVIEW'?'READING':'WRITING',excludeMechanismIds:input.event.outcome==='FAILURE'&&input.currentDecision?[input.currentDecision.selectedBlockId]:undefined})}catch{return decision}if(!composition)return decision;const changed=Boolean(prior&&composition.planId!==prior.planId),active=composition.pieces[composition.cursor],registered=blockRegistryV4.get(active.blockId),returnReady=active.kind==='RETURN_TO_OUTPUT'&&composition.status==='RETURN_READY',composedAction:LegalTeacherActionV1|undefined=registered?.role==='TEACH'?'TEACH':registered?.role==='PRACTICE'?'PRACTICE':registered?.role==='ASSESS'?'CHECK':registered?.role==='TRANSFER'?'RETURN_TO_TASK':undefined,action=returnReady?'RETURN_TO_TASK':composedAction??decision.action,roleCompatible=Boolean(registered&&actionAllowsRole(action,registered.role)),selected=roleCompatible?active.blockId:decision.blockDecision.selectedBlockId,support=roleCompatible?active.support:decision.blockDecision.supportLevel,blockDecision={...decision.blockDecision,selectedBlockId:selected,supportLevel:support,pedagogicalIntent:returnReady?'TRANSFER':registered?.role??decision.blockDecision.pedagogicalIntent,contextProvenance:returnReady?'SOURCE':decision.blockDecision.contextProvenance,configuration:{...decision.blockDecision.configuration,teacherComposition:JSON.stringify(composition),compositionPlanId:composition.planId,compositionCursor:composition.cursor,compositionStatus:composition.status,compositionActivePieceId:active.id},requestedSystemAction:returnReady?'RETURN_TO_SOURCE':decision.blockDecision.requestedSystemAction};return{...decision,action,blockDecision,composition,experience:experience(action,selected,support,changed),provenance:{...decision.provenance,selectedMechanismId:selected}}}
+const puzzleMode=(input:InnerTutorDecisionInputV1):'WRITING'|'TRANSLATION'|'READING'|'LANGUAGE'=>input.sourceTaskContext?.kind==='READING_REVIEW'?'READING':String(input.sourceTaskContext?.kind??'').includes('TRANSLATION')?'TRANSLATION':'WRITING';
+function compositionFor(input:InnerTutorDecisionInputV1,context:PedagogicalContextV1,decision:QualifiedInnerTutorDecisionV1){
+  let prior:TeacherCompositionPlanV1|undefined;
+  const raw=input.currentDecision?.configuration.teacherComposition;
+  if(typeof raw==='string')try{prior=JSON.parse(raw) as TeacherCompositionPlanV1}catch{prior=undefined}
+  const request=fRequest(context,input.event,input.currentDecision?.selectedBlockId),mode=puzzleMode(input),signal=responseSignal(input.event);
+  let composition:TeacherCompositionPlanV1|undefined;
+  try{
+    composition=prior
+      ?decideNextTeacherPuzzleV1({prior,request,signal,occurredAt:input.event.occurredAt,sessionId:input.lessonPlan.id,mode})
+      :decision.action==='TEACH'
+        ?startTeacherPuzzleV1({request,occurredAt:input.event.occurredAt,sessionId:input.lessonPlan.id,mode,excludeMechanismIds:input.event.outcome==='FAILURE'&&input.currentDecision?[input.currentDecision.selectedBlockId]:undefined})
+        :undefined;
+  }catch{return decision}
+  if(!composition)return decision;
+  const previous=prior?.pieces[prior.cursor],active=composition.pieces[composition.cursor],registered=blockRegistryV4.get(active.blockId);
+  if(!registered)return decision;
+  const changed=Boolean(previous&&(previous.blockId!==active.blockId||previous.support!==active.support||previous.kind!==active.kind));
+  const returnReady=active.kind==='RETURN_TO_OUTPUT'&&composition.status==='RETURN_READY';
+  const stopped=composition.status==='STOPPED';
+  const composedAction:LegalTeacherActionV1|undefined=registered.role==='TEACH'?'TEACH':registered.role==='PRACTICE'?'PRACTICE':registered.role==='ASSESS'?'CHECK':registered.role==='TRANSFER'?'RETURN_TO_TASK':undefined;
+  const action=stopped?'STOP':returnReady?'RETURN_TO_TASK':composedAction??decision.action;
+  const roleCompatible=stopped||returnReady||Boolean(registered&&actionAllowsRole(action,registered.role));
+  const selected=roleCompatible?active.blockId:decision.blockDecision.selectedBlockId;
+  const support=stopped?'NONE':roleCompatible?active.support:decision.blockDecision.supportLevel;
+  const pedagogicalIntent=stopped?'SYSTEM':returnReady?'TRANSFER':registered.role;
+  const blockDecision={...decision.blockDecision,selectedBlockId:selected,supportLevel:support,pedagogicalIntent,contextProvenance:returnReady?'SOURCE':decision.blockDecision.contextProvenance,configuration:{...decision.blockDecision.configuration,teacherComposition:JSON.stringify(composition),compositionPlanId:composition.planId,compositionCursor:composition.cursor,compositionStatus:composition.status,compositionActivePieceId:active.id,puzzleDecisionMode:'RESPONSE_DRIVEN',teachingPuzzlePieceId:active.surfacePieceId??''},requestedSystemAction:returnReady?'RETURN_TO_SOURCE':decision.blockDecision.requestedSystemAction};
+  return{...decision,action,blockDecision,composition,experience:experience(action,selected,support,changed),provenance:{...decision.provenance,selectedMechanismId:selected,reasonCodes:[...decision.provenance.reasonCodes,'RESPONSE_DRIVEN_PUZZLE_COMPOSER']}};
+}
 
 function fallback(context:PedagogicalContextV1,event:InnerTutorDecisionInputV1['event'],currentMechanism?:string):{proposal:InnerTutorProposalV1;action:LegalTeacherActionV1;reasons:string[]} {
   let action:LegalTeacherActionV1='TEACH',role:PedagogicalRoleV4='TEACH',reasons=['FALLBACK_GROUNDED_IN_CANONICAL_CONTEXT'];

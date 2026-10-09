@@ -137,8 +137,9 @@ export interface TeachingOptionsV1{
   stopConditions:readonly string[];
 }
 
+export type TeachingPuzzlePieceIdV1='ANNOTATED_SPANS'|'ROLE_RELATION_MAP'|'CONTRAST_PAIR'|'CHUNK_GROUPING'|'RELATION_NETWORK'|'TRANSFORMATION_STEPS'|'REFORMULATION_SET'|'EVIDENCE_BRIDGE';
 export type TeacherCompositionPieceKindV1='REPRESENT'|'GUIDED_ACTION'|'SUPPORTED_PRACTICE'|'FADE_SUPPORT'|'FRESH_ATTEMPT'|'RETURN_TO_OUTPUT';
-export interface TeacherCompositionPieceV1{id:string;kind:TeacherCompositionPieceKindV1;blockId:string;mechanismId?:string;learnerAction:string;support:BlockSupportV4;advanceWhen:readonly TeachingResponseSignalV1[];recomposeWhen:readonly TeachingResponseSignalV1[];evidenceCeiling:string}
+export interface TeacherCompositionPieceV1{id:string;kind:TeacherCompositionPieceKindV1;blockId:string;mechanismId?:string;surfacePieceId?:TeachingPuzzlePieceIdV1;learnerAction:string;support:BlockSupportV4;advanceWhen:readonly TeachingResponseSignalV1[];recomposeWhen:readonly TeachingResponseSignalV1[];evidenceCeiling:string}
 export interface TeacherCompositionPlanV1{schemaVersion:1;planId:string;targetRef:string;facet:CapabilityFacet;pieces:readonly TeacherCompositionPieceV1[];cursor:number;status:'ACTIVE'|'RECOMPOSED'|'RETURN_READY'|'STOPPED';excludedMechanismIds:readonly string[];createdAt:string;updatedAt:string;masteryMutationAllowed:false}
 
 export interface TeachingModeV1{
