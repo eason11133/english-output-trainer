@@ -8,6 +8,7 @@ export * from './pckCatalog';
 export * from './intelligence';
 export * from './composition';
 export * from './puzzleContract';
+export * from './puzzleLibrary';
 export * from './pckAssets';
 export * from './personalization';
 export * from './waveFStatus';
