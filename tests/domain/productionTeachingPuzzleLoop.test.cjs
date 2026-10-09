@@ -30,7 +30,7 @@ test('undeliverable puzzle content is not persisted as if that puzzle had been s
 test('puzzle micro-interactions are recorded without advancing the Teacher before a meaningful completion or impasse',()=>{
   const lesson=fs.readFileSync(path.join(root,'app/daily-lesson.tsx'),'utf8');
   assert.match(lesson,/puzzleInteractionOnly/);
-  for(const event of ['ITEM_MOVED','ITEM_REORDERED','OPTION_SELECTED','SUPPORT_REVEALED'])assert.match(lesson,new RegExp(event));
+  for(const event of ['ITEM_MOVED','ITEM_REORDERED','OPTION_SELECTED','TEXT_ENTERED','SUPPORT_REVEALED'])assert.match(lesson,new RegExp(event));
   assert.match(lesson,/onComplete=\{\(\)=>void handleEvent\('BLOCK_COMPLETED'/);
   assert.match(lesson,/onStuck=\{\(\)=>void handleEvent\('IMPASSE_REPLAN_REQUESTED'/);
 });
