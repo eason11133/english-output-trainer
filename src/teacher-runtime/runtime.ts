@@ -1,7 +1,7 @@
 import { adaptQualifiedBlockDecisionV4 } from '../application/stage4/blockDecisionAdapterV4';
 import { coreEnglishDomainPortV2 } from '../domain/english';
 import type { LearningBlockDefinitionV4, PedagogicalRoleV4 } from '../domain/v4/LearningBlockV4';
-import { blockRegistryV4, bundledPckAssetsV1, decideNextTeachingPuzzleMoveV1, defaultTeachingOpportunityConditionsV1, deriveAdaptiveTeacherEpisodeDecisionV1, deriveTeachingOptionsV1, eligiblePckAssetsForRequestV1, selectPreferredTeachingBlockV1, treatmentConfoundsV1, validateContingentSupportChoiceV1, validateTeachingMechanismChoiceV1, type TeachingPuzzleComposerStateV1, type TeachingRequestV1, type TeachingResponseSignalV1 } from '../teaching';
+import { blockRegistryV4, bundledPckAssetsV1, decideNextTeachingPuzzleMoveV1, defaultTeachingOpportunityConditionsV1, deriveAdaptiveTeacherEpisodeDecisionV1, deriveTeachingOptionsV1, eligiblePckAssetsForRequestV1, selectPreferredTeachingBlockV1, treatmentConfoundsV1, validateContingentSupportChoiceV1, validateTeachingMechanismChoiceV1, type TeachingPuzzleComposerStateV1, type TeachingPuzzleSelectionV1, type TeachingRequestV1, type TeachingResponseSignalV1 } from '../teaching';
 import { compilePedagogicalContextV1, isPedagogicalDecisionPointV1 } from './contextCompiler';
 import { teacherModelCallRouteV1 } from './modelRouting';
 import { legalTeacherActionsV1, type InnerTutorDecisionInputV1, type InnerTutorProposalV1, type LegalTeacherActionV1, type PedagogicalContextV1, type QualifiedInnerTutorDecisionV1, type TeacherExperienceRequestV1 } from './types';
@@ -99,7 +99,7 @@ function withPuzzleStateConfigurationV1(
   decision:QualifiedInnerTutorDecisionV1['blockDecision'],
   moveKind:string,
   state:TeachingPuzzleComposerStateV1,
-  selection?:{puzzleId:string;mechanismId:string;representationKind:string;primaryInteraction:string}
+  selection?:TeachingPuzzleSelectionV1
 ){
   return{
     ...decision.configuration,
@@ -109,6 +109,7 @@ function withPuzzleStateConfigurationV1(
     teachingPuzzleMechanismId:selection?.mechanismId??'',
     teachingPuzzleRepresentation:selection?.representationKind??'',
     teachingPuzzleInteraction:selection?.primaryInteraction??'',
+    teachingPuzzleSelection:selection?JSON.stringify(selection):'',
   };
 }
 
