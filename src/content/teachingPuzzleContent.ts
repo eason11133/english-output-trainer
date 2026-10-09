@@ -2,6 +2,7 @@ import type { CapabilityFacet } from '../domain/english/EnglishDomain';
 import {
   bindTeachingPuzzleV1,
   teachingPuzzleDefinitionV1,
+  teachingPuzzleLibraryV1,
   type TeachingPuzzleContentSlotV1,
   type TeachingPuzzleInstanceV1,
   type TeachingPuzzleSelectionV1,
@@ -67,6 +68,22 @@ function directContextValue(slot:TeachingPuzzleContentSlotV1,context:TeachingPuz
     return slot.multiple?rows:rows[0];
   }
   return undefined;
+}
+
+
+/**
+ * Synchronous delivery preflight used before the Teacher chooses a puzzle.
+ * It only advertises puzzles whose required slots are already available from
+ * authoritative task/source context. Async instructional content is not
+ * guessed as available here.
+ */
+export function availableTeachingPuzzleIdsV1(context:TeachingPuzzleContentContextV1):readonly string[]{
+  const available:string[]=[];
+  for(const definition of teachingPuzzleLibraryV1){
+    const ready=definition.contentSlots.filter(slot=>slot.required).every(slot=>nonEmpty(directContextValue(slot,context,undefined)));
+    if(ready)available.push(definition.id);
+  }
+  return Object.freeze(available);
 }
 
 /**
