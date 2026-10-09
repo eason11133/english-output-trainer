@@ -112,6 +112,7 @@ function selectPuzzle(input:{
   prior?:TeachingPuzzleSelectionV1;
   responseSignal?:TeachingResponseSignalV1;
   history:readonly TeachingPuzzleHistoryEntryV1[];
+  availablePuzzleIds?:readonly string[];
 }):TeachingPuzzleSelectionV1|undefined{
   const options=deriveTeachingOptionsV1(input.request);
   const failed=['NO_PROGRESS','CONFUSED','FAILURE'].includes(input.responseSignal??'UNKNOWN')||input.request.current.outcome==='FAILURE';
@@ -121,6 +122,7 @@ function selectPuzzle(input:{
 
   for(const mechanism of rankedMechanisms){
     for(const definition of teachingPuzzleLibraryV1){
+      if(input.availablePuzzleIds&&!input.availablePuzzleIds.includes(definition.id))continue;
       if(!definition.mechanismIds.includes(mechanism.mechanismId)||!scopeMatches(definition,input.request))continue;
       const support=compatibleSupport(definition,input.desiredSupport);
       if(!support)continue;
@@ -189,6 +191,7 @@ export function decideNextTeachingPuzzleMoveV1(input:{
   state?:TeachingPuzzleComposerStateV1;
   responseSignal?:TeachingResponseSignalV1;
   occurredAt:string;
+  availablePuzzleIds?:readonly string[];
 }):TeachingPuzzleMoveV1{
   if(input.state&&(input.state.targetRef!==input.request.targetRef||input.state.facet!==input.request.facet))throw new Error('teaching_puzzle_composer_target_drift');
   if(input.state?.current&&!input.responseSignal)throw new Error('teaching_puzzle_response_required_before_next_move');
@@ -219,6 +222,7 @@ export function decideNextTeachingPuzzleMoveV1(input:{
     prior:input.state?.current,
     responseSignal:input.responseSignal,
     history,
+    availablePuzzleIds:input.availablePuzzleIds,
   });
   if(!selection)return moveWithoutPuzzle({kind:'STOP',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:[...reasons,'NO_ADMISSIBLE_TEACHING_PUZZLE']});
 
