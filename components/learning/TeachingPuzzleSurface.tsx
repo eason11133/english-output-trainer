@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { TeachingPuzzleExperienceVMV1 } from '../../src/experience/teachingPuzzleExperience';
 import { eotLearnerTokensV1 as t } from '../../src/ui/tokens';
 
@@ -7,12 +7,13 @@ export type TeachingPuzzleUIEventV1=
   |{type:'CONTRAST_SELECTED';instanceId:string;side:'LEFT'|'RIGHT';value:string}
   |{type:'RELATION_ATTEMPTED';instanceId:string;from:string;to:string}
   |{type:'STEP_REVEALED';instanceId:string;index:number;value:string}
+  |{type:'TRANSFORMATION_RECONSTRUCTED';instanceId:string;value:string}
   |{type:'CHUNK_PARTNER_SELECTED';instanceId:string;index:number;value:string}
   |{type:'EVIDENCE_SELECTED';instanceId:string;index:number;value:string}
   |{type:'REFORMULATION_SELECTED';instanceId:string;index:number;value:string};
 
 export function TeachingPuzzleSurface({vm,onEvent,onComplete,onStuck}:{vm:TeachingPuzzleExperienceVMV1;onEvent?:(event:TeachingPuzzleUIEventV1)=>void;onComplete?:()=>void;onStuck?:()=>void}){
-  const[interacted,setInteracted]=useState(false),emit=(event:TeachingPuzzleUIEventV1)=>{setInteracted(true);onEvent?.(event)};
+  const[interacted,setInteracted]=useState(false),emit=(event:TeachingPuzzleUIEventV1)=>{if(event.type!=='STEP_REVEALED')setInteracted(true);onEvent?.(event)};
   return <View style={s.root} testID={`teaching-puzzle-${vm.puzzleId}`}>
     <Text style={s.instruction}>{vm.instruction}</Text>
     {vm.kind==='CONTRAST'?<ContrastPuzzle vm={vm} onEvent={emit}/>:null}
@@ -62,17 +63,18 @@ function RelationPuzzle({vm,onEvent}:{vm:Extract<TeachingPuzzleExperienceVMV1,{k
 }
 
 function TransformationPuzzle({vm,onEvent}:{vm:Extract<TeachingPuzzleExperienceVMV1,{kind:'WORKED_TRANSFORMATION'}>;onEvent?:(event:TeachingPuzzleUIEventV1)=>void}){
-  const[revealed,setRevealed]=useState(1);
+  const[revealed,setRevealed]=useState(1),[reconstruction,setReconstruction]=useState('');
   const next=()=>{
     if(revealed>=vm.steps.length)return;
     const index=revealed;
     setRevealed(value=>Math.min(vm.steps.length,value+1));
     onEvent?.({type:'STEP_REVEALED',instanceId:vm.instanceId,index,value:vm.steps[index]});
   };
+  const submit=()=>{const value=reconstruction.trim();if(value)onEvent?.({type:'TRANSFORMATION_RECONSTRUCTED',instanceId:vm.instanceId,value})};
   return <View>
     <Text style={s.learnerOutput}>{vm.learnerOutput}</Text>
     <View style={s.sequence}>{vm.steps.slice(0,revealed).map((step,index)=><View key={`${index}-${step}`} style={s.step}><Text style={s.stepIndex}>{index+1}</Text><Text style={s.stepText}>{step}</Text></View>)}</View>
-    {revealed<vm.steps.length?<Pressable accessibilityRole="button" onPress={next} style={s.secondaryAction}><Text style={s.secondaryActionText}>看下一個變化</Text></Pressable>:<Text style={s.microcopy}>變化已看完；下一步應回到你的產出，而不是繼續看答案。</Text>}
+    {revealed<vm.steps.length?<Pressable accessibilityRole="button" onPress={next} style={s.secondaryAction}><Text style={s.secondaryActionText}>看下一個變化</Text></Pressable>:<View style={s.reconstruct}><Text style={s.smallLabel}>現在換你重建</Text><TextInput accessibilityLabel="自己重建一次" value={reconstruction} onChangeText={setReconstruction} onSubmitEditing={submit} placeholder="不照抄步驟，自己寫一次" style={s.reconstructInput}/><Pressable accessibilityRole="button" disabled={!reconstruction.trim()} onPress={submit} style={[s.secondaryAction,!reconstruction.trim()&&s.disabledAction]}><Text style={s.secondaryActionText}>完成重建</Text></Pressable></View>}
   </View>;
 }
 
@@ -126,6 +128,7 @@ const s=StyleSheet.create({
   step:{flexDirection:'row',alignItems:'flex-start',gap:t.spacing.sm,paddingVertical:t.spacing.sm,borderBottomWidth:1,borderBottomColor:t.colors.line},
   stepIndex:{width:24,height:24,borderRadius:12,textAlign:'center',lineHeight:24,backgroundColor:t.colors.woodWash,color:t.colors.midWood,fontWeight:'800'},
   stepText:{flex:1,fontSize:t.typography.body,lineHeight:t.lineHeight.body,color:t.colors.ink},
+  reconstruct:{marginTop:t.spacing.md},reconstructInput:{minHeight:54,borderWidth:1,borderColor:t.colors.line,borderRadius:t.radius.medium,paddingHorizontal:t.spacing.md,paddingVertical:t.spacing.sm,fontSize:t.typography.body,color:t.colors.ink,backgroundColor:t.colors.paper},
   secondaryAction:{minHeight:t.layout.minimumTouchTarget,alignSelf:'flex-start',justifyContent:'center',marginTop:t.spacing.sm},
   secondaryActionText:{fontSize:t.typography.secondary,color:t.colors.midWood,fontWeight:'700'},
   focusText:{fontSize:t.typography.section,lineHeight:t.lineHeight.section,color:t.colors.ink,fontWeight:'800',marginBottom:t.spacing.md},
