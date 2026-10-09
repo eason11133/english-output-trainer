@@ -20,7 +20,7 @@ import { requestQualifiedBlockDecision, transcribeArtifact } from '../lib/teache
 import {providerFailureLearnerMessageV1} from '../src/reliability';
 import { backgroundLessonSessionV1, beginStage4RuntimeV4, canonicalLessonActionPayloadV1, closeReturnedLessonSessionV1, completePendingTeacherContinuationV1, confirmSourceSpanV4, correctInterpretationStage4V4, foregroundLessonSessionV1, hydrateLearnerDraftV1, lessonActionAlreadyRecordedV1, lessonActionIdentityV1, markPendingTeacherContinuationV1, pauseLessonSessionV1, projectAdaptiveWorkspaceV4, recordBlockEventStage4V4, recordContextualLookupExposureV4, resumeLessonSessionV1, saveLearnerDraftV1, selectBlockV4, type ArtifactModeV4, type ArtifactSpanV4, type IntakeSourceV4, type OriginalArtifactV4, type Stage4RuntimeV4 } from '../src/lesson-runtime';
 import { appendOriginalArtifactV4, canonicalLearnerTruthV1, composeTreatmentPersistenceV1, createOperationalIdV1, fingerprintV1, loadActiveOperationalLessonBundleV1, nativeCorpusServiceV1, operationalDatabaseV1, operationalHistoryReadPortV1, operationalRetentionNeedStoreV1, persistDurableArtifactV1, saveOperationalLessonCheckpointV1 } from '../src/persistence';
-import { bindSelectedTeachingPuzzleContentV1, createLearningContentGatewayV1, productTaskByIdV1, productTaskForFamilyV1, resolveProductionTeacherContentV1, type ProductTaskV1 } from '../src/content';
+import { availableTeachingPuzzleIdsV1, bindSelectedTeachingPuzzleContentV1, createLearningContentGatewayV1, productTaskByIdV1, productTaskForFamilyV1, resolveProductionTeacherContentV1, type ProductTaskV1 } from '../src/content';
 import { practiceLessonPlanV1 } from '../src/curriculum';
 import { createContextualLookupRuntimeV1, lookupRequestsFromTapV1 } from '../src/lookup';
 import { productExperienceAccessDecisionV2 } from '../src/product';
@@ -104,6 +104,24 @@ export default function Lesson(){
     try{
       if(!lessonPlan)throw new Error('今天的練習尚未準備完成，請稍後再試。');
       const latest=current.blockEvents.at(-1),latestResponse=typeof latest?.payload.response==='string'?latest.payload.response:current.usableSourceText;
+      const writingAtDecision=current.artifact.mode==='WRITING'?hydrateWritingWorkV1(current):undefined,translationAtDecision=current.artifact.mode==='TRANSLATION'?hydrateTranslationWorkV1(current):undefined;
+      const puzzleSourceText=current.readingReview?.passage??systemTask?.passage??translationAtDecision?.sourceContext.sourceText??systemTask?.sourceZh??writingAtDecision?.sourceContext.promptText??systemTask?.prompt??current.artifact.chineseSource??current.usableSourceText;
+      const puzzlePrompt=current.readingReview?.question??systemTask?.prompt??writingAtDecision?.sourceContext.promptText;
+      const puzzleMeaning=translationAtDecision?.sourceContext.sourceText??systemTask?.sourceZh??current.artifact.chineseSource??current.interpretation;
+      const acceptedAnswer=systemTask?.acceptedAnswers?.[0],filledFrame=acceptedAnswer&&systemTask?.prompt?.includes('___')?systemTask.prompt.replace('___',acceptedAnswer):undefined;
+      const directPuzzleContext={
+        sourceText:puzzleSourceText,
+        learnerOutput:latestResponse,
+        prompt:puzzlePrompt,
+        meaningUnits:puzzleMeaning?[puzzleMeaning]:undefined,
+        targetLanguage:systemTask?.facet==='COLLOCATION'?acceptedAnswer:undefined,
+        contrastItems:acceptedAnswer&&acceptedAnswer!==latestResponse?[latestResponse,acceptedAnswer]:undefined,
+        relationNodes:systemTask?.facet==='COLLOCATION'&&filledFrame?[filledFrame]:undefined,
+        evidenceSpans:current.readingReview?.focus.anchorText?[current.readingReview.focus.anchorText]:undefined,
+        authoritativeBindings:puzzleMeaning&&systemTask?.family==='TRANSLATION'&&systemTask.acceptedAnswers.length?{meaning:puzzleMeaning,alternatives:systemTask.acceptedAnswers}:undefined,
+        provenanceRefs:[current.artifact.id,...(systemTask?.validatorRefs??[]),...current.observations.slice(-2).map(item=>item.id)],
+      };
+      const teachingPuzzleAvailableIds=availableTeachingPuzzleIdsV1(directPuzzleContext);
       const remaining=tutorTimeRemainingMinutesV1(current);
       const event=remaining<=0
         ?adaptLearnerEventToPedagogyV1({id:`timeout:${current.id}`,type:'TIME_EXHAUSTED',occurredAt:new Date().toISOString(),support:'NONE',observationIds:[]}).event
@@ -122,7 +140,14 @@ export default function Lesson(){
           focusAnchor:current.readingReview.focus.anchorText,
           reviewObjective:lessonPlan.objective,
           assessmentMode:current.readingReview.assessment.mode,
-        }:undefined,
+          teachingPuzzleAvailableIds,
+        }:systemTask?{
+          kind:'PRODUCT_TASK',
+          taskId:systemTask.id,
+          family:systemTask.family,
+          validated:systemTask.validated,
+          teachingPuzzleAvailableIds,
+        }:{kind:'AUTHENTIC_WORK',teachingPuzzleAvailableIds},
         learnerTruth,
         event,
         recentAttempts:attempts,
