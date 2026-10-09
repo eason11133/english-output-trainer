@@ -10,6 +10,7 @@ export * from './learnerContent';
 export * from './coverage';
 export * from './coverageCensus';
 export * from './teachingContent';
+export * from './teachingPuzzleContent';
 
 export * from './translationTaskRuntime';
 export * from './delivery';
