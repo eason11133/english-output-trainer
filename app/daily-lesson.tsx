@@ -138,8 +138,41 @@ export default function Lesson(){
       });
       let decision:TeacherBlockDecisionV4={...result.blockDecision,configuration:{...result.blockDecision.configuration,decisionProvider:result.provenance.provider,decisionReasonCodes:result.provenance.reasonCodes.join('|'),teacherNarratorState:result.experience.narrator?.state??'NONE',teacherNarratorMessage:result.experience.narrator?.message??'',modelCallRoute:result.provenance.modelCall?.route??'UNKNOWN',modelCallReason:result.provenance.modelCall?.reason??'UNKNOWN'}};
       if(decision.pedagogicalIntent==='TEACH'){
-        const corpusState=await nativeCorpusServiceV1.get(),content=await resolveProductionTeacherContentV1({lessonPlan,mechanismId:result.provenance.selectedMechanismId,role:'TEACH',corpus:corpusState.status==='READY'?corpusState.port:undefined,maxItems:3}),learnerContent=content.candidates.map(item=>item.learnerVisibleText).join('|');
+        const corpusState=await nativeCorpusServiceV1.get(),content=await resolveProductionTeacherContentV1({lessonPlan,mechanismId:result.provenance.selectedMechanismId,role:'TEACH',corpus:corpusState.status==='READY'?corpusState.port:undefined,maxItems:4}),learnerContent=content.candidates.map(item=>item.learnerVisibleText).join('|');
         if(learnerContent)decision={...decision,configuration:{...decision.configuration,instructionalContent:learnerContent,instructionalContentRefs:content.candidates.map(item=>item.contentRef).join('|'),instructionalContentProvenance:content.candidates.flatMap(item=>item.provenanceRefs).join('|'),instructionalContentMeasurementEligible:false}};
+
+        const puzzleSelection=parseTeachingPuzzleSelectionV1(decision.configuration.teachingPuzzleSelection);
+        if(puzzleSelection){
+          const writing=current.artifact.mode==='WRITING'?hydrateWritingWorkV1(current):undefined,translation=current.artifact.mode==='TRANSLATION'?hydrateTranslationWorkV1(current):undefined;
+          const sourceText=current.readingReview?.passage??translation?.sourceContext.sourceText??writing?.sourceContext.promptText??current.artifact.chineseSource??current.usableSourceText;
+          const prompt=current.readingReview?.question??writing?.sourceContext.promptText??systemTask?.prompt;
+          const meaning=translation?.sourceContext.sourceText??current.artifact.chineseSource??current.interpretation;
+          const instructional=content.candidates.map(item=>item.learnerVisibleText).filter(Boolean);
+          const contrastItems=[latestResponse,...instructional].filter((value,index,all)=>Boolean(value)&&all.indexOf(value)===index);
+          const authoritativeBindings:Record<string,unknown>={};
+          if(puzzleSelection.puzzleId==='worked-transformation'&&instructional.length)authoritativeBindings.steps=instructional;
+          if(puzzleSelection.puzzleId==='reformulation-space'&&meaning&&systemTask?.acceptedAnswers?.length){authoritativeBindings.meaning=meaning;authoritativeBindings.alternatives=systemTask.acceptedAnswers}
+          const bound=bindSelectedTeachingPuzzleContentV1({
+            selection:puzzleSelection,
+            targetRef:lessonPlan.targetRef,
+            facet:lessonPlan.facet,
+            instanceId:`puzzle:${current.id}:${event.id}`,
+            createdAt:event.occurredAt,
+            sourceContextRef:current.readingReview?.originalAttemptId??current.artifact.id,
+            contentResolution:content,
+            context:{
+              sourceText,
+              learnerOutput:latestResponse,
+              prompt,
+              meaningUnits:meaning?[meaning]:undefined,
+              contrastItems:contrastItems.length>=2?contrastItems:undefined,
+              evidenceSpans:current.readingReview?.focus.anchorText?[current.readingReview.focus.anchorText]:undefined,
+              authoritativeBindings:Object.keys(authoritativeBindings).length?authoritativeBindings:undefined,
+              provenanceRefs:[current.artifact.id,...current.observations.slice(-2).map(item=>item.id)],
+            },
+          });
+          decision={...decision,configuration:{...decision.configuration,teachingPuzzleBindingStatus:bound.status,teachingPuzzleBindingReasons:bound.reasonCodes.join('|'),teachingPuzzleInstance:bound.status==='READY'?JSON.stringify(bound.instance):'',teachingPuzzleContentProvenance:bound.provenanceRefs.join('|')}};
+        }
       }
       if(result.reused){const recovered=completePendingTeacherContinuationV1(current,event.id);if(recovered!==current)await persist(recovered);return}
       let executionBase=current;
