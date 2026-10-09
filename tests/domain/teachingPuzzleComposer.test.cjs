@@ -49,7 +49,7 @@ test('failed puzzle changes representation when another admissible representatio
   assert.notEqual(next.selection.representationKind,prior.representationKind);
 });
 
-test('supported success fades the current approach instead of forcing a new scripted stage',()=>{
+test('supported success hands control to learner practice instead of chaining another teaching puzzle',()=>{
   const first=teaching.decideNextTeachingPuzzleMoveV1({request:request(),occurredAt:'2026-10-09T00:00:00Z'});
   const prior=first.selection;
   const successRequest=request({
@@ -58,13 +58,9 @@ test('supported success fades the current approach instead of forcing a new scri
     conditions:teaching.defaultTeachingOpportunityConditionsV1({support:prior.support,elicitation:'FUNCTION_CUED',context:'SOURCE',taskLoad:'MEDIUM'}),
   });
   const next=teaching.decideNextTeachingPuzzleMoveV1({request:successRequest,state:first.state,responseSignal:'ASSISTED_SUCCESS',occurredAt:'2026-10-09T00:01:00Z'});
-  if(next.kind==='PRESENT_PUZZLE'){
-    const order=['MODELED','EXPLICIT','GUIDED','CUED','LIGHT','NONE'];
-    assert.ok(order.indexOf(next.selection.support)>=order.indexOf(prior.support));
-    assert.equal(next.selection.puzzleId,prior.puzzleId);
-  }else{
-    assert.equal(next.kind,'REQUEST_INDEPENDENT_ATTEMPT');
-  }
+  assert.equal(next.kind,'HANDOFF_TO_PRACTICE');
+  assert.equal(next.selection,undefined);
+  assert.equal(next.state.history.length,1);
 });
 
 test('learner request for independence returns control instead of selecting another teaching puzzle',()=>{
