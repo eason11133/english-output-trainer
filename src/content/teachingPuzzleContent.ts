@@ -54,7 +54,7 @@ function directContextValue(slot:TeachingPuzzleContentSlotV1,context:TeachingPuz
   if(slot.kind==='PROMPT')return context.prompt;
   if(slot.kind==='MEANING_UNIT')return slot.multiple?context.meaningUnits:context.meaningUnits?.[0];
   if(slot.kind==='TARGET_LANGUAGE')return context.targetLanguage;
-  if(slot.kind==='CONTRAST_ITEM')return slot.multiple?context.contrastItems:context.contrastItems?.[0];
+  if(slot.kind==='CONTRAST_ITEM'){if(slot.multiple)return context.contrastItems;if(slot.key==='right')return context.contrastItems?.[1];return context.contrastItems?.[0]}
   if(slot.kind==='RELATION_NODE')return slot.multiple?context.relationNodes:context.relationNodes?.[0];
   if(slot.kind==='RELATION_EDGE')return slot.multiple?context.relationEdges:context.relationEdges?.[0];
   if(slot.kind==='EVIDENCE_SPAN')return slot.multiple?context.evidenceSpans:context.evidenceSpans?.[0];
