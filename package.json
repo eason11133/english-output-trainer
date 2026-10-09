@@ -85,7 +85,7 @@
     "test:wave-c": "node scripts/run-isolated-domain-suite.cjs wave-c tests/domain/learnerTruthWaveC.test.cjs scripts/run-learner-truth-wave-c-gate.cjs",
     "test:curriculum": "npm run test:wave-d",
     "test:wave-d": "node scripts/run-isolated-domain-suite.cjs wave-d tests/domain/curriculumOuterLoopWaveD.test.cjs scripts/run-curriculum-wave-d-gate.cjs",
-    "test:wave-e": "node scripts/run-isolated-domain-suite.cjs wave-e tests/domain/teacherRuntimeWaveE.test.cjs scripts/run-teacher-runtime-wave-e-gate.cjs",
+    "test:wave-e": "node scripts/run-isolated-domain-suite.cjs wave-e tests/domain/teacherRuntimeWaveE.test.cjs tests/domain/productionTeachingPuzzleLoop.test.cjs scripts/run-teacher-runtime-wave-e-gate.cjs",
     "test:wave-gates:parallel": "node scripts/run-wave-gates-parallel.cjs",
     "test:wave-f": "node scripts/run-isolated-domain-suite.cjs wave-f tests/domain/teachingIntelligenceWaveF.test.cjs tests/domain/teachingPuzzleContract.test.cjs tests/domain/teachingPuzzleLibrary.test.cjs tests/domain/teachingPuzzleComposer.test.cjs scripts/run-teaching-intelligence-wave-f-gate.cjs",
     "test:wave-u1": "node scripts/run-u1-local-persistence-gate.cjs",
