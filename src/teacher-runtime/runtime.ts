@@ -124,9 +124,11 @@ function puzzleFlowFor(input:InnerTutorDecisionInputV1,context:PedagogicalContex
   if(!hasActivePuzzle&&decision.action!=='TEACH')return decision;
 
   const request=fRequest(context,input.event,input.currentDecision?.selectedBlockId);
+  const rawAvailable=context.sourceTaskContext?.teachingPuzzleAvailableIds,availablePuzzleIds=Array.isArray(rawAvailable)?rawAvailable.filter((id):id is string=>typeof id==='string') : undefined;
+  if(!hasActivePuzzle&&availablePuzzleIds&&availablePuzzleIds.length===0)return decision;
   let move;
   try{
-    move=decideNextTeachingPuzzleMoveV1({request,state:prior,responseSignal:hasActivePuzzle?signal:undefined,occurredAt:input.event.occurredAt});
+    move=decideNextTeachingPuzzleMoveV1({request,state:prior,responseSignal:hasActivePuzzle?signal:undefined,occurredAt:input.event.occurredAt,availablePuzzleIds});
   }catch{return decision}
 
   if(move.kind==='PRESENT_PUZZLE'&&move.selection){
