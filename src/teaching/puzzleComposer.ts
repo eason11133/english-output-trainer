@@ -7,6 +7,7 @@ import type { TeachingPrimitiveV1, TeachingRequestV1, TeachingResponseSignalV1 }
 
 export type TeachingPuzzleMoveKindV1=
   |'PRESENT_PUZZLE'
+  |'HANDOFF_TO_PRACTICE'
   |'REQUEST_INDEPENDENT_ATTEMPT'
   |'CHECK_PREREQUISITE'
   |'REDUCE_TARGET_GRANULARITY'
@@ -202,6 +203,11 @@ export function decideNextTeachingPuzzleMoveV1(input:{
   if(episode.action==='DEFER_TARGET')return moveWithoutPuzzle({kind:'DEFER_TARGET',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:reasons});
   if(episode.action==='RETURN_TO_SOURCE')return moveWithoutPuzzle({kind:'RETURN_TO_SOURCE',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:reasons});
   if(episode.action==='STOP_NO_FURTHER_INTERVENTION')return moveWithoutPuzzle({kind:'STOP',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:reasons});
+
+  const positiveTeachingResponse=['HELPED','SELF_REPAIRED','ASSISTED_SUCCESS'].includes(input.responseSignal??'UNKNOWN');
+  if(input.state?.current&&positiveTeachingResponse&&!input.request.learnerRequestedIndependentAttempt&&episode.support!=='NONE'){
+    return moveWithoutPuzzle({kind:'HANDOFF_TO_PRACTICE',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:[...reasons,'TEACHING_HELPED_HANDOFF_TO_LEARNER_ACTION']});
+  }
 
   if(input.request.learnerRequestedIndependentAttempt||episode.support==='NONE'){
     return moveWithoutPuzzle({kind:'REQUEST_INDEPENDENT_ATTEMPT',request:input.request,history,occurredAt:input.occurredAt,reasonCodes:[...reasons,'NO_TEACHING_PUZZLE_WITHOUT_SUPPORT']});
